@@ -1,0 +1,3 @@
+[submodule "tasks/connect4/connect4_solver"]
+	path = tasks/connect4/connect4_solver
+	url = https://github.com/PascalPons/connect4
