@@ -6,7 +6,7 @@ import regex
 json_pattern = regex.compile(r'\{(?:[^{}]|(?R))*\}', regex.DOTALL)
 import json
 import time
-from utils.chat_service import get_chat, fix_json
+from tools.chat_service import get_chat, fix_json
 from utils.play_service import (
 	play,
 	create_hook_functions,

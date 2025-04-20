@@ -5,8 +5,8 @@ json_pattern = regex.compile(r'\{(?:[^{}]|(?R))*\}', regex.DOTALL)
 import json
 from pettingzoo.classic import connect_four_v3
 import time
-from utils.chat_service import get_chat,fix_json
-from utils.play_service import (
+from tools.chat_service import get_chat,fix_json
+from tools.play_service import (
 	play,
 	create_hook_functions,
 )
@@ -117,7 +117,7 @@ def gen_move(player_messages, player_model):
 		reason = None
 	return move, content, used_token, action, reason
 
-store_folder = "cf_no_reasoning"
+store_folder = "connect4_games"
 if not os.path.exists(store_folder):
 	os.makedirs(store_folder)
 player_list_json = json.load(open("cf_no_reasoning.json","r"))

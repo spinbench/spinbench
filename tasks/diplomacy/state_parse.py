@@ -1,4 +1,3 @@
-import json
 from typing import List, Dict
 from datetime import datetime
 
@@ -125,21 +124,7 @@ def parse_diplomacy_state(state: dict) -> str:
     final_report = "\n".join(descriptions)
     return final_report
 
-def get_message_text(messages: dict, recipient: str, time_start: int, time_end: int) -> str:
-    """
-    Helper function to extract messages from the game log for a specific player
-    or for GLOBAL, within a time range.
-    """
-    message_text = ""
-    for k in sorted(messages.keys()):
-        if time_start <= k <= time_end:
-            if messages[k].recipient == recipient:
-                message_text += f"{messages[k].sender}: {messages[k].message}\n"
-            elif messages[k].recipient == "GLOBAL":
-                message_text += f"{messages[k].sender} to all players: {messages[k].message}\n"
-    return message_text
-
-def get_message_text_bundle(messages: dict, recipients: list, time_start: int, time_end: int) -> str:
+def get_message_text(messages: dict, recipients: list, time_start: int, time_end: int) -> str:
     """
     Helper function to extract messages from the game log for a list of recipients
     or for GLOBAL, within a time range.

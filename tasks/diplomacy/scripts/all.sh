@@ -100,7 +100,7 @@ model_str=$(IFS=,; echo "${model_list[*]}")
 
 # start a new game
 python run_game.py \
---num_agents=7 \
+--num_powers=7 \
 --winning_centers=${winning_centers} \
 --max_tokens=10000000 \
 --max_years=1920 \
@@ -110,4 +110,4 @@ python run_game.py \
 --state_file=diplomacy_game_state.json \
 --enable_negotiation=0 \
 --negotiation_rounds=3 \
---store_folder="2221-ds-no-talk"
+--save_folder="-no-neg"

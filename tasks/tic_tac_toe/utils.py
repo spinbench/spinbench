@@ -2,12 +2,65 @@ import random
 import os
 import json
 import regex
-from utils.chat_service import get_chat
+from tools.chat_service import get_chat
 json_pattern = regex.compile(r'\{(?:[^{}]|(?R))*\}', regex.DOTALL)
 
 ######################################
 ############ prompt utils ############
 ######################################
+
+first_player_initial_prompt = """
+You are playing a game of Tic-Tac-Toe against an opponent. Tic-tac-toe is a simple turn based strategy game where 2 players, X and O, take turns marking spaces on a 3 x 3 grid. The first player to place 3 of their marks in a horizontal, vertical, or diagonal line is the winner. Taking an illegal move ends the game and the player who made the illegal move loses.
+The board is a 3x3 grid, and you are playing as 'X'. The opponent is playing as 'O'. The board is indexed as follows:
+Action Space: 
+Each action from 0 to 8 represents placing either an X or O in the corresponding cell. The cells are indexed as follows:
+
+0 | 3 | 6
+_________
+
+1 | 4 | 7
+_________
+
+2 | 5 | 8
+"""
+
+second_player_initial_prompt = """
+You are playing a game of Tic-Tac-Toe against an opponent. Tic-tac-toe is a simple turn based strategy game where 2 players, X and O, take turns marking spaces on a 3 x 3 grid. The first player to place 3 of their marks in a horizontal, vertical, or diagonal line is the winner.
+The board is a 3x3 grid, and you are playing as 'O'. The opponent is playing as 'X'. The board is indexed as follows:
+Action Space: 
+Each action from 0 to 8 represents placing either an X or O in the corresponding cell. The cells are indexed as follows:
+
+0 | 3 | 6
+_________
+
+1 | 4 | 7
+_________
+
+2 | 5 | 8
+"""
+
+def get_initial_player_messages():
+	first_player_messages = [
+		{
+			"role": "user",
+			"content": first_player_initial_prompt,
+		},
+		{
+			"role": "assistant",
+			"content": "Sure, let's start. "
+		},
+	] 
+	second_player_messages = [
+		{
+			"role": "user",
+			"content": second_player_initial_prompt,
+		},
+		{
+			"role": "assistant",
+			"content": "Sure, let's start. "
+		},
+	]
+	return first_player_messages, second_player_messages
 
 def generate_action_prompt(legal_moves):
 	action_prompt = """

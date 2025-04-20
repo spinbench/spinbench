@@ -2,19 +2,26 @@ from pettingzoo.classic import tictactoe_v3
 import os
 import json
 import regex
-from utils.chat_service import get_chat
-from utils.play_service import (
+from tools.chat_service import get_chat
+from tools.play_service import (
 	play,
 	create_hook_functions,
 )
+from tools.project_root import ROOT
 from tasks.tic_tac_toe.utils import (
 	generate_action_prompt,
 	parse_observation,
 	gen_move,
+	get_initial_player_messages,
 )
+
+saves_folder = ROOT / "saves/tic_tac_toe"
+if not os.path.exists(saves_folder):
+	os.makedirs(saves_folder)
+
 # Regex pattern for recursive matching
 json_pattern = regex.compile(r'\{(?:[^{}]|(?R))*\}', regex.DOTALL)
-player_list_json = json.load(open("solver-list-deepseek.json","r"))
+player_list_json = json.load(open(ROOT / "configs/player-list.json","r"))
 player1_model_list = player_list_json["player1_model_list"]
 player2_model_list = player_list_json["player2_model_list"]
 print(len(player1_model_list), len(player2_model_list))
@@ -43,68 +50,11 @@ for model_index in range(len(player1_model_list)):
 			player1_model_save_name = player1_model_save_name.replace("/", "_")
 			player2_model_save_name = player2_model_save_name.replace("/", "_")
 			print(player1_model_save_name, player2_model_save_name)
-			filename = f"ttt_archive/ttt_{game_index}_{player1_model_save_name}_{player2_model_save_name}.json"
+			filename = saves_folder / f"ttt_{game_index}_{player1_model_save_name}_{player2_model_save_name}.json"
 			if os.path.exists(filename):
-				old_status = json.load(open(filename, "r"))["status"]
-				if "illegal move!" in old_status:
-					print("File exists, but illegal move, continue", filename)
-					pass
-				else:
-					print("File exists", filename)
-					# time.sleep(1)
-					continue
+				continue
 
-			first_player_initial_prompt = """
-			You are playing a game of Tic-Tac-Toe against an opponent. Tic-tac-toe is a simple turn based strategy game where 2 players, X and O, take turns marking spaces on a 3 x 3 grid. The first player to place 3 of their marks in a horizontal, vertical, or diagonal line is the winner. Taking an illegal move ends the game and the player who made the illegal move loses.
-			The board is a 3x3 grid, and you are playing as 'X'. The opponent is playing as 'O'. The board is indexed as follows:
-			Action Space: 
-			Each action from 0 to 8 represents placing either an X or O in the corresponding cell. The cells are indexed as follows:
-
-			0 | 3 | 6
-			_________
-
-			1 | 4 | 7
-			_________
-
-			2 | 5 | 8
-			"""
-
-			second_player_initial_prompt = """
-			You are playing a game of Tic-Tac-Toe against an opponent. Tic-tac-toe is a simple turn based strategy game where 2 players, X and O, take turns marking spaces on a 3 x 3 grid. The first player to place 3 of their marks in a horizontal, vertical, or diagonal line is the winner.
-			The board is a 3x3 grid, and you are playing as 'O'. The opponent is playing as 'X'. The board is indexed as follows:
-			Action Space: 
-			Each action from 0 to 8 represents placing either an X or O in the corresponding cell. The cells are indexed as follows:
-
-			0 | 3 | 6
-			_________
-
-			1 | 4 | 7
-			_________
-
-			2 | 5 | 8
-			"""
-
-
-			first_player_messages = [
-				{
-					"role": "user",
-					"content": first_player_initial_prompt,
-				},
-				{
-					"role": "assistant",
-					"content": "Sure, let's start. "
-				},
-			] 
-			second_player_messages = [
-				{
-					"role": "user",
-					"content": second_player_initial_prompt,
-				},
-				{
-					"role": "assistant",
-					"content": "Sure, let's start. "
-				},
-			]
+			first_player_messages, second_player_messages = get_initial_player_messages()
 
 			first_player_reasoning_action_steps = []
 			second_player_reasoning_action_steps = []
@@ -183,7 +133,7 @@ for model_index in range(len(player1_model_list)):
 			player2_model_save_name = player2_model_save_name.replace("/", "_")
 			print(player1_model_save_name, player2_model_save_name)
 			# save the chat log for two players
-			with open(f"ttt_archive/ttt_{game_index}_{player1_model_save_name}_{player2_model_save_name}.json", "w") as f:
+			with open(saves_folder / f"ttt_{game_index}_{player1_model_save_name}_{player2_model_save_name}.json", "w") as f:
 				json.dump({
 					"status": {
 						0: "Player 1 wins!",

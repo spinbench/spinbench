@@ -1,19 +1,29 @@
 import chess
 import time
+from openai import OpenAI
 import os
+import random
+import re
 from stockfish import Stockfish
 import regex
 # Regex pattern for recursive matching
 json_pattern = regex.compile(r'\{(?:[^{}]|(?R))*\}', regex.DOTALL)
+import sys
+sys.path.append(os.path.abspath("../"))
 import json
+import anthropic
 import time
-from tools.chat_service import get_chat, fix_json
-from utils.play_service import (
+from chat_service import get_chat, fix_json
+from play_service import (
 	play,
 	create_hook_functions,
 )
+import argparse
+parser = argparse.ArgumentParser(description="Set model name for player1_model")
+parser.add_argument('--model', type=str, required=True, help="Specify the model name (e.g., gpt-4o)")
+args = parser.parse_args()
 
-stockfish = Stockfish("PATH_TO_STOCKFISH_EXECUTABLE")
+
 
 def transform_to_uci(board, s):
     # Parse the notation
@@ -71,6 +81,7 @@ def format_board(board_str):
 	result += "     a  b  c  d  e  f  g  h\n"
 	return result
 
+
 def generate_action_prompt(legal_moves):
 			return f"""
 	Please enter your move in Universal Chess Interface (UCI) format. For example, to move a pawn from e2 to e4, you would enter \"e2e4\". You should state your reason first, and serialize the output to a json object with the key "reason" and the value as a string of your reason, the key "action" and the value as a UCI string representing your move. The legal moves are: \n<legal_moves>\n{" ".join(legal_moves)}\n</legal_moves>\n You must select one legal move from this list and respond with the UCI format of the move you choose. Do not generate any move outside of this list. You have to win. In your reason and action, you can only use UCI format to describe. Your output should be in this format: {{"reason": "your reason", "action": "your action"}}, and you can only use json valid characters. When you write json, all the elements (including all the keys and values) should be enclosed in double quotes!!!
@@ -109,63 +120,62 @@ def gen_move(player_messages, player_model,board=None,legal_move_list=None):
 		reason = None
 	return move, content, used_token, action, reason
 
-player_list_json = json.load(open("stockfish-list-supp.json","r"))
-player1_model_list = player_list_json["player1_model_list"]
-player2_model_list = player_list_json["player2_model_list"]
 
-print(len(player1_model_list))
-print(len(player2_model_list))
-time.sleep(1)
-for i in range(len(player1_model_list)):
-	print(player1_model_list[i]["model"], "vs", player2_model_list[i]["model"])
-assert len(player1_model_list) == len(player2_model_list)
+init_player1_model = {
+			"model": args.model,
+			"prompt_config": [
+				{
+					"name": "forced-reasoning",
+					"params": {
+						"interactive_times": 1,
+						"prompt_messages": [
+							"Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to reason now, no need to make move at this stage."
+						]
+					}
+				}
+			]
+		}
+init_player2_model = {
+			"model": "human",
+			"prompt_config": [
+				{
+					"name": "forced-reasoning",
+					"params": {
+						"interactive_times": 1,
+						"prompt_messages": [
+							"Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to reason now, no need to make move at this stage."
+						]
+					}
+				}
+			]
+		}
 
-for model_index in range(len(player1_model_list)):
-	for game_index in range(4):
-		player1_model = player1_model_list[model_index]
-		player2_model = player2_model_list[model_index]
+for game_index in range(4):
+	try:
+		player1_model = init_player1_model
+		player2_model = init_player2_model
+		if game_index > 2:
+			player1_model, player2_model = player2_model, player1_model
 		player1_model_name = player1_model["model"]
 		player2_model_name = player2_model["model"]
-		if game_index < 2:
-			pass
-		else:
-			temp = player1_model
-			player1_model = player2_model
-			player2_model = temp
-			temp = player1_model_name
-			player1_model_name = player2_model_name
-			player2_model_name = temp
-
-		if "prompt_config" in player1_model:
-			player1_model_save_name = player1_model_name + "-" + "-".join([i["name"] for i in player1_model["prompt_config"]])
-			player1_model_save_name = player1_model_save_name.replace("/", "_")
-		elif "elo" in player1_model:
-			player1_model_save_name = player1_model_name + "-elo-" + str(player1_model["elo"])
-		elif "level" in player1_model:
-			player1_model_save_name = player1_model_name + "-level-" + str(player1_model["level"])
-
-		if "prompt_config" in player2_model:
-			player2_model_save_name = player2_model_name + "-" + "-".join([i["name"] for i in player2_model["prompt_config"]])
-			player2_model_save_name = player2_model_save_name.replace("/", "_")
-		elif "elo" in player2_model:
-			player2_model_save_name = player2_model_name + "-elo-" + str(player2_model["elo"])
-		elif "level" in player2_model:
-			player2_model_save_name = player2_model_name + "-level-" + str(player2_model["level"])
-
-		print(player1_model_save_name, player2_model_save_name)
-		filename = f"chess_stock_baseline/chess_{game_index}_{player1_model_save_name}_{player2_model_save_name}.json"
-		another_filename = f"chess_stock_baseline/chess_{game_index}_{player2_model_save_name}_{player1_model_save_name}.json"
-		print(filename)
-		if os.path.exists(filename) or os.path.exists(another_filename):
-			print("File exists", filename)
+		if "o1" in player1_model_name:
+			player1_model["prompt_config"] = []
+		if "o1" in player2_model_name:
+			player2_model["prompt_config"] = []
+		player1_model_save_name = player1_model_name + "-" + "-".join([i["name"] for i in player1_model["prompt_config"]])
+		player2_model_save_name = player2_model_name + "-" + "-".join([i["name"] for i in player2_model["prompt_config"]])
+		player1_model_save_name = player1_model_save_name.replace("/", "_")
+		player2_model_save_name = player2_model_save_name.replace("/", "_")
+		filename = f"chess_{game_index}_{player1_model_save_name}_{player2_model_save_name}.json"
+		if os.path.exists(f"chess_archive/{filename}"):
 			continue
 
 		first_player_initial_prompt = f"""
-		You are playing a text game of Chess against an opponent. Chess is a two-player strategy board game played on an 8x8 board. The goal of the game is to checkmate the opponent's king. On the board, your pieces are represented by uppercase letters and the opponent's pieces are represented by lowercase letters. You are a chest master playing a text based game of chess.
-			"""
+	You are playing a text game of Chess against an opponent. Chess is a two-player strategy board game played on an 8x8 board. The goal of the game is to checkmate the opponent's king. On the board, your pieces are represented by uppercase letters and the opponent's pieces are represented by lowercase letters. You are a chest master playing a text based game of chess.
+		"""
 
 		second_player_initial_prompt = f"""
-		You are playing a text game of Chess against an opponent. Chess is a two-player strategy board game played on an 8x8 board. The goal of the game is to checkmate the opponent's king. On the board, your pieces are represented by lowercase letters and the opponent's pieces are represented by uppercase letters. You are a chest master playing a text based game of chess.
+	You are playing a text game of Chess against an opponent. Chess is a two-player strategy board game played on an 8x8 board. The goal of the game is to checkmate the opponent's king. On the board, your pieces are represented by lowercase letters and the opponent's pieces are represented by uppercase letters. You are a chest master playing a text based game of chess.
 		"""
 
 		first_player_messages = [
@@ -197,25 +207,18 @@ for model_index in range(len(player1_model_list)):
 		]
 		second_player_reasoning_action_steps = []
 
-
 		first_player_store_message = first_player_messages.copy()
 		second_player_store_message = second_player_messages.copy()
 
 		board = chess.Board()
-		cnt = 0
 		win = None # 0 is player1, 1 is player2, 2 is Draw, 3 is player1 illegal move, 4 is player2 illegal move
 		total_tokens = 0
 		game_log = []
 		game_state = None
 		while True:
 			hook_functions = {}
-			cnt += 1
-			board_state = format_board(str(board))
-			fen_board = board.fen()
 			outcome = board.outcome()
-			stockfish.set_fen_position(fen_board)
 			print(board)
-			print("outcome: ", outcome)
 			if outcome != None:
 				termination = outcome.termination
 				game_state = termination.name
@@ -233,38 +236,25 @@ for model_index in range(len(player1_model_list)):
 				break
 			turn = board.turn
 			legal_moves = board.legal_moves
-			illegal_tolerance = 10 # if the model makes an illegal move, it will try again 3 times
+			illegal_tolerance = 10
 			if turn == True: # white
-				if player1_model_name == "stockfish":
-					print("stockfish")
-					if "elo" in player1_model:
-						elo = player1_model["elo"]
-						stockfish.set_elo_rating(elo)
-					elif "level" in player1_model:
-						level = player1_model["level"]
-						stockfish.set_skill_level(level)
-					else:
-						raise Exception("Stockfish model must have elo or level")
-					best_move_by_stockfish = stockfish.get_best_move()
-					move = chess.Move.from_uci(best_move_by_stockfish)
+				if player1_model_name == "human":
+					print("\nPlease look at the current board state represented by ascii and FEN and make your next move:\n <FEN>\nFEN: " + board.fen() +  "\n</FEN>\n\n<board_state>\n\n2D board: \n" + format_board(str(board)) + "\n</board_state>\n\n"+ generate_action_prompt([move.uci() for move in board.legal_moves]))
+					action = input("You are playing as uppercase letters, Enter your uci move: ")
+					move = get_move(board, action)
 				else:
 					first_player_messages = first_player_messages[:2]
 					hook_functions = create_hook_functions(player1_model, first_player_reasoning_action_steps, "\nPlease look at the current board state represented by ascii and FEN and make your next move:\n <FEN>\nFEN: " + board.fen() +  "\n</FEN>\n\n<board_state>\n\n2D board: \n" + format_board(str(board)) + "\n</board_state>\n\n", generate_action_prompt([move.uci() for move in board.legal_moves]))
 					move, action, win, game_state, added_tokens = play(first_player_messages, first_player_store_message, player1_model_name, first_player_reasoning_action_steps, board, "", legal_moves, gen_move,illegal_tolerance, True, hook_functions,0,board=board,legal_move_list=[move.uci() for move in legal_moves])
 					total_tokens += added_tokens
+				# action = random.choice(legal_moves)
+				# move = chess.Move.from_uci(action)
+				# reason = "Random move"
 			elif turn == False: # black
-				if player2_model_name == "stockfish":
-					print("stockfish")
-					if "elo" in player2_model:
-						elo = player2_model["elo"]
-						stockfish.set_elo_rating(elo)
-					elif "level" in player2_model:
-						level = player2_model["level"]
-						stockfish.set_skill_level(level)
-					else:
-						raise Exception("Stockfish model must have elo or level")
-					best_move_by_stockfish = stockfish.get_best_move()
-					move = chess.Move.from_uci(best_move_by_stockfish)
+				if player2_model_name == "human":
+					print("\nPlease look at the current board state represented by ascii and FEN and make your next move:\n <FEN>\nFEN: " + board.fen() +  "\n</FEN>\n\n<board_state>\n\n2D board: \n" + format_board(str(board)) + "\n</board_state>\n\n"+ generate_action_prompt([move.uci() for move in board.legal_moves]))
+					action = input("You are playing as lowercase letters, Enter your uci move: ")
+					move = get_move(board, action)
 				else:
 					second_player_messages = second_player_messages[:2]
 					hook_functions = create_hook_functions(player2_model, second_player_reasoning_action_steps, "\nPlease look at the current board state represented by ascii and FEN and make your next move:\n <FEN>\nFEN: " + board.fen() +  "\n</FEN>\n\n<board_state>\n\n2D board: \n" + format_board(str(board)) + "\n</board_state>\n\n", generate_action_prompt([move.uci() for move in board.legal_moves]))
@@ -273,7 +263,7 @@ for model_index in range(len(player1_model_list)):
 			game_log.append({
 				"board": board.fen(),
 				"agent": "white" if turn == True else "black",
-				"action": str(move),
+				"action": action,
 			})
 			if win != None:
 				break
@@ -282,41 +272,31 @@ for model_index in range(len(player1_model_list)):
 			except Exception as e:
 				print(e)
 				break
-			stockfish.set_fen_position(board.fen())
-
-		# save the chat log for two players
-		if "prompt_config" in player1_model:
-			player1_model_save_name = player1_model_name + "-" + "-".join([i["name"] for i in player1_model["prompt_config"]])
-			player1_model_save_name = player1_model_save_name.replace("/", "_")
-		elif "elo" in player1_model:
-			player1_model_save_name = player1_model_name + "-elo-" + str(player1_model["elo"])
-		elif "level" in player1_model:
-			player1_model_save_name = player1_model_name + "-level-" + str(player1_model["level"])
-
-		if "prompt_config" in player2_model:
-			player2_model_save_name = player2_model_name + "-" + "-".join([i["name"] for i in player2_model["prompt_config"]])
-			player2_model_save_name = player2_model_save_name.replace("/", "_")
-		elif "elo" in player2_model:
-			player2_model_save_name = player2_model_name + "-elo-" + str(player2_model["elo"])
-		elif "level" in player2_model:
-			player2_model_save_name = player2_model_name + "-level-" + str(player2_model["level"])
+		player1_model_save_name = player1_model_name + "-" + "-".join([i["name"] for i in player1_model["prompt_config"]])
+		player2_model_save_name = player2_model_name + "-" + "-".join([i["name"] for i in player2_model["prompt_config"]])
+		player1_model_save_name = player1_model_save_name.replace("/", "_")
+		player2_model_save_name = player2_model_save_name.replace("/", "_")
 		print(player1_model_save_name, player2_model_save_name)
-		with open(f"chess_stock_baseline/chess_{game_index}_{player1_model_save_name}_{player2_model_save_name}.json", "w") as f:
-				json.dump({
-					"status": game_state,
-					"winner": {
-						0: "Player 1",
-						1: "Player 2",
-						2: "Draw",
-						3: "Player 2",
-						4: "Player 1",
-					}[win],
-					"player1_model": player1_model,
-					"player2_model": player2_model,
-					"total_tokens": total_tokens,
-					"illegal_tolerance": illegal_tolerance,
-					"number_of_requests": len(game_log)/2,
-					"game_log": game_log,
-					"first_player_messages": first_player_store_message,
-					"second_player_messages": second_player_store_message,
-				}, f, indent=4)
+		# save the chat log for two players
+		with open(f"chess_archive/chess_{game_index}_{player1_model_save_name}_{player2_model_save_name}.json", "w") as f:
+			json.dump({
+				"status": game_state,
+				"winner": {
+					0: "Player 1",
+					1: "Player 2",
+					2: "Draw",
+					3: "Player 2",
+					4: "Player 1",
+				}[win],
+				"player1_model": player1_model,
+				"player2_model": player2_model,
+				"total_tokens": total_tokens,
+				"illegal_tolerance": illegal_tolerance,
+				"number_of_requests": len(game_log)/2,
+				"game_log": game_log,
+				"first_player_messages": first_player_store_message,
+				"second_player_messages": second_player_store_message,
+			}, f, indent=4)
+	except Exception as e:
+		print(e)
+		continue

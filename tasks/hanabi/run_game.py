@@ -5,7 +5,7 @@ import pyspiel
 import os
 import json
 import regex
-from utils.chat_service import get_chat
+from tools.chat_service import get_chat
 from utils.play_service import (
 	play,
 	create_hook_functions,

@@ -1,5 +1,4 @@
-import json
-from chat_service import get_chat
+from tools.chat_service import get_chat
 import copy
 
 # player1_model_list = [

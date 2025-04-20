@@ -8,7 +8,7 @@ from pettingzoo.classic import connect_four_v3
 import random
 import requests
 import time
-from utils.chat_service import get_chat,fix_json
+from tools.chat_service import get_chat,fix_json
 from utils.play_service import (
     play,
     create_hook_functions,

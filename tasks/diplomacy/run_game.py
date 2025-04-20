@@ -7,7 +7,7 @@ action phases. It can store state into a single JSON file, allowing you to resum
 the game gracefully.
 
 Command-line arguments:
---num_agents: The number of players (agents). Defaults to 7.
+--num_powers: The number of players (agents). Defaults to 7.
 --winning_centers: The minimum number of supply centers needed to win the game. Defaults to 18.
 --max_tokens: The maximum cumulative tokens to allow before ending the game. Defaults to 100000.
 --model_names: Comma-separated model names for each agent, e.g. "gpt-4,gpt-3.5,gpt-3.5,..."
@@ -16,12 +16,12 @@ Command-line arguments:
 --state_file: JSON file to store and resume game states. Defaults to "diplomacy_game_state.json".
 --enable_negotiation: Whether to enable negotiation rounds. Defaults to 1 (enabled).
 --negotiation_rounds: Number of negotiation rounds per move phase. Defaults to 3.
---store_folder: Folder to store game state and messages.
+--save_folder: Folder to save game state and messages.
 
 
 Example usage:
 python diplomacy_refactored.py
---num_agents 7
+--num_powers 7
 --winning_centers 18
 --max_tokens 500000
 --model_names "gpt-4,gpt-4,gpt-3.5,gpt-3.5,gpt-4,gpt-3.5,gpt-4"
@@ -30,7 +30,7 @@ python diplomacy_refactored.py
 --state_file "my_saved_game.json"
 --enable_negotiation 1
 --negotiation_rounds 3
---store_folder "my_game_store"
+--save_folder "my_game_saves"
 """
 import time
 import copy
@@ -49,23 +49,15 @@ from diplomacy.utils.export import to_saved_game_format, load_saved_games_from_d
 from diplomacy.utils.sorted_dict import SortedDict
 from openai import OpenAI
 from diplomacy_utils import (
-    parse_diplomacy_state,
-    get_message_text_bundle,
-    gen_round_prompt,
-    gen_message_prompt,
-    gen_action_prompt,
     get_message_text,
-    gen_init_prompt,
-    gen_winter_action_prompt,
-    generate_phase_history_prompt,
+    gen_round_prompt,
     append_user_message,
     append_assistant_message,
+    gen_winter_action_prompt,
+    gen_action_prompt,
     gen_retreat_action_prompt,
-    gen_winter_action_prompt_bundle,
-    gen_action_prompt_bundle,
-    gen_retreat_action_prompt_bundle,
-    gen_init_prompt_bundle,
-    gen_negotiation_prompt_bundle,
+    gen_init_prompt,
+    gen_negotiation_prompt,
 )
 JSON_PATTERN = re.compile(r"({(.|\n)*})")
 anthropic_client = anthropic.Anthropic(
@@ -75,23 +67,6 @@ headers = {
   'Authorization': "Bearer "+os.environ.get("OPENROUTER_API_KEY"),
   'Content-Type': "application/json",
 }
-# response = requests.post('https://openrouter.ai/api/v1/chat/completions', headers=headers, json={
-#     'model': 'mistralai/mixtral-8x7b-instruct',
-#     'messages': [
-#       {
-#         'role': 'user',
-#         'content': 'Hello'
-#       }
-#     ],
-#     'provider': {
-#       'order': [
-#         'OpenAI',
-#         'Together'
-#       ],
-#       'allow_fallbacks': False
-#     }
-# })
-
 
 def format_adj_information(adj_info):
     """
@@ -145,7 +120,7 @@ def end_game_check(game, winning_centers, max_tokens, max_years, total_tokens):
     return False
 
 def play_diplomacy_game(
-    num_agents: int=7,
+    num_powers: int=7,
     winning_centers: int=18,
     max_tokens: int=1000000,
     max_years: int=1916,
@@ -156,13 +131,13 @@ def play_diplomacy_game(
     message_file: str="diplomacy_game_message.json",
     enable_negotiation: int=1,
     negotiation_rounds: int=3,
-    store_folder: str=None,
+    save_folder: str=None,
     ):
     """
     Main function to run a Diplomacy game with the given settings.
 
     Args:
-    num_agents: Number of players in the game.
+    num_powers: Number of players in the game.
     winning_centers: Number of centers needed to claim victory.
     max_tokens: If the total token usage exceeds this, end the game.
     model_names: A list of strings denoting which model each agent uses.
@@ -174,14 +149,13 @@ def play_diplomacy_game(
     # Basic validation
     if model_names is None:
         # Default every agent to the same model if not provided
-        model_names = ["bot"] * num_agents
-    elif len(model_names) < num_agents:
+        model_names = ["bot"] * num_powers
+    elif len(model_names) < num_powers:
         raise ValueError("Not enough model names provided for each agent.")
     
-    index_model = {i: model_names[i] for i in range(num_agents)}
+    index_model = {i: model_names[i] for i in range(num_powers)}
     model_index = {name: i for i, name in index_model.items()}
 
-    # For simplicity, let's assume the default power names are 7:
     power_list = [
         "AUSTRIA",
         "ENGLAND",
@@ -197,7 +171,7 @@ def play_diplomacy_game(
             neutral_powers.append(power_list[i])
 
     # Map indices to powers and vice versa
-    index_power_name = {i: power_list[i] for i in range(num_agents)}
+    index_power_name = {i: power_list[i] for i in range(num_powers)}
     power_name_index = {name: i for i, name in index_power_name.items()}
     # generate model_power_dict
     model_name_set = set(model_names)
@@ -210,15 +184,16 @@ def play_diplomacy_game(
             "store_messages": [],
         } for model_name in model_name_set if model_name != "bot"
     }
+
     # init messages
     for model_name in model_power_dict.keys():
         model_power_dict[model_name]["messages"].append({
             "role": "user",
-            "content": gen_init_prompt_bundle(neutral_powers, model_power_dict[model_name]["power_names"], power_list)
+            "content": gen_init_prompt(neutral_powers, model_power_dict[model_name]["power_names"], power_list)
         })
         model_power_dict[model_name]["store_messages"].append({
             "role": "user",
-            "content": gen_init_prompt_bundle(neutral_powers, model_power_dict[model_name]["power_names"], power_list)
+            "content": gen_init_prompt(neutral_powers, model_power_dict[model_name]["power_names"], power_list)
         })
         model_power_dict[model_name]["messages"].append({
             "role": "assistant",
@@ -228,20 +203,19 @@ def play_diplomacy_game(
             "role": "assistant",
             "content": "Sure, let's start."
         })
+
     # Initialize or load from state_file
-    if os.path.exists(store_folder + "/" + state_file):
-        state = json.load(open(store_folder + "/" + state_file, "r"))
+    if os.path.exists(save_folder + "/" + state_file):
+        state = json.load(open(save_folder + "/" + state_file, "r"))
         game = load_saved_games_from_disk(state["game_path"])[-1]
         past_model_power_dict = state["model_power_dict"]
         total_tokens = state["total_tokens"]
         try:
             input_tokens = state["input_tokens"]
             output_tokens = state["output_tokens"]
-            cached_tokens = state["cached_tokens"]
         except KeyError:
             input_tokens = 0
             output_tokens = 0
-            cached_tokens = 0
         for model_name in model_power_dict.keys():
             model_power_dict[model_name]["store_messages"] = past_model_power_dict[model_name]["store_messages"]
         print("Resuming from existing game:", game.get_current_phase())
@@ -250,23 +224,20 @@ def play_diplomacy_game(
         total_tokens = 0
         input_tokens = 0
         output_tokens = 0
-        cached_tokens = 0
 
     # init power
     for power_name, power in game.powers.items():
         if model_names[power_name_index[power_name]] == "bot":
             continue
         model_power_dict[model_names[power_name_index[power_name]]]["power_names"].append(power_name)
-    
-    
 
     client = OpenAI(
         api_key=os.environ.get("OPENAI_API_KEY", ""),
     )
 
-    # Helper function to call the chat model
+    # Helper function to call the chat model and capture tokens
     def call_chat_model(role_messages, model):
-        nonlocal total_tokens, input_tokens, output_tokens, cached_tokens
+        nonlocal total_tokens, input_tokens, output_tokens
         try:
             # You can also pass temperature, top_p here if needed
             if "o1" not in model and "gpt" in model:
@@ -282,9 +253,8 @@ def play_diplomacy_game(
                 print("input tokens used in this call: ", chat_completion.usage.to_dict().get("prompt_tokens", 0))
                 output_tokens += chat_completion.usage.to_dict().get("completion_tokens", 0)
                 print("output tokens used in this call: ", chat_completion.usage.to_dict().get("completion_tokens", 0))
-                cached_tokens += chat_completion.usage.to_dict().get("completion_tokens_details", {}).get("cached_tokens", 0)
                 content = chat_completion.choices[0].message.content
-            elif "o1" in model:
+            elif "o1" in model or "o3" in model:
                 chat_completion = client.chat.completions.create(
                     messages=role_messages,
                     model=model,
@@ -295,17 +265,6 @@ def play_diplomacy_game(
                 print("input tokens used in this call: ", chat_completion.usage.to_dict().get("prompt_tokens", 0))
                 output_tokens += chat_completion.usage.to_dict().get("completion_tokens", 0)
                 print("output tokens used in this call: ", chat_completion.usage.to_dict().get("completion_tokens", 0))
-                cached_tokens += chat_completion.usage.to_dict().get("completion_tokens_details", {}).get("cached_tokens", 0)
-                content = chat_completion.choices[0].message.content
-            elif "o3" in model:
-                chat_completion = client.chat.completions.create(
-                    messages=role_messages,
-                    model=model,
-                )
-                total_tokens += chat_completion.usage.to_dict().get("total_tokens", 0)
-                input_tokens += chat_completion.usage.to_dict().get("prompt_tokens", 0)
-                output_tokens += chat_completion.usage.to_dict().get("completion_tokens", 0)
-                cached_tokens += chat_completion.usage.to_dict().get("completion_tokens_details", {}).get("cached_tokens", 0)
                 content = chat_completion.choices[0].message.content
             elif "claude" in model:
                 message = anthropic_client.messages.create(
@@ -339,9 +298,7 @@ def play_diplomacy_game(
                 print("input tokens used in this call: ", response["usage"].get("prompt_tokens", 0))
                 output_tokens += response["usage"].get("completion_tokens", 0)
                 print("output tokens used in this call: ", response["usage"].get("completion_tokens", 0))
-                cached_tokens += response["usage"].get("completion_tokens_details", {}).get("cached_tokens", 0)
                 content = response["choices"][0]["message"]["content"]
-                print("deepseek content: ", content)
             return content
         except Exception as e:
             print("Error calling chat model:", e)
@@ -385,7 +342,6 @@ def play_diplomacy_game(
         print("total tokens: ", total_tokens)
         print("input tokens: ", input_tokens)
         print("output tokens: ", output_tokens)
-        print("cached tokens: ", cached_tokens)
         print("*"*50)
         print("current state: ", game.get_state())
         print("now phase: ", game.get_current_phase())
@@ -398,7 +354,7 @@ def play_diplomacy_game(
             for model_name in model_power_dict.keys():
                 print("model_name: ", model_name)
                 print("controlling powers: ", model_power_dict[model_name]["power_names"])
-                prompt = gen_winter_action_prompt_bundle(model_power_dict[model_name]["power_names"], current_state, str(model_power_dict[model_name]["power_name_to_location_orders"]), neutral_powers)
+                prompt = gen_winter_action_prompt(model_power_dict[model_name]["power_names"], current_state, str(model_power_dict[model_name]["power_name_to_location_orders"]), neutral_powers)
                 append_user_message(model_power_dict[model_name]["messages"], model_power_dict[model_name]["store_messages"], prompt)
                 print("prompt: ", prompt)
                 while True:
@@ -421,6 +377,7 @@ def play_diplomacy_game(
                 print("power_orders: ", power_orders)
                 # Store
                 store_orders[f"{current_phase}-{model_name}"] = power_orders
+
             # iterate through all the bot
             for power_name, power in game.powers.items():
                 if model_names[power_name_index[power_name]] == "bot":
@@ -442,13 +399,15 @@ def play_diplomacy_game(
                     game.set_orders(power_name, power_orders)
                 else:
                     continue
+
         elif phase_type == "R":
             print("retreat phase")
+            
             # iterate through each model
             for model_name in model_power_dict.keys():
                 print("model_name: ", model_name)
                 print("controlling powers: ", model_power_dict[model_name]["power_names"])
-                prompt = gen_retreat_action_prompt_bundle(model_power_dict[model_name]["power_names"], current_state, str(model_power_dict[model_name]["power_name_to_location_orders"]), neutral_powers)
+                prompt = gen_retreat_action_prompt(model_power_dict[model_name]["power_names"], current_state, str(model_power_dict[model_name]["power_name_to_location_orders"]), neutral_powers)
                 append_user_message(model_power_dict[model_name]["messages"], model_power_dict[model_name]["store_messages"], prompt)
                 print("prompt: ", prompt)
                 while True:
@@ -488,6 +447,7 @@ def play_diplomacy_game(
                     game.set_orders(power_name, power_orders)
                 else:
                     continue
+
         elif phase_type == "M":
             print("move phase")
             if enable_negotiation == 1:
@@ -510,16 +470,16 @@ def play_diplomacy_game(
                                 negotiation_rounds=negotiation_rounds,
                                 neutral_powers=neutral_powers,
                             )
-                            prompt += gen_negotiation_prompt_bundle(round_i, negotiation_rounds, model_power_dict[model_name]["power_names"], power_list, None, neutral_powers, False)
+                            prompt += gen_negotiation_prompt(round_i, negotiation_rounds, model_power_dict[model_name]["power_names"], power_list, None, neutral_powers, False)
                         else:
                             # Summarize last round's messages
-                            last_msgs = get_message_text_bundle(
+                            last_msgs = get_message_text(
                                 game.messages,
                                 recipients=model_power_dict[model_name]["power_names"],
                                 time_start=last_negotiation_round_time or 0,
                                 time_end=negotiation_round_start_time
                             )
-                            prompt = gen_negotiation_prompt_bundle(round_i, negotiation_rounds, model_power_dict[model_name]["power_names"], power_list, last_msgs, neutral_powers, False)
+                            prompt = gen_negotiation_prompt(round_i, negotiation_rounds, model_power_dict[model_name]["power_names"], power_list, last_msgs, neutral_powers, False)
                         prompt += f"""\nEnsure that in your JSON output, the value assigned to the "messages" key must strictly be options listed in {model_power_dict[model_name]['power_names']}.\n"""
                         append_user_message(model_power_dict[model_name]["messages"], model_power_dict[model_name]["store_messages"], prompt)
                         print("prompt: ", prompt)
@@ -552,16 +512,17 @@ def play_diplomacy_game(
                     last_negotiation_round_time = negotiation_round_start_time
                 # "End" negotiation message
                 current_time = common.timestamp_microseconds()
+                
                 for model_name in model_power_dict.keys():
                     print("model_name: ", model_name)
                     print("controlling powers: ", model_power_dict[model_name]["power_names"])
-                    last_msgs = get_message_text_bundle(
+                    last_msgs = get_message_text(
                         game.messages,
                         recipients=model_power_dict[model_name]["power_names"],
                         time_start=last_negotiation_round_time or 0,
                         time_end=current_time
                     )
-                    prompt = gen_negotiation_prompt_bundle(negotiation_rounds, negotiation_rounds, model_power_dict[model_name]["power_names"], power_list, last_msgs, neutral_powers, True)
+                    prompt = gen_negotiation_prompt(negotiation_rounds, negotiation_rounds, model_power_dict[model_name]["power_names"], power_list, last_msgs, neutral_powers, True)
                     append_user_message(model_power_dict[model_name]["messages"], model_power_dict[model_name]["store_messages"], prompt)
                     print("prompt: ", prompt)
                     while True:
@@ -578,7 +539,7 @@ def play_diplomacy_game(
                             continue
                     store_messages[f"{current_phase}-{model_name}-R{negotiation_rounds}-end"] = content_reply
             print("#"*50)
-            print("negotiation phase done")
+            print("negotiation phase done/skipped")
             print("start action phase")
             # iterate through each model
             for model_name in model_power_dict.keys():
@@ -598,7 +559,7 @@ def play_diplomacy_game(
                 else:
                     adj_information = str(adj_list)
                 # adj_information = None
-                prompt = gen_action_prompt_bundle(
+                prompt = gen_action_prompt(
                     power_names=model_power_dict[model_name]["power_names"], state=current_state, 
                     possible_orders=str(model_power_dict[model_name]["power_name_to_location_orders"]), 
                     adj_information=adj_information, 
@@ -644,16 +605,15 @@ def play_diplomacy_game(
 
         # Save the game state
         print("Saving game state...")
-        game.render(True, True, output_format="svg", output_path=f"{store_folder}/maps/{game.get_current_phase()}.svg")
+        game.render(True, True, output_format="svg", output_path=f"{save_folder}/maps/{game.get_current_phase()}.svg")
         outcome = None
-        game_save_path = f"{store_folder}/diplomacy_game_save.json"
+        game_save_path = f"{save_folder}/diplomacy_game_save.json"
         to_saved_game_format(game, output_path=game_save_path)
         data_to_save = {
             "game_path": game_save_path, # Save the path to the game state
             "total_tokens": total_tokens,
             "input_tokens": input_tokens,
             "output_tokens": output_tokens,
-            "cached_tokens": cached_tokens,
             "outcome": outcome,
             "model_power_dict": {
                 model_name: {
@@ -668,7 +628,7 @@ def play_diplomacy_game(
             "store_messages": store_messages,
             "store_orders": store_orders
         }
-        with open(store_folder + "/" + state_file, "w") as f:
+        with open(save_folder + "/" + state_file, "w") as f:
             json.dump(data_to_save, f, indent=2)
         if any([model_power_dict[model_name]["supply_center_count"] >= winning_centers for model_name in model_power_dict.keys()]):
             break
@@ -684,7 +644,7 @@ def play_diplomacy_game(
     
 def main():
     parser = argparse.ArgumentParser(description="Run a configurable Diplomacy game with LLM-based agents.")
-    parser.add_argument("--num_agents", type=int, default=7, help="Number of players in the game.")
+    parser.add_argument("--num_powers", type=int, default=7, help="Number of players in the game.")
     parser.add_argument("--winning_centers", type=int, default=18, help="Number of supply centers required to win.")
     parser.add_argument("--max_tokens", type=int, default=10000000, help="Max total token usage before ending.")
     parser.add_argument("--max_years", type=int, default=1916, help="Max number of years to run the game.")
@@ -697,7 +657,7 @@ def main():
     parser.add_argument("--enable_negotiation", type=int, default=1, help="Enable negotiation phase.")
     parser.add_argument("--negotiation_rounds", type=int, default=3,
     help="Number of negotiation rounds per move phase.")
-    parser.add_argument("--store_folder", type=str, default=None, help="Folder to store game state.")
+    parser.add_argument("--save_folder", type=str, default=None, help="Folder to store game state.")
     args = parser.parse_args()
     print(args)
     
@@ -707,9 +667,8 @@ def main():
     if args.model_names:
         models = [m.strip() for m in args.model_names.split(",")]
 
-    if args.store_folder is None:
-        store_folder = time.strftime("%Y%m%d-%H%M%S")
-        save_folder = f"diplomacy_saves/" + store_folder
+    if args.save_folder is None:
+        save_folder = f"diplomacy_saves/" + time.strftime("%Y%m%d-%H%M%S")
         os.makedirs(save_folder, exist_ok=True)
         os.makedirs(f"{save_folder}/maps", exist_ok=True)
         # save args as config
@@ -720,7 +679,7 @@ def main():
         sys.stdout = output_file
         print(f"Using save folder: {save_folder}", flush=True)
     else:
-        save_folder = f"diplomacy_saves/" + args.store_folder
+        save_folder = args.save_folder
         os.makedirs(save_folder, exist_ok=True)
         os.makedirs(f"{save_folder}/maps", exist_ok=True)
         # save args as config
@@ -734,7 +693,7 @@ def main():
 
     try:
         play_diplomacy_game(
-            num_agents=args.num_agents,
+            num_powers=args.num_powers,
             winning_centers=args.winning_centers,
             max_tokens=args.max_tokens,
             max_years=args.max_years,
@@ -744,7 +703,7 @@ def main():
             state_file=args.state_file,
             enable_negotiation=args.enable_negotiation,
             negotiation_rounds=args.negotiation_rounds,
-            store_folder=save_folder
+            save_folder=save_folder
         )
         output_file.close()
     except Exception as e:

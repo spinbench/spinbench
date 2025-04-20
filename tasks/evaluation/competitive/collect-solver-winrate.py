@@ -2,6 +2,7 @@ import os
 import json
 import sys
 from collections import defaultdict
+import argparse
 
 def process_directory_for_solver_winrate(dir_path, output_filename="our_solver_winrate.json"):
     if not os.path.isdir(dir_path):
@@ -72,9 +73,8 @@ def process_directory_for_solver_winrate(dir_path, output_filename="our_solver_w
         print(f"{matchup}: {info['wins']}/{info['total']} wins = {info['win_rate']:.2f}%")
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python collect_our_solver_winrate.py <directory_with_jsons>")
-        sys.exit(1)
-
-    input_path = sys.argv[1]
+    parser = argparse.ArgumentParser(description="Process JSON files for our_solver winrate.")
+    parser.add_argument("--directory", type=str, required=True, help="Directory containing JSON files.")
+    args = parser.parse_args()
+    input_path = args.directory
     process_directory_for_solver_winrate(input_path)
