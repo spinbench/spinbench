@@ -92,6 +92,7 @@ class ChatGemini(EngineLM, CachedEngine):
                 max_tokens=max_tokens,
                 top_p=top_p,
             )
+        self.total_tokens += response.usage.total_tokens
         response = response.choices[0].message.content
         self._save_cache(sys_prompt_arg + prompt, response)
         return response
@@ -151,7 +152,7 @@ class ChatGemini(EngineLM, CachedEngine):
                 max_tokens=max_tokens,
                 top_p=top_p,
             )
-
+        self.total_tokens += response.usage.total_tokens
         response_text = response.choices[0].message.content
         self._save_cache(cache_key, response_text)
         return response_text
@@ -175,5 +176,6 @@ class ChatGemini(EngineLM, CachedEngine):
                 max_tokens=max_tokens,
                 top_p=top_p,
             )
+        self.total_tokens += response.usage.total_tokens
         response_text = response.choices[0].message.content
         return response_text

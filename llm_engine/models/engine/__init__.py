@@ -47,7 +47,7 @@ def get_engine(engine_name: str, **kwargs) -> EngineLM:
         # remove engine_name "azure-" prefix
         engine_name = engine_name[6:]
         return AzureChatOpenAI(model_string=engine_name, **kwargs)
-    elif (("gpt-4" in engine_name) or ("gpt-3.5" in engine_name)) or (("o1-mini") in engine_name) or (("o1-preview") in engine_name) or (("o1") in engine_name) or (("o3-mini") in engine_name) or (("o3-preview") in engine_name) or (("o3") in engine_name):
+    elif (("gpt-4" in engine_name) or ("gpt-3.5" in engine_name)) or (("o1-mini") in engine_name) or (("o1-preview") in engine_name) or (("o1") in engine_name) or (("o3-mini") in engine_name) or (("o3-preview") in engine_name) or (("o3") in engine_name) or (("o4-mini") in engine_name) or (("o4-preview") in engine_name) or (("o4") in engine_name):
         from .openai import ChatOpenAI
         return ChatOpenAI(model_string=engine_name, is_multimodal=_check_if_multimodal(engine_name), **kwargs)
     elif "claude" in engine_name:

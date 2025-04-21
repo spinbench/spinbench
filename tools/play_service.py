@@ -53,12 +53,10 @@ def play(player_messages, player_store_message, player_model, player_reasoning_a
         illegal_tolerance -= 1
         player_messages.extend([
             {"role": "assistant", "content": content},
-            # {"role": "user", "content": "Illegal move, try again, your legal moves are: " + " ".join(legal_move_list)}
             {"role": "user", "content": "Illegal move, try again"}
         ])
         player_store_message.extend([
             {"role": "assistant", "content": content},
-            # {"role": "user", "content": "Illegal move, try again, your legal moves are: " + " ".join(legal_move_list)}
             {"role": "user", "content": "Illegal move, try again"}
         ])
         move, content, used_token, action, reason = gen_move(player_messages, player_model)

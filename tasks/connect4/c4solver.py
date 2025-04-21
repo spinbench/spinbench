@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import subprocess
+import argparse
 
 app = Flask(__name__)
 
@@ -47,4 +48,8 @@ def analyze_position():
     return jsonify({"pos": input_data.replace("\n",""), "score": scores})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    parser = argparse.ArgumentParser(description="connect 4 solver server")
+    parser.add_argument('--port', type=int, default=5000, help="Port to run the server on")
+    args = parser.parse_args()
+    # Start the Flask server
+    app.run(host='0.0.0.0', port=args.port)

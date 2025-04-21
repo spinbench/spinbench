@@ -159,6 +159,28 @@ def gen_move(player_messages, player_model):
 	return move, content, used_token, action, reason
 
 
+def check_win(rewards):
+	win = None
+	if len(list(rewards.keys())) == 1 and rewards[list(rewards.keys())[0]] == 0:
+		print("Draw!")
+		win = 2
+	elif rewards["player_1"] == 1 and rewards["player_2"] == 1:
+		print("Draw!")
+		win = 2
+	elif rewards["player_1"] == 1 and rewards["player_2"] == -1:
+		print("Player 1 wins!")
+		win = 0
+	elif rewards["player_1"] == -1 and rewards["player_2"] == 1:
+		print("Player 2 wins!")
+		win = 1
+	elif rewards["player_1"] == -1 and rewards["player_2"] == 0:
+		print("Player 1 illegal move!")
+		win = 3
+	elif rewards["player_1"] == 0 and rewards["player_2"] == -1:
+		print("Player 2 illegal move!")
+		win = 4
+	return win
+
 ######################################
 ########### solver utils #############
 ######################################

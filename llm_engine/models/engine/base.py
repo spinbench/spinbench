@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 class EngineLM(ABC):
     system_prompt: str = "You are a helpful, creative, and smart assistant."
     model_string: str
+    total_tokens: int = 0
     @abstractmethod
     def generate(self, prompt, system_prompt=None, **kwargs):
         pass

@@ -110,7 +110,7 @@ class ChatOpenAI(EngineLM, CachedEngine):
             return cache_or_none
 
 
-        if "o1" in self.model_string:
+        if "o1" in self.model_string or "o3" in self.model_string or "o4" in self.model_string:
             response = self.client.chat.completions.create(
             model=self.model_string,
             messages=[
@@ -128,6 +128,7 @@ class ChatOpenAI(EngineLM, CachedEngine):
                 max_tokens=max_tokens,
                 top_p=top_p,
             )
+        self.total_tokens += response.usage.total_tokens
         response = response.choices[0].message.content
         self._save_cache(sys_prompt_arg + prompt, response)
         return response
@@ -169,9 +170,7 @@ class ChatOpenAI(EngineLM, CachedEngine):
         cache_or_none = self._check_cache(cache_key)
         if cache_or_none is not None:
             return cache_or_none
-        ic(self.model_string)
-        if "o1" in self.model_string:
-            ic("using o1 model")
+        if "o1" in self.model_string or "o3" in self.model_string or "o4" in self.model_string:
             response = self.client.chat.completions.create(
             model=self.model_string,
             messages=[
@@ -191,6 +190,7 @@ class ChatOpenAI(EngineLM, CachedEngine):
             )
 
         response_text = response.choices[0].message.content
+        self.total_tokens += response.usage.total_tokens
         self._save_cache(cache_key, response_text)
         return response_text
 
@@ -199,13 +199,7 @@ class ChatOpenAI(EngineLM, CachedEngine):
     ):
         sys_prompt_arg = system_prompt if system_prompt else self.system_prompt
         ic(self.model_string)
-        if "o1" in self.model_string:
-            ic("using o1 model")
-            response = self.client.chat.completions.create(
-            model=self.model_string,
-            messages=history,
-        )
-        elif "o3" in self.model_string:
+        if "o1" in self.model_string or "o3" in self.model_string or "o4" in self.model_string:
             response = self.client.chat.completions.create(
                 model=self.model_string,
                 messages=history,
@@ -220,6 +214,7 @@ class ChatOpenAI(EngineLM, CachedEngine):
                 max_tokens=max_tokens,
                 top_p=top_p,
             )
+        self.total_tokens += response.usage.total_tokens
         response_text = response.choices[0].message.content
         return response_text
 

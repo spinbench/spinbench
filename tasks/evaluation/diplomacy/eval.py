@@ -1,16 +1,9 @@
 # Generating the meta data for further evaluation
-import glob
 import json
-import regex
-import time
-import traceback
 import os
-import re
 import argparse
 import sys
-from diplomacy import Game, Message
-from diplomacy.utils.export import to_saved_game_format, load_saved_games_from_disk
-from diplomacy.utils.game_phase_data import GamePhaseData, MESSAGES_TYPE
+from diplomacy.utils.export import load_saved_games_from_disk
 from utils import parse_model_message
 
 def compute_metrics(tp, fp, fn):
@@ -41,7 +34,7 @@ def get_game_by_phase(games, phase):
 			return game
 	return None
 
-def process_game(game_folder):
+def process_game(game_folder, output_file):
 	power_list = [
         "AUSTRIA",
         "ENGLAND",
@@ -53,10 +46,29 @@ def process_game(game_folder):
     ]
 	game_state = json.load(open(os.path.join(game_folder, "diplomacy_game_state.json"),"r"))
 	games = load_saved_games_from_disk(os.path.join(game_folder, "diplomacy_game_save.json"))
+	store_result = {}
 	for model in game_state["model_power_dict"].keys():
 		if "sta" in game_state["model_power_dict"][model].keys():
 			continue
 		sta = {
+			# print sta
+			"final_supply_centers": None,
+			"final_controlled_regions": None,
+			"success_moves_total": None,
+			"total_moves_total": None,
+			"success_moves_rates": None,
+			"success_attacks_total": None,
+			"total_attacks_total": None,
+			"success_attacks_rates": None,
+			"success_support_self_total": None,
+			"total_support_self_total": None,
+			"success_support_self_rates": None,
+			"success_support_others_total": None,
+			"total_support_others_total": None,
+			"success_support_others_rates": None,
+			"factual_metrics": {},
+
+
 			"supply_centers": [],
 			"controlled_regions": [],
 			"success_moves": [],
@@ -70,7 +82,6 @@ def process_game(game_folder):
 			"phase_list": [],
 			"orders": {},
 			"message_dict": {},
-			"factual_metrics": {},
 		}
 		power_names = game_state["model_power_dict"][model]["power_names"]
 		other_powers = [power for power in power_list if power not in power_names]
@@ -181,7 +192,20 @@ def process_game(game_folder):
 			sta["success_attacks"].append(success_attack)
 			sta["success_support_self"].append(success_support_self)
 			sta["success_support_others"].append(success_support_others)
-
+		sta["final_supply_centers"] = sta["supply_centers"][-1]
+		sta["final_controlled_regions"] = sta["controlled_regions"][-1]
+		sta["success_moves_total"] = sum(sta["success_moves"])
+		sta["total_moves_total"] = sum(sta["total_moves"])
+		sta["success_moves_rates"] = sta["success_moves_total"] / sta["total_moves_total"] if sta["total_moves_total"] > 0 else None
+		sta["success_attacks_total"] = sum(sta["success_attacks"])
+		sta["total_attacks_total"] = sum(sta["total_attacks"])
+		sta["success_attacks_rates"] = sta["success_attacks_total"] / sta["total_attacks_total"] if sta["total_attacks_total"] > 0 else None
+		sta["success_support_self_total"] = sum(sta["success_support_self"])
+		sta["total_support_self_total"] = sum(sta["total_support_self"])
+		sta["success_support_self_rates"] = sta["success_support_self_total"] / sta["total_support_self_total"] if sta["total_support_self_total"] > 0 else None
+		sta["success_support_others_total"] = sum(sta["success_support_others"])
+		sta["total_support_others_total"] = sum(sta["total_support_others"])
+		sta["success_support_others_rates"] = sta["success_support_others_total"] / sta["total_support_others_total"] if sta["total_support_others_total"] > 0 else None
 		game_state["model_power_dict"][model]["sta"] = sta
 		try:
 			message_dict = parse_model_message(store_messages,phase_list,model)
@@ -364,16 +388,35 @@ def process_game(game_folder):
 		# print this models' all metrics
 		print("model",model)
 		print("sta",sta)
+		new_sta = {
+			"final_supply_centers": sta["final_supply_centers"],
+			"final_controlled_regions": sta["final_controlled_regions"],
+			"success_moves_total": sta["success_moves_total"],
+			"total_moves_total": sta["total_moves_total"],
+			"success_moves_rates": sta["success_moves_rates"],
+			"success_attacks_total": sta["success_attacks_total"],
+			"total_attacks_total": sta["total_attacks_total"],
+			"success_attacks_rates": sta["success_attacks_rates"],
+			"success_support_self_total": sta["success_support_self_total"],
+			"total_support_self_total": sta["total_support_self_total"],
+			"success_support_self_rates": sta["success_support_self_rates"],
+			"success_support_others_total": sta["success_support_others_total"],
+			"total_support_others_total": sta["total_support_others_total"],
+			"success_support_others_rates": sta["success_support_others_rates"],
+			"factual_metrics": final_metrics,
+		}
+		store_result[model] = new_sta
 
-
-	# game = games[-1]
+	json.dump(store_result, open(os.path.join(output_file),"w"), indent=2)
 	json.dump(game_state, open(os.path.join(game_folder, "diplomacy_game_state.json"),"w"), indent=4)
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description="Process game folders.")
-	parser.add_argument("--game_folder", type=str, help="Path to the game folder")
+	parser.add_argument("--game_folder", type=str, help="Path to the game folder", required=True)
+	parser.add_argument("--output_file", type=str, help="Path to the output file (json)", required=True)
 	args = parser.parse_args()	
 	game_folder = args.game_folder
+	output_file = args.output_file
 	if not os.path.exists(game_folder):
 		print(f"Game folder {game_folder} does not exist.")
 		sys.exit(1)
@@ -386,4 +429,4 @@ if __name__ == "__main__":
 	if not os.path.exists(os.path.join(game_folder, "diplomacy_game_save.json")):
 		print(f"Game save file does not exist in {game_folder}.")
 		sys.exit(1)
-	process_game(game_folder)
+	process_game(game_folder, output_file)

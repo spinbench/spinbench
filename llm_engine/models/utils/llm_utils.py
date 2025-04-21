@@ -44,8 +44,6 @@ class LLMPlanCall(Function):
         self.system_prompt = system_prompt
         if self.system_prompt and self.system_prompt.get_role_description() is None:
             self.system_prompt.set_role_description(SYSTEM_PROMPT_DEFAULT_ROLE)
-    # TODO(Kevin): Potentially use LLM as formatter 
-    # Currently still directly output plan
 
 
     def forward(self, input_variable: Union[str, List], response_role_description: str = SYSTEM_PROMPT_DEFAULT_ROLE) -> str:
@@ -73,7 +71,6 @@ class LLMPlanCall(Function):
 
         # Make the LLM Call
         response_text = self.engine(input_variable, system_prompt=system_prompt_value)
-        # TODO(kevin): add promopt generation step. 
         response = response_text
         # Create the response variable
         # response = Variable(

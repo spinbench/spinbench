@@ -79,7 +79,7 @@ class ChatAnthropic(EngineLM, CachedEngine):
             max_tokens=max_tokens,
             top_p=top_p,
         )
-
+        self.total_tokens += response.usage.input_tokens + response.usage.output_tokens
         response = response.content[0].text
         self._save_cache(sys_prompt_arg + prompt, response)
         return response
@@ -130,6 +130,7 @@ class ChatAnthropic(EngineLM, CachedEngine):
             top_p=top_p,
             system=sys_prompt_arg
         )
+        self.total_tokens += response.usage.input_tokens + response.usage.output_tokens
 
         response_text = response.content[0].text
         self._save_cache(cache_key, response_text)
@@ -149,5 +150,6 @@ class ChatAnthropic(EngineLM, CachedEngine):
             system=sys_prompt_arg
         )
 
+        self.total_tokens += response.usage.input_tokens + response.usage.output_tokens
         response_text = response.content[0].text
         return response_text
