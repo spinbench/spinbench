@@ -1,19 +1,21 @@
 # power list
 power_list="AUSTRIA ENGLAND FRANCE GERMANY ITALY RUSSIA TURKEY"
 
-# 2 2 2 1
-model1="gpt-4-turbo_1"
+# 2 1 1 1 1 1
+model1="gpt-4o_1"
 model2="claude-3-5-haiku-20241022_1"
-model3="gpt-4o_1"
-model4="deepseek-reasoner_1"
+model3="o1-preview_1"
+model4="gpt-4-turbo_1"
+model5="deepseek-reasoner_1"
+model6="o1_1"
 model_list=(\
 ${model1} \
-${model1} \
-${model2} \
-${model2} \
+${model6} \
 ${model3} \
+${model5} \
+${model2} \
 ${model4} \
-${model3} \
+${model2} \
 )
 winning_centers="18"
 
@@ -21,7 +23,7 @@ winning_centers="18"
 model_str=$(IFS=,; echo "${model_list[*]}")
 
 # start a new game
-python run_game.py \
+python -m spinbench.tasks.diplomacy.run_game \
 --num_powers=7 \
 --winning_centers=${winning_centers} \
 --max_tokens=10000000 \
@@ -32,4 +34,4 @@ python run_game.py \
 --state_file=diplomacy_game_state.json \
 --enable_negotiation=0 \
 --negotiation_rounds=3 \
---save_folder="2221-no-neg"
+--save_folder="211111-no-neg"

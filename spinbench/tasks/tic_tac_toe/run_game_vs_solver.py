@@ -15,59 +15,15 @@ from spinbench.tasks.tic_tac_toe.utils import (
 	gen_move,
 	find_best_move_for_x,
 	find_best_move_for_o,
+	solver_parse_observation,
 	get_initial_player_messages,
 	check_win,
 )
 
-# old version
-def old_parse_observation(observation_dict, agent):
-	# Extract the observation planes and the action mask from the observation dictionary
-	observation = observation_dict['observation']  # 3x3x2 array
-	action_mask = observation_dict['action_mask']  # Legal action mask
-
-	# Initialize variables to store the board and the agent's mark
-	board = [['' for _ in range(3)] for _ in range(3)]
-	if agent == 'player_1':
-		player_mark = 'X'
-		opponent_mark = 'O'
-	else:
-		player_mark = 'O'
-		opponent_mark = 'X'
-
-	# Parse the board from the observation
-	for row in range(3):
-		for col in range(3):
-			if observation[row][col][0] == 1:
-				board[row][col] = player_mark
-			elif observation[row][col][1] == 1:
-				board[row][col] = opponent_mark
-			else:
-				board[row][col] = ' '
-
-	# Convert the board into a text description
-	board_description = "\n".join(
-		[f"{board[0][0]} | {board[1][0]} | {board[2][0]}\n---------\n"
-		 f"{board[0][1]} | {board[1][1]} | {board[2][1]}\n---------\n"
-		 f"{board[0][2]} | {board[1][2]} | {board[2][2]}"]
-	)
-
-	# Convert the action mask into text description of legal actions
-	legal_moves = [i for i, is_legal in enumerate(action_mask) if is_legal == 1]
-	legal_moves_list = legal_moves.copy()
-	legal_moves_description = f"Legal moves: {', '.join(map(str, legal_moves))}" if legal_moves else "No legal moves available."
-
-	# Create the final description
-	description = f"Current player: {agent} ({player_mark})\n" \
-				  f"Opponent: {'player_2' if agent == 'player_1' else 'player_1'} ({opponent_mark})\n" \
-				  f"Board state:\n{board_description}\n" \
-				  f"{legal_moves_description}"
-	
-	return f"Board state:\n{board_description}\n", f"{legal_moves_description}\n", legal_moves_list
-
-def run_game_vs_solver(saves_folder, player_list, total_rounds=10):
+def run_game_vs_solver(store_folder, player_list, total_rounds=10):
 	assert total_rounds % 2 == 0, "total_rounds must be even"
-	if not os.path.exists(saves_folder):
-		os.makedirs(saves_folder)
+	if not os.path.exists(store_folder):
+		os.makedirs(store_folder)
 	player_list_json = json.load(open(player_list,"r"))
 	player1_model_list = player_list_json["player1_model_list"]
 	player2_model_list = player_list_json["player2_model_list"]
@@ -99,8 +55,8 @@ def run_game_vs_solver(saves_folder, player_list, total_rounds=10):
 				player1_model_save_name = player1_model_save_name.replace("/", "_")
 				player2_model_save_name = player2_model_save_name.replace("/", "_")
 				print(player1_model_save_name, player2_model_save_name)
-				filename = f"{saves_folder}/ttt_{game_index}_{player1_model_save_name}_{player2_model_save_name}.json"
-				reverse_filename = f"{saves_folder}/ttt_{game_index}_{player2_model_save_name}_{player1_model_save_name}.json"
+				filename = f"{store_folder}/ttt_{game_index}_{player1_model_save_name}_{player2_model_save_name}.json"
+				reverse_filename = f"{store_folder}/ttt_{game_index}_{player2_model_save_name}_{player1_model_save_name}.json"
 				if os.path.exists(filename) or os.path.exists(reverse_filename):
 					print("File exists", filename)
 					continue
@@ -122,8 +78,8 @@ def run_game_vs_solver(saves_folder, player_list, total_rounds=10):
 					hook_functions = {}
 					cnt += 1
 					observation, reward, termination, truncation, info = env.last()
-					board_state, legal_moves, legal_moves_list = parse_observation(observation, agent)
-					old_board_state, old_legal_moves, old_legal_moves_list = old_parse_observation(observation, agent)
+					board_state, legal_moves, legal_moves_list = solver_parse_observation(observation, agent)
+					old_board_state, old_legal_moves, old_legal_moves_list = parse_observation(observation, agent)
 					print("board state: ", old_board_state)
 					rewards = env.rewards
 					print(rewards)
@@ -144,14 +100,12 @@ def run_game_vs_solver(saves_folder, player_list, total_rounds=10):
 							else:
 								# LLM-based approach
 								first_player_messages = first_player_messages[:2]
-								print("Debug before or after 1")
 								hook_functions = create_hook_functions(
 									player1_model,
 									first_player_reasoning_action_steps,
 									old_board_state,
 									generate_action_prompt(old_legal_moves)
 								)
-								print("Debug before or after 2")
 								move, action, win, game_state, added_tokens = play(
 									first_player_messages,
 									first_player_store_message,
@@ -166,11 +120,9 @@ def run_game_vs_solver(saves_folder, player_list, total_rounds=10):
 									hook_functions,
 									0
 								)
-								print("Debug before or after 3")
 								total_tokens += added_tokens
 
 						elif agent == 'player_2':
-							print("DEBUG: agent=", agent, " player2_model_name=", player2_model_name)
 							if player2_model_name == 'our_solver':
 								# move_for = -1  # 'O'
 								best_move = find_best_move_for_o(board_state)
@@ -221,7 +173,7 @@ def run_game_vs_solver(saves_folder, player_list, total_rounds=10):
 				player2_model_save_name = player2_model_save_name.replace("/", "_")
 				print(player1_model_save_name, player2_model_save_name)
 				# save the chat log for two players
-				with open(f"{saves_folder}/ttt_{game_index}_{player1_model_save_name}_{player2_model_save_name}.json", "w") as f:
+				with open(f"{store_folder}/ttt_{game_index}_{player1_model_save_name}_{player2_model_save_name}.json", "w") as f:
 					json.dump({
 						"status": {
 							0: "Player 1 wins!",
@@ -255,7 +207,7 @@ def run_game_vs_solver(saves_folder, player_list, total_rounds=10):
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description="Run Tic Tac Toe game")
 	parser.add_argument(
-		"--saves_folder",
+		"--store_folder",
 		type=str,
 		required=True,
 		help="Folder to save the game results",
@@ -273,7 +225,7 @@ if __name__ == "__main__":
 		help="Total rounds to play",
 	)
 	args = parser.parse_args()
-	saves_folder = args.saves_folder
+	store_folder = args.store_folder
 	player_list = args.player_list
 	total_rounds = args.total_rounds
-	run_game_vs_solver(saves_folder, player_list, total_rounds)
+	run_game_vs_solver(store_folder, player_list, total_rounds)

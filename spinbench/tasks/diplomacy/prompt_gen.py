@@ -1,4 +1,4 @@
-from state_parse import parse_diplomacy_state
+from spinbench.tasks.diplomacy.state_parse import parse_diplomacy_state
 
 def gen_round_prompt(
     power_name: str,

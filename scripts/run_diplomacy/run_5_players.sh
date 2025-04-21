@@ -22,7 +22,7 @@ winning_centers="18"
 model_str=$(IFS=,; echo "${model_list[*]}")
 
 # start a new game
-python run_game.py \
+python -m spinbench.tasks.diplomacy.run_game \
 --num_powers=7 \
 --winning_centers=${winning_centers} \
 --max_tokens=10000000 \

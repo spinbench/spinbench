@@ -88,6 +88,49 @@ Your previous moves and thinking are below  (in the last 3 moves in the order of
 </previous_moves>
 """
 
+def solver_parse_observation(observation_dict, agent):
+	"""
+	Returns:
+	  board_2d (list of lists) - 3x3 board with ' ', 'X', or 'O'
+	  legal_moves (list of int) - same as legal_moves_list
+	  legal_moves_list (list of int) - identical to legal_moves, or a copy
+	"""
+	# 1. Grab the observation planes and action mask
+	observation = observation_dict['observation']  # shape: (3,3,2)
+	action_mask = observation_dict['action_mask']  # shape: (9,)
+
+	# 2. Initialize a 3x3 board of spaces
+	board_2d = [[' ' for _ in range(3)] for _ in range(3)]
+
+	# Determine which mark belongs to the agent vs. opponent
+	if agent == 'player_1':
+		player_mark = 'X'
+		opponent_mark = 'O'
+	else:
+		player_mark = 'O'
+		opponent_mark = 'X'
+
+	# 3. Fill board_2d by checking which plane is 1
+	for row in range(3):
+		for col in range(3):
+			if observation[row][col][0] == 1:
+				board_2d[row][col] = player_mark
+			elif observation[row][col][1] == 1:
+				board_2d[row][col] = opponent_mark
+			else:
+				board_2d[row][col] = ' '
+
+	# 4. Extract legal moves from the action mask
+	#    (These are the indices 0..8 of the board that are allowed)
+	legal_moves = [i for i, is_legal in enumerate(action_mask) if is_legal == 1]
+
+	# If you truly need both "legal_moves" and "legal_moves_list", 
+	# you can duplicate them or set them to the same reference:
+	legal_moves_list = legal_moves[:]  # or the same reference
+
+	# 5. Return them (no strings involved)
+	return board_2d, legal_moves, legal_moves_list
+
 def parse_observation(observation_dict, agent):
 	# Extract the observation planes and the action mask from the observation dictionary
 	observation = observation_dict['observation']  # 3x3x2 array

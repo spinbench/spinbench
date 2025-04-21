@@ -23,14 +23,16 @@ from spinbench.tasks.hanabi.utils import (
 	gen_initial_prompt,
 )
 
-def run_game(player_models_json, store_folder, result_name, total_round=5):
+def run_game(player_models_json, store_folder, result_name, total_rounds=5):
 	player_models = json.load(open(player_models_json,"r")) # list
 	player_num = len(player_models)
 	if player_num < 5:
 		hand_size = 5
 	else:
 		hand_size = 4
-	for idx in range(total_round):
+	if not os.path.exists(store_folder):
+		os.makedirs(store_folder)
+	for idx in range(total_rounds):
 		total_token_used = 0
 		filename = result_name+"_"+str(idx)+".json"
 
@@ -102,7 +104,7 @@ def run_game(player_models_json, store_folder, result_name, total_round=5):
 		# save the chat log
 		json.dump({
 			"player_models": player_models,
-			"total_round": total_round,
+			"total_rounds": total_rounds,
 			"total_token_used": total_token_used,
 			"cnt": cnt,
 			"returns": returns,
@@ -119,7 +121,7 @@ if __name__ == "__main__":
 	parser.add_argument("--player_models_json", type=str, required=True, help="Path to the player models JSON file")
 	parser.add_argument("--store_folder", type=str, required=True, help="Path to the folder where results will be stored")
 	parser.add_argument("--result_name", type=str, required=True, help="Name of the result file")
-	parser.add_argument("--total_round", type=int, default=5)
+	parser.add_argument("--total_rounds", type=int, default=5)
 	args = parser.parse_args()
 
-	run_game(args.player_models_json, args.store_folder, args.result_name, args.total_round)
+	run_game(args.player_models_json, args.store_folder, args.result_name, args.total_rounds)

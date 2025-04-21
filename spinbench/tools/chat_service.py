@@ -60,6 +60,7 @@ def get_chat(model, messages):
 			del old_instance
 		model_dict[model] = lpb.BlackboxLLM(model)
 	before_total_tokens = model_dict[model].engine.total_tokens
+	# print("messages", messages)
 	content = model_dict[model](messages)
 	after_total_tokens = model_dict[model].engine.total_tokens
 	return content, after_total_tokens - before_total_tokens

@@ -1,4 +1,5 @@
 import chess
+import argparse
 import time
 import os
 from stockfish import Stockfish
@@ -18,10 +19,8 @@ from spinbench.tasks.chess.utils import (
 	gen_move, 
 )
 
-stockfish = Stockfish("PATH_TO_STOCKFISH_EXECUTABLE")
-
-def run_game_vs_stockfish(store_folder, player_list, total_round=4):
-	assert total_round % 2 == 0, "total_round should be even"
+def run_game_vs_stockfish(store_folder, player_list, stockfish, total_rounds=4):
+	assert total_rounds % 2 == 0, "total_rounds should be even"
 	if not os.path.exists(store_folder):
 		os.makedirs(store_folder)
 	player_list_json = json.load(open(player_list,"r"))
@@ -35,12 +34,12 @@ def run_game_vs_stockfish(store_folder, player_list, total_round=4):
 	assert len(player1_model_list) == len(player2_model_list)
 
 	for model_index in range(len(player1_model_list)):
-		for game_index in range(total_round):
+		for game_index in range(total_rounds):
 			player1_model = player1_model_list[model_index]
 			player2_model = player2_model_list[model_index]
 			player1_model_name = player1_model["model"]
 			player2_model_name = player2_model["model"]
-			if game_index < total_round // 2:
+			if game_index < total_rounds // 2:
 				pass
 			else:
 				temp = player1_model
@@ -207,3 +206,13 @@ def run_game_vs_stockfish(store_folder, player_list, total_round=4):
 						"first_player_messages": first_player_store_message,
 						"second_player_messages": second_player_store_message,
 					}, f, indent=4)
+
+if __name__ == "__main__":
+	parser = argparse.ArgumentParser()
+	parser.add_argument("--store_folder", type=str, required=True, help="The folder to store the game results")
+	parser.add_argument("--player_list", type=str, required=True, help="The file to store the player list")
+	parser.add_argument("--stockfish_path", type=str, required=True, help="The path to the stockfish executable")
+	parser.add_argument("--total_rounds", type=int, default=4, help="The total number of rounds to play")
+	args = parser.parse_args()
+	stockfish = Stockfish(args.stockfish_path)
+	run_game_vs_stockfish(args.store_folder, args.player_list, stockfish, args.total_rounds)

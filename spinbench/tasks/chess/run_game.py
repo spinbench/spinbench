@@ -19,8 +19,8 @@ from spinbench.tasks.chess.utils import (
 	gen_move, 
 )
 
-def run_game(store_folder, player_list, total_round=4):
-	assert total_round % 2 == 0, "total_round should be even"
+def run_game(store_folder, player_list, total_rounds=4):
+	assert total_rounds % 2 == 0, "total_rounds should be even"
 	if not os.path.exists(store_folder):
 		os.makedirs(store_folder)
 	player_list_json = json.load(open(player_list,"r"))
@@ -34,13 +34,13 @@ def run_game(store_folder, player_list, total_round=4):
 	assert len(player1_model_list) == len(player2_model_list)
 
 	for model_index in range(len(player1_model_list)):
-		for game_index in range(total_round):
+		for game_index in range(total_rounds):
 			try:
 				player1_model = player1_model_list[model_index]
 				player2_model = player2_model_list[model_index]
 				player1_model_name = player1_model["model"]
 				player2_model_name = player2_model["model"]
-				if game_index < total_round // 2:
+				if game_index < total_rounds // 2:
 					pass
 				else:
 					temp = player1_model
@@ -172,10 +172,10 @@ if __name__ == "__main__":
 		help="json file to store the player list",
 	)
 	parser.add_argument(
-		"--total_round",
+		"--total_rounds",
 		type=int,
 		default=4,
 		help="total round of the game",
 	)
 	args = parser.parse_args()
-	run_game(args.store_folder, args.player_list, args.total_round)
+	run_game(args.store_folder, args.player_list, args.total_rounds)

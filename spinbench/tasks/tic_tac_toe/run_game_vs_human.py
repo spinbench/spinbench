@@ -33,7 +33,7 @@ Your previous moves and thinking are below  (in the last 3 moves in the order of
 </previous_moves>
 """
 
-def run_game_vs_human(saves_folder, model, total_rounds = 4):
+def run_game_vs_human(store_folder, model, total_rounds = 4):
 
 	init_player1_model = {
 		"model": model,
@@ -64,8 +64,8 @@ def run_game_vs_human(saves_folder, model, total_rounds = 4):
 		]
 	}
 
-	if not os.path.exists(saves_folder):
-		os.makedirs(saves_folder)
+	if not os.path.exists(store_folder):
+		os.makedirs(store_folder)
 
 	for game_index in range(total_rounds):
 		player1_model = init_player1_model
@@ -84,8 +84,8 @@ def run_game_vs_human(saves_folder, model, total_rounds = 4):
 		player2_model_save_name = player2_model_name + "-" + "-".join([i["name"] for i in player2_model["prompt_config"]])
 		player1_model_save_name = player1_model_save_name.replace("/", "_")
 		player2_model_save_name = player2_model_save_name.replace("/", "_")
-		filename = f"{saves_folder}/ttt_{game_index}_{player1_model_save_name}_{player2_model_save_name}.json"
-		reverse_filename = f"{saves_folder}/ttt_{game_index}_{player2_model_save_name}_{player1_model_save_name}.json"
+		filename = f"{store_folder}/ttt_{game_index}_{player1_model_save_name}_{player2_model_save_name}.json"
+		reverse_filename = f"{store_folder}/ttt_{game_index}_{player2_model_save_name}_{player1_model_save_name}.json"
 		if os.path.exists(f"{filename}") or os.path.exists(f"{reverse_filename}"):
 			print("File exists")
 			continue
@@ -158,7 +158,7 @@ def run_game_vs_human(saves_folder, model, total_rounds = 4):
 		player2_model_save_name = player2_model_save_name.replace("/", "_")
 		print(player1_model_save_name, player2_model_save_name)
 		# save the chat log for two players
-		with open(f"{saves_folder}/ttt_{game_index}_{player1_model_save_name}_{player2_model_save_name}.json", "w") as f:
+		with open(f"{store_folder}/ttt_{game_index}_{player1_model_save_name}_{player2_model_save_name}.json", "w") as f:
 			json.dump({
 				"status": {
 					0: "Player 1 wins!",
@@ -188,8 +188,8 @@ def run_game_vs_human(saves_folder, model, total_rounds = 4):
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description="Set model name for player1_model")
 	parser.add_argument('--model', type=str, required=True, help="Specify the model name (e.g., gpt-4o)")
-	parser.add_argument('--saves_folder', type=str, required=True, help="Specify the folder to save the game logs")
+	parser.add_argument('--store_folder', type=str, required=True, help="Specify the folder to save the game logs")
 	parser.add_argument('--total_rounds', type=int, default=4, help="Specify the number of rounds to play")
 	# Parse the arguments
 	args = parser.parse_args()
-	run_game_vs_human(args.saves_folder, args.model, args.total_rounds)
+	run_game_vs_human(args.store_folder, args.model, args.total_rounds)

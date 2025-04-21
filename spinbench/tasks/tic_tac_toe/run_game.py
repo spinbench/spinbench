@@ -16,10 +16,10 @@ from spinbench.tasks.tic_tac_toe.utils import (
 )
 import argparse
 
-def run_game(saves_folder, player_list, total_rounds=10):
+def run_game(store_folder, player_list, total_rounds=10):
 	assert total_rounds % 2 == 0, "total_rounds must be even"
-	if not os.path.exists(saves_folder):
-		os.makedirs(saves_folder)
+	if not os.path.exists(store_folder):
+		os.makedirs(store_folder)
 	player_list_json = json.load(open(player_list,"r"))
 	player1_model_list = player_list_json["player1_model_list"]
 	player2_model_list = player_list_json["player2_model_list"]
@@ -50,8 +50,8 @@ def run_game(saves_folder, player_list, total_rounds=10):
 				player2_model_save_name = player2_model_save_name.replace("/", "_")
 				print(player1_model_save_name, player2_model_save_name)
 
-				filename = saves_folder / f"ttt_{game_index}_{player1_model_save_name}_{player2_model_save_name}.json"
-				reverse_filename = saves_folder / f"ttt_{game_index}_{player2_model_save_name}_{player1_model_save_name}.json"
+				filename = store_folder / f"ttt_{game_index}_{player1_model_save_name}_{player2_model_save_name}.json"
+				reverse_filename = store_folder / f"ttt_{game_index}_{player2_model_save_name}_{player1_model_save_name}.json"
 				if os.path.exists(filename) or os.path.exists(reverse_filename):
 					print("File exists")
 					continue
@@ -119,7 +119,7 @@ def run_game(saves_folder, player_list, total_rounds=10):
 				player2_model_save_name = player2_model_save_name.replace("/", "_")
 				print(player1_model_save_name, player2_model_save_name)
 				# save the chat log for two players
-				with open(saves_folder / f"ttt_{game_index}_{player1_model_save_name}_{player2_model_save_name}.json", "w") as f:
+				with open(store_folder / f"ttt_{game_index}_{player1_model_save_name}_{player2_model_save_name}.json", "w") as f:
 					json.dump({
 						"status": {
 							0: "Player 1 wins!",
@@ -151,7 +151,7 @@ def run_game(saves_folder, player_list, total_rounds=10):
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description="Run Tic Tac Toe game")
 	parser.add_argument(
-		"--saves_folder",
+		"--store_folder",
 		type=str,
 		required=True,
 		help="Path to the folder where game results will be saved",
@@ -169,11 +169,11 @@ if __name__ == "__main__":
 		help="Total number of rounds to play",
 	)
 	args = parser.parse_args()
-	saves_folder = args.saves_folder
+	store_folder = args.store_folder
 	player_list = args.player_list
 	total_rounds = args.total_rounds
 
-	if not os.path.exists(saves_folder):
-		os.makedirs(saves_folder)
+	if not os.path.exists(store_folder):
+		os.makedirs(store_folder)
 	
-	run_game(saves_folder, player_list, total_rounds)
+	run_game(store_folder, player_list, total_rounds)

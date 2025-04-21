@@ -21,8 +21,8 @@ from spinbench.tasks.chess.utils import (
 )
 import argparse
 
-def run_game_vs_human(model_name, store_folder, total_round=4):
-	assert total_round % 2 == 0, "total_round should be even"
+def run_game_vs_human(model_name, store_folder, total_rounds=4):
+	assert total_rounds % 2 == 0, "total_rounds should be even"
 	if not os.path.exists(store_folder):
 		os.makedirs(store_folder)
 
@@ -55,11 +55,11 @@ def run_game_vs_human(model_name, store_folder, total_round=4):
 				]
 			}
 
-	for game_index in range(total_round):
+	for game_index in range(total_rounds):
 		try:
 			player1_model = init_player1_model
 			player2_model = init_player2_model
-			if game_index > total_round // 2:
+			if game_index > total_rounds // 2:
 				player1_model, player2_model = player2_model, player1_model
 			player1_model_name = player1_model["model"]
 			player2_model_name = player2_model["model"]
@@ -180,6 +180,6 @@ if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--model_name", type=str, required=True, help="The model name to use for the game.")
 	parser.add_argument("--store_folder", type=str, required=True, help="The folder to store the game results.")
-	parser.add_argument("--total_round", type=int, default=4, help="The total number of rounds to play.")
+	parser.add_argument("--total_rounds", type=int, default=4, help="The total number of rounds to play.")
 	args = parser.parse_args()
-	run_game_vs_human(args.model_name, args.store_folder, args.total_round)
+	run_game_vs_human(args.model_name, args.store_folder, args.total_rounds)

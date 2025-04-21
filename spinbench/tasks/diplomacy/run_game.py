@@ -48,7 +48,7 @@ from diplomacy.utils import common
 from diplomacy.utils.export import to_saved_game_format, load_saved_games_from_disk
 from diplomacy.utils.sorted_dict import SortedDict
 from openai import OpenAI
-from diplomacy_utils import (
+from spinbench.tasks.diplomacy.diplomacy_utils import (
     get_message_text,
     gen_round_prompt,
     append_user_message,
@@ -203,7 +203,7 @@ def play_diplomacy_game(
             "role": "assistant",
             "content": "Sure, let's start."
         })
-
+    
     # Initialize or load from state_file
     if os.path.exists(save_folder + "/" + state_file):
         state = json.load(open(save_folder + "/" + state_file, "r"))
