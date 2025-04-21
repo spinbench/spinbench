@@ -1,0 +1,1 @@
+python -m spinbench.tasks.tic_tac_toe.run_game_vs_solver
