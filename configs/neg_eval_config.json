@@ -1,0 +1,14 @@
+{
+    "game_folder": "/home/jianzhu/LLm-pddl-benchmark/game/diplomacy/diplomacy_saves/multi-211111-talk-fix",
+    "power2model": {
+		"AUSTRIA": "gpt-4o_1",
+		"ITALY": "claude-3-5-haiku-20241022_1",
+		"TURKEY": "claude-3-5-haiku-20241022_1",
+		"FRANCE": "o1-preview_1",
+		"RUSSIA": "gpt-4-turbo_1",
+		"GERMANY": "deepseek-reasoner_1",
+		"ENGLAND": "o1_1"
+	},
+    "eval_model": "claude-3-7-sonnet-20250219",
+    "output_folder": "neg_result"
+}

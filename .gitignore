@@ -21,3 +21,7 @@ ENV/
 .venv/
 
 *.json
+spinbench/tasks/connect4/c4solver
+spinbench/tasks/connect4/connect4_solver/.depend
+spinbench/tasks/connect4/connect4_solver/c4solver
+results/

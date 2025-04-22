@@ -1,0 +1,16 @@
+{
+    "player1_model_list": [
+        {
+            "model": "our_solver",
+            "prompt_config": [
+            ]
+        }
+    ],
+    "player2_model_list": [
+        {
+            "model": "gpt-4o",
+            "prompt_config": [
+            ]
+        }
+    ]
+}
