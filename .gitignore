@@ -1,7 +1,5 @@
 pddl_exp_v1
 saves/
-/exp*/
-
 # Python cache files
 __pycache__/
 *.py[cod]
@@ -19,9 +17,11 @@ env/
 ENV/
 .env/
 .venv/
-
+# spinbench results
+/exp*/
 *.json
 spinbench/tasks/connect4/c4solver
 spinbench/tasks/connect4/connect4_solver/.depend
 spinbench/tasks/connect4/connect4_solver/c4solver
+spinbench/tasks/PDDL/planning_task_with_prompts/
 results/

@@ -1,0 +1,45 @@
+(define (problem p01)
+    (:domain Multi_Agent_coordination)
+    (:objects
+        robot1 robot2 robot3 robot4 robot5 - robot
+room1 room2 room3 room4 room5 room6 room7 room8 room9 room10 room11 room12 room13 room14 room15 room16 room17 room18 room19 room20 - room
+ball1 ball2 ball3 ball4 ball5 ball6 - object
+rgripper1 rgripper2 rgripper3 rgripper4 rgripper5 lgripper1 lgripper2 lgripper3 lgripper4 lgripper5 - gripper
+    )
+    (:init
+        (at-robby robot1 room18)
+(at-robby robot2 room11)
+(at-robby robot3 room15)
+(at-robby robot4 room4)
+(at-robby robot5 room10)
+(free robot1 rgripper1)
+(free robot1 lgripper1)
+(free robot2 rgripper2)
+(free robot2 lgripper2)
+(free robot3 rgripper3)
+(free robot3 lgripper3)
+(free robot4 rgripper4)
+(free robot4 lgripper4)
+(free robot5 rgripper5)
+(free robot5 lgripper5)
+(at ball1 room17)
+(at ball2 room4)
+(at ball3 room15)
+(at ball4 room2)
+(at ball5 room15)
+(at ball6 room7)
+(needs-collaboration ball6)
+(needs-collaboration ball5)
+(needs-collaboration ball3)
+    )
+    (:goal
+        (and
+            (at ball1 room5)
+(at ball2 room5)
+(at ball3 room5)
+(at ball4 room5)
+(at ball5 room5)
+(at ball6 room5)
+        )
+    )
+)
