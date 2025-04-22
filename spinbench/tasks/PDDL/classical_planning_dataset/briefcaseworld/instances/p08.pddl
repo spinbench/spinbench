@@ -1,0 +1,35 @@
+(define (problem briefcase-o10)
+(:domain briefcase)
+(:objects l0 l1 l2 l3 l4 l5 l6 l7 l8 l9 l10 - location
+          o0 o1 o2 o3 o4 o5 o6 o7 o8 o9 - portable)
+(:init
+(at o0 l0)
+(at o1 l2)
+(at o2 l3)
+(at o3 l1)
+(at o4 l4)
+(at o5 l8)
+(at o6 l10)
+(at o7 l4)
+(at o8 l1)
+(at o9 l0)
+(is-at l5)
+)
+(:goal
+(and
+(at o0 l2)
+(at o1 l4)
+(at o2 l6)
+(at o3 l8)
+(at o4 l0)
+(at o5 l10)
+(at o6 l9)
+(at o7 l8)
+(at o8 l3)
+(at o9 l9)
+(is-at l2)
+)
+)
+)
+
+

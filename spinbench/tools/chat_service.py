@@ -51,14 +51,14 @@ def fix_json(line):
 	except Exception as e:
 		print(e)
 
-def get_chat(model, messages):
+def get_chat(model, messages, device=None):
 	if model in model_dict:
 		model_dict.move_to_end(model)
 	else:
 		if len(model_dict) >= 2:
 			old_model, old_instance = model_dict.popitem(last=False)
 			del old_instance
-		model_dict[model] = lpb.BlackboxLLM(model)
+		model_dict[model] = lpb.BlackboxLLM(model, device=device)
 	before_total_tokens = model_dict[model].engine.total_tokens
 	# print("messages", messages)
 	content = model_dict[model](messages)

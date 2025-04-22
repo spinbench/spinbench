@@ -1,0 +1,62 @@
+(define (problem p38)
+  (:domain cooperate_sequential_gripper)
+
+  (:objects
+        robot1 robot2 - gripper
+        room7 room5 room3 room2 room1 room4 room6 - room
+        object1 object2 object3 object4 object5 object6 object7 object8 - object
+  )
+
+  (:init
+        
+        (at-robby robot1 room7)
+        (room-occupied room7)
+        (at-robby robot2 room5)
+        (room-occupied room5)
+        (not (room-occupied room3))
+        (not (room-occupied room2))
+        (not (room-occupied room1))
+        (not (room-occupied room4))
+        (not (room-occupied room6))
+        (at object1 room2)
+        (at object2 room2)
+        (at object3 room6)
+        (at object4 room5)
+        (at object5 room6)
+        (at object6 room3)
+        (at object7 room7)
+        (at object8 room4)
+        (can-activate robot1 object1)
+        (can-handle robot1 object1)
+        (can-activate robot2 object2)
+        (can-handle robot2 object2)
+        (can-activate robot2 object3)
+        (can-handle robot2 object3)
+        (can-activate robot2 object4)
+        (can-handle robot2 object4)
+        (can-activate robot1 object5)
+        (can-handle robot1 object5)
+        (can-activate robot1 object6)
+        (can-handle robot1 object6)
+        (can-activate robot2 object7)
+        (can-handle robot2 object7)
+        (can-activate robot2 object8)
+        (can-handle robot2 object8)
+        (free robot1)
+        (free robot2)
+  )
+
+  (:goal
+    (and
+      (at object1 room7)
+      (at object2 room5)
+      (at object3 room1)
+      (at object4 room6)
+      (at object5 room7)
+      (at object6 room1)
+      (at object7 room5)
+      (at object8 room2)
+      (at-robby robot2 room4)
+    )
+  )
+)
