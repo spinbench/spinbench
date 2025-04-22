@@ -1,13 +1,16 @@
-# SPIN‑Bench  
-**Strategic Planning & Interpersonal Negotiation Benchmark**
+# SPIN‑Bench: How well do large language models plan strategically and reason socially?  
 
-> *“How well do large language models plan strategically and reason socially?”*  
-> Jianzhu Yao, Kevin Wang, Ryan Hsieh, Haisu Zhou, Tianqing Zou, Zerui Cheng, Zhangyang Wang, Pramod Viswanath  
-> [[arXiv 2503.12349]](https://arxiv.org/pdf/2503.12349) | [[Project Website]](https://spinbench.github.io/) | [[Huggingface Daily Paper]](https://huggingface.co/papers/2503.12349)
+**A Strategic Planning & Interpersonal Negotiation Benchmark**
+
+Jianzhu Yao, Kevin Wang, Ryan Hsieh, Haisu Zhou, Tianqing Zou, Zerui Cheng, Zhangyang Wang, Pramod Viswanath  
+[[arXiv 2503.12349]](https://arxiv.org/pdf/2503.12349)  |  [[Project Website]](https://spinbench.github.io/)  |  [[Huggingface Daily Paper]](https://huggingface.co/papers/2503.12349)
 
 ---
 
-## Abstract
+## 👋 Overview
+
+![](assets/main_figure.png)
+
 SPIN‑Bench is an open‑source benchmark that probes the **strategic planning** and **social‑reasoning** abilities of contemporary language models.  
 It unifies a diverse suite of games—from *Tic‑Tac‑Toe* to *Diplomacy*—together with ground‑truth solvers, evaluation harnesses, and reproducible experiments. Researchers can easily:
 
@@ -18,34 +21,19 @@ It unifies a diverse suite of games—from *Tic‑Tac‑Toe* to *Diplomacy*—to
 
 ---
 
-## Table of Contents
-1. [Features](#features)  
-2. [Installation](#installation)  
-3. [Quick‑Start](#quick-start)  
-4. [Configuration](#configuration-files)  
-5. [Games & Scripts](#games--scripts)  
-   * Competitive Games – Tic‑Tac‑Toe, Connect 4, Chess  
-   * Cooperative Game – Hanabi  
-   * Multi‑Agent Game – Diplomacy  
-6. [Citation](#citation)  
-7. [Contributing](#contributing)  
-8. [License & Contact](#license--contact)  
-
----
-
-## Features
+## 🚀 Features
 | Category | Highlights |
 | -------- | ---------- |
-| **Breadth of Tasks** | Classic perfect‑information games (Tic‑Tac‑Toe, Connect 4, Chess) plus imperfect‑information and negotiation‑heavy games (Hanabi, Diplomacy). |
-| **Plug‑and‑Play Solvers** | Optimal solvers (Connect 4, Tic‑Tac‑Toe, Stockfish) for ground‑truth baselines. |
+| **Breadth of Tasks** | Classic perfect‑information games (Tic‑Tac‑Toe, Connect 4, Chess) plus imperfect‑information and negotiation‑heavy games (Hanabi, Diplomacy). |
+| **Plug‑and‑Play Solvers** | Optimal solvers (Connect 4, Tic‑Tac‑Toe, Stockfish) for ground‑truth baselines. |
 | **Flexible Prompting** | YAML/JSON prompt templates with *forced reasoning*, multi‑step self‑reflection, or any custom protocol. |
 | **Rich Analytics** | Fine‑grained move scoring, win‑rate collectors, Elo calculators, detailed game metric, negotiation sentiment analysis. |
 
 ---
 
-## Installation
+## 🔧 Installation
 ### 1. Prerequisites
-* Python ≥ 3.9  
+* Python ≥ 3.9  
 * `gcc`, `make`, and a C++17‑capable toolchain (for solvers)  
 * Unix‑like OS (Linux/macOS). Windows users are encouraged to leverage WSL2.
 
@@ -56,7 +44,7 @@ cd spinbench
 pip install -e .
 ```
 
-### 3. Build the **Connect 4** solver
+### 3. Build the **Connect 4** solver
 ```shell
 cd spinbench/tasks/connect4/connect4_solver
 make
@@ -76,7 +64,7 @@ The resulting `stockfish` binary must remain in the repository root (or set `--s
 
 ---
 
-## Quick‑Start
+## 🔥 Quick‑Start
 Want to see SPIN‑Bench in action? Run ten LLM‑vs‑solver *Tic‑Tac‑Toe* matches and score every move:
 
 ```shell
@@ -93,7 +81,7 @@ Results appear in `saves/tic_tac_toe_vs_solver`, ready for analysis or Elo aggre
 
 ---
 
-## Configuration Files
+## 🔩 Configuration Files
 SPIN‑Bench decouples *model definitions* from *game logic* through declarative JSON configs:
 
 ```jsonc
@@ -126,13 +114,13 @@ Detailed prompt‑template documentation lives in **[`docs/prompt_config.md`](do
 
 ---
 
-## Games & Scripts
+## 🎮 Usage
 
 ### Competitive Games
 <details>
 <summary><strong>Tic‑Tac‑Toe</strong></summary>
 
-**LLM vs Solver**
+**LLM vs Solver**
 ```shell
 python -m spinbench.tasks.tic_tac_toe.run_game_vs_solver \
     --store_folder="saves/tic_tac_toe_vs_solver" \
@@ -140,7 +128,7 @@ python -m spinbench.tasks.tic_tac_toe.run_game_vs_solver \
     --total_rounds=10
 ```
 
-**LLM vs LLM**
+**LLM vs LLM**
 ```shell
 python -m spinbench.tasks.tic_tac_toe.run_game \
     --store_folder="saves/tic_tac_toe_LLMs" \
@@ -156,7 +144,7 @@ python -m spinbench.tasks.evaluation.competitive.tictactoe_score_moves \
 </details>
 
 <details>
-<summary><strong>Connect 4</strong></summary>
+<summary><strong>Connect 4</strong></summary>
 
 **Launch solver service (once per machine):**
 ```shell
@@ -165,7 +153,7 @@ python c4solver.py --port 5000
 cd ../../..
 ```
 
-**Run games: LLM vs Solver**
+**Run games: LLM vs Solver**
 ```shell
 python -m spinbench.tasks.connect4.run_game_vs_solver \
     --store_folder="saves/connect4_vs_solver" \
@@ -173,7 +161,7 @@ python -m spinbench.tasks.connect4.run_game_vs_solver \
     --total_rounds=10
 ```
 
-**Run games: LLM vs LLM**
+**Run games: LLM vs LLM**
 ```shell
 python -m spinbench.tasks.connect4.run_game \
     --store_folder="saves/connect4_LLMs" \
@@ -201,7 +189,7 @@ Create a config such as:
 
 The level of Stockfish can be set from 0 (weak) to 20 (strongest).
 
-**LLM vs Stockfish**
+**LLM vs Stockfish**
 ```shell
 python -m spinbench.tasks.chess.chess_stockfish \
     --store_folder="saves/chess_vs_stockfish" \
@@ -210,7 +198,7 @@ python -m spinbench.tasks.chess.chess_stockfish \
     --total_rounds=2
 ```
 
-**LLM vs LLM**
+**LLM vs LLM**
 ```shell
 python -m spinbench.tasks.chess.run_game \
     --store_folder="saves/chess_LLMs" \
@@ -319,7 +307,7 @@ python -m spinbench.tasks.evaluation.diplomacy.eval_neg \
 
 ---
 
-## Citation
+## ✍️ Citation
 If you build upon SPIN‑Bench, please cite:
 
 ```bibtex
@@ -336,16 +324,16 @@ If you build upon SPIN‑Bench, please cite:
 
 ---
 
-## Contributing
+## 💪 Contributing
 
 We would love to hear from you! If you have any suggestions, bug reports, issues, or feature requests, please open an issue on our GitHub repository. If you would like to contribute code, please fork the repository and submit a pull request. We'll be sure to follow up shortly!
 
 Have questions, ideas, or want to integrate a new game?  
-Email **Jianzhu Yao** (<jy0246@princeton.edu>) or **Kevin Wang** (<kevinwang.1839@utexas.edu>).
+Email **Jianzhu Yao** (<jy0246@princeton.edu>) or **Kevin Wang** (<kevinwang.1839@utexas.edu>).
 
 ---
 
-## License & Contact
+## 🪪 License & Contact
 
 SPIN‑Bench is released under the **MIT License**. See [`LICENSE`](LICENSE) for details.
 
