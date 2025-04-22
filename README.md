@@ -1,9 +1,17 @@
-# SPIN‑Bench: How well do large language models plan strategically and reason socially?  
+# SPIN‑Bench
 
-**A Strategic Planning & Interpersonal Negotiation Benchmark**
+> **How well do large language models plan strategically and reason socially?**
 
-Jianzhu Yao, Kevin Wang, Ryan Hsieh, Haisu Zhou, Tianqing Zou, Zerui Cheng, Zhangyang Wang, Pramod Viswanath  
-[[arXiv 2503.12349]](https://arxiv.org/pdf/2503.12349)  |  [[Project Website]](https://spinbench.github.io/)  |  [[Huggingface Daily Paper]](https://huggingface.co/papers/2503.12349)
+**SPIN‑Bench** is an open‑source framework for benchmarking the **strategic planning** and **social‑reasoning** capabilities of large language models (LLMs). It provides:
+
+- An **extensible LLM‑driven game‑agent** pipeline  
+- A variety of **game environments** (perfect‑ and imperfect‑information)  
+- **Ground‑truth solvers** (e.g. Stockfish, Connect 4 engine)  
+- **Flexible JSON‑based prompting** and multi‑agent configurations  
+- **Evaluation scripts** for tactical strength, Elo, negotiation metrics, and reasoning chains  
+
+Authors: Jianzhu Yao, Kevin Wang, Ryan Hsieh, Haisu Zhou, Tianqing Zou, Zerui Cheng, Zhangyang Wang, Pramod Viswanath  
+[📄 Paper](https://arxiv.org/pdf/2503.12349) • [🌐 Website](https://spinbench.github.io/) • [🤗 Daily Paper](https://huggingface.co/papers/2503.12349)
 
 ---
 
@@ -12,30 +20,37 @@ Jianzhu Yao, Kevin Wang, Ryan Hsieh, Haisu Zhou, Tianqing Zou, Zerui Cheng, Zhan
 ![](assets/main_figure.png)
 
 SPIN‑Bench is an open‑source benchmark that probes the **strategic planning** and **social‑reasoning** abilities of contemporary language models.  
-It unifies a diverse suite of games—from *Tic‑Tac‑Toe* to *Diplomacy*—together with ground‑truth solvers, evaluation harnesses, and reproducible experiments. Researchers can easily:
+It unifies a diverse suite of games—from *Tic‑Tac‑Toe* and *Connect 4* to *Chess*, *Hanabi*, and *Diplomacy*—together with ground‑truth solvers, flexible prompting, and end-to-end evaluation.  
 
-* **Pit LLMs against optimal solvers** to gauge raw tactical strength.  
-* **Stage multi‑agent LLM battles** to study emergent collaboration and deception.  
-* **Score reasoning chains** to examine how models plan, reflect, and react.  
-* **Compute win‑rates, Elo ratings, and negotiation metrics** with one‑line commands.
+Researchers can effortlessly:  
+
+* **Pit LLMs against optimal solvers** (e.g. Stockfish, perfect‑play Connect 4) to gauge raw tactical strength.  
+* **Stage multi‑agent LLM battles** via simple JSON configs—assign one model to multiple players or ensembles.  
+* **Customize reasoning** with JSON hooks (forced‑reasoning, history replay, future speculation, code generation).  
+* **Score reasoning chains** to examine how models plan, reflect, and adapt over time.  
+
+With SPIN‑Bench’s plug‑and‑play agents, configurable pipelines, and rich analytics, you can probe every facet of LLM strategic and social intelligence—end to end.
 
 ---
 
 ## 🚀 Features
-| Category | Highlights |
-| -------- | ---------- |
-| **Breadth of Tasks** | Classic perfect‑information games (Tic‑Tac‑Toe, Connect 4, Chess) plus imperfect‑information and negotiation‑heavy games (Hanabi, Diplomacy). |
-| **Plug‑and‑Play Solvers** | Optimal solvers (Connect 4, Tic‑Tac‑Toe, Stockfish) for ground‑truth baselines. |
-| **Flexible Prompting** | YAML/JSON prompt templates with *forced reasoning*, multi‑step self‑reflection, or any custom protocol. |
-| **Rich Analytics** | Fine‑grained move scoring, win‑rate collectors, Elo calculators, detailed game metric, negotiation sentiment analysis. |
+
+| Category                       | Highlights                                                                                                                                                           |
+|--------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Diverse Games**              | Perfect‑information (Tic‑Tac‑Toe, Connect 4, Chess) + imperfect‑information & negotiation (Hanabi, Diplomacy)                                                        |
+| **Plug‑and‑Play Solvers**      | Optimal baselines for Connect 4 and Tic‑Tac‑Toe, Stockfish for Chess, plus custom algorithm‐based solvers                                                             |
+| **Agent Prompt Config Hooks**        | JSON hooks to customize chain‑of‑thought, reasoning history, future‑state speculation, code generation, and more ([see `doc/prompt_config.md`])                         |
+| **Player List Configuration**  | Define multi‑agent setups in `player_list_config.json`—LLMs, chess engines (e.g. Stockfish), custom solvers; also support for multi-agent ensembles                 |
+| **Negotiation Annotation**     | Post‑process Diplomacy saves with an `eval_model` to label, summarize, and score all negotiation messages                                                              |
+| **Rich Evaluation**            | Compute win‑rates, Elo ratings, move scoring, negotiation metrics, chain‑of‑thought analysis, and sentiment labels                                                     |
 
 ---
 
 ## 🔧 Installation
+
 ### 1. Prerequisites
 * Python ≥ 3.9  
-* `gcc`, `make`, and a C++17‑capable toolchain (for solvers)  
-* Unix‑like OS (Linux/macOS). Windows users are encouraged to leverage WSL2.
+* `gcc`, `make`, and a C++‑capable toolchain (for solvers)  
 
 ### 2. Clone & Install `spinbench`
 ```shell
@@ -48,7 +63,7 @@ pip install -e .
 ```shell
 cd spinbench/tasks/connect4/connect4_solver
 make
-cp c4solver ..
+cp c4solver ..    # copy the solver to the parent directory
 cd ../../../..    # back to repo root
 ```
 
@@ -110,11 +125,15 @@ SPIN‑Bench decouples *model definitions* from *game logic* through declarative
 
 *The i‑th entry of `player1_model_list` always faces the i‑th entry of `player2_model_list`; add or reorder entries to orchestrate round‑robins, self‑play, or ablations.*
 
-Detailed prompt‑template documentation lives in **[`docs/prompt_config.md`](docs/prompt_config.md)**.
+Detailed prompt‑template documentation lives in **[`docs/prompt_config.md`](docs/prompt_config.md)**. We also provide more documentations for how to write the config file in **[`docs`](docs)**. And you can find the example configs in **[`configs`](configs)**.
 
 ---
 
 ## 🎮 Usage
+
+### PDDL
+
+Coming soon.
 
 ### Competitive Games
 <details>
@@ -265,7 +284,7 @@ python -m spinbench.tasks.evaluation.hanabi.gather_result \
 
 ### Multi‑Agent Game — Diplomacy
 
-Extensive helper scripts are shown in **[`scripts/run_diplomacy`](scripts/run_diplomacy)**.  
+Extensive helper scripts are shown in **[`scripts/run_diplomacy`](scripts/run_diplomacy)**. We also provide documentation on how to configure the Diplomacy running scripts in **[`docs/diplomacy_config.md`](docs/diplomacy_config.md)**.
 A minimal *basic‑skill* example:
 
 ```shell
@@ -299,7 +318,7 @@ python -m spinbench.tasks.evaluation.diplomacy.eval \
     --output_file="saves/diplomacy/gpt-4o_1-basic-skill/eval.json"
 ```
 
-Negotiation‑specific evaluation requires **[`configs/neg_eval_config.json`](configs/neg_eval_config.json)**:
+Negotiation‑specific evaluation requires configuration, examples in **[`configs/neg_eval_config.json`](configs/neg_eval_config.json)**:
 ```shell
 python -m spinbench.tasks.evaluation.diplomacy.eval_neg \
     --neg_config_file="configs/neg_eval_config.json"
