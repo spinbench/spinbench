@@ -8,7 +8,6 @@ json_pattern = regex.compile(r'\{(?:[^{}]|(?R))*\}', regex.DOTALL)
 import json
 client = OpenAI()
 import sys
-print(os.getenv("OPENAI_API_KEY"))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import llm_engine as lpb
 
@@ -52,13 +51,13 @@ def fix_json(line):
 	except Exception as e:
 		print(e)
 
-def get_chat(model, messages):
+def get_chat(model, messages, device=None):
 	if model in model_dict:
 		model_dict.move_to_end(model)
 	else:
 		if len(model_dict) >= 2:
 			old_model, old_instance = model_dict.popitem(last=False)
 			del old_instance
-		model_dict[model] = lpb.BlackboxLLM(model)
+		model_dict[model] = lpb.BlackboxLLM(model, device=device)
 	content = model_dict[model](messages)
 	return content, 0
