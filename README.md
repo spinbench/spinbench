@@ -74,8 +74,20 @@ unzip sf_17.1.zip
 cd Stockfish-sf_17.1/src
 make -j profile-build
 cp stockfish ../../
+cd ../..    # back to repo root
 ```
 The resulting `stockfish` binary must remain in the repository root (or set `--stockfish_path` in later commands).
+
+### 5. API Key setup
+
+SPIN‑Bench supports OpenAI, Anthropic, Gemini APIs, OpenRouter, ollama, and local models. 
+
+```shell
+export OPENAI_API_KEY="your_openai_api_key"
+export ANTHROPIC_API_KEY="your_anthropic_api_key"
+export GEMINI_API_KEY="your_gemini_api_key"
+export OPENROUTER_API_KEY="your_openrouter_api_key"
+```
 
 ---
 
@@ -131,6 +143,8 @@ Detailed prompt‑template documentation lives in **[`docs/prompt_config.md`](do
 
 ## 🎮 Usage
 
+With all examples in this readme file and configs folder, we will show you how to run our benchmark **main table**'s result with OpenAI API, using model `o4-mini`. If you want to run one single file containing all the tasks, please refer to [scripts/run_all.py](scripts/run_all.py) for more details.
+
 ### PDDL
 
 Coming soon.
@@ -139,15 +153,15 @@ Coming soon.
 <details>
 <summary><strong>Tic‑Tac‑Toe</strong></summary>
 
-**LLM vs Solver**
+**Run games: LLM vs Solver**
 ```shell
 python -m spinbench.tasks.tic_tac_toe.run_game_vs_solver \
-    --store_folder="saves/tic_tac_toe_vs_solver" \
+    --store_folder="saves/tic_tac_toe_LLM_vs_solver" \
     --player_list="configs/solver_list_single.json" \
     --total_rounds=10
 ```
 
-**LLM vs LLM**
+**Run games: LLM vs LLM (optional, for leaderboard use)**
 ```shell
 python -m spinbench.tasks.tic_tac_toe.run_game \
     --store_folder="saves/tic_tac_toe_LLMs" \
@@ -155,17 +169,23 @@ python -m spinbench.tasks.tic_tac_toe.run_game \
     --total_rounds=10
 ```
 
-**Move Scoring**
+**Run the evaluation**
 ```shell
+# annotate each move with the solver's score
 python -m spinbench.tasks.evaluation.competitive.tictactoe_score_moves \
-    --json_folder="saves/tic_tac_toe_LLMs"
+    --json_folder="saves/tic_tac_toe_LLM_vs_solver"
+
+# compute the game statistics against the solver
+python -m spinbench.tasks.evaluation.competitive.collect_solver_winrate \
+    --directory="saves/tic_tac_toe_LLM_vs_solver" \
+    --output_file="results/tic_tac_toe_LLM_vs_solver_winrate.json"
 ```
 </details>
 
 <details>
 <summary><strong>Connect 4</strong></summary>
 
-**Launch solver service (once per machine):**
+**Launch solver service:**
 ```shell
 cd spinbench/tasks/connect4/
 python c4solver.py --port 5000
@@ -175,22 +195,33 @@ cd ../../..
 **Run games: LLM vs Solver**
 ```shell
 python -m spinbench.tasks.connect4.run_game_vs_solver \
-    --store_folder="saves/connect4_vs_solver" \
+    --store_folder="saves/connect4_LLM_vs_solver" \
     --player_list="configs/solver_list_single.json" \
     --total_rounds=10
 ```
 
-**Run games: LLM vs LLM**
+**Run games: LLM vs LLM (optional, for leaderboard use)**
 ```shell
 python -m spinbench.tasks.connect4.run_game \
     --store_folder="saves/connect4_LLMs" \
     --player_list="configs/player_list_single.json" \
     --total_rounds=10
 ```
-**Move Scoring**
+**Run the evaluation**
 ```shell
+# annotate each move with the solver's score
 python -m spinbench.tasks.evaluation.competitive.connect4_score_moves \
-    --json_folder="saves/connect4_vs_solver"
+    --json_folder="saves/connect4_LLM_vs_solver"
+
+# gather the scores and compute the result
+python -m spinbench.tasks.evaluation.competitive.connect4_score_plot \
+    --json_folder="saves/connect4_LLM_vs_solver" \
+    --output_path="results"
+
+# compute the game statistics against the solver
+python -m spinbench.tasks.evaluation.competitive.collect_solver_winrate \
+    --directory="saves/connect4_LLM_vs_solver" \
+    --output_file="results/connect4_LLM_vs_solver_winrate.json"
 ```
 
 </details>
@@ -208,33 +239,43 @@ Create a config such as:
 
 The level of Stockfish can be set from 0 (weak) to 20 (strongest).
 
-**LLM vs Stockfish**
+**Run games: LLM vs Stockfish**
 ```shell
 python -m spinbench.tasks.chess.chess_stockfish \
-    --store_folder="saves/chess_vs_stockfish" \
-    --player_list="configs/stockfish-list-supp.json" \
+    --store_folder="saves/chess_LLM_vs_stockfish" \
+    --player_list="configs/stockfish-list-single.json" \
     --stockfish_path="stockfish" \
-    --total_rounds=2
+    --total_rounds=4
 ```
 
-**LLM vs LLM**
+**Run games: LLM vs LLM (optional, for leaderboard use)**
 ```shell
 python -m spinbench.tasks.chess.run_game \
     --store_folder="saves/chess_LLMs" \
     --player_list="configs/player_list_single.json" \
-    --total_rounds=2
+    --total_rounds=4
 ```
 
-**Move Scoring (Stockfish engine required)**
+**Run the evaluation**
 ```shell
+# annotate each move with the solver's score
 python -m spinbench.tasks.evaluation.competitive.chess_score_moves \
     --stockfish_path="stockfish" \
-    --json_folder="saves/chess_LLMs"
+    --json_folder="saves/chess_LLM_vs_stockfish"
+
+# gather the scores and compute the result
+python -m spinbench.tasks.evaluation.competitive.chess_score_plot \
+    --json_folder="saves/chess_LLM_vs_stockfish" \
+    --output_path="results"
+
+# compute the game statistics against the solver
+python -m spinbench.tasks.evaluation.competitive.collect_solver_winrate \
+    --directory="saves/chess_LLM_vs_stockfish" \
+    --output_file="results/chess_LLM_vs_stockfish_winrate.json"
 ```
 </details>
 
-
-### Win‑Rate, Win‑Stats, and Elo ratings for competitive games
+### More on win‑rate, win‑stats, and Elo ratings for competitive games
 
 ```shell
 python -m spinbench.tasks.evaluation.competitive.collect-solver-winrate \
@@ -277,12 +318,13 @@ python -m spinbench.tasks.hanabi.run_game \
 python -m spinbench.tasks.evaluation.hanabi.gather_result \
     --store_folder="saves/hanabi" \
     --result_name="2gemini-2.5-pro-preview" \
-    --total_rounds=5
+    --total_rounds=5 \
+    --output_file="results/hanabi_result_2_gemini-2.5-pro-preview.json"
 ```
 
 ---
 
-### Multi‑Agent Game — Diplomacy
+### Strategic Game — Diplomacy
 
 Extensive helper scripts are shown in **[`scripts/run_diplomacy`](scripts/run_diplomacy)**. We also provide documentation on how to configure the Diplomacy running scripts in **[`docs/diplomacy_config.md`](docs/diplomacy_config.md)**.
 A minimal *basic‑skill* example:
@@ -315,13 +357,14 @@ Generate evaluation metrics:
 ```shell
 python -m spinbench.tasks.evaluation.diplomacy.eval \
     --game_folder="saves/diplomacy/gpt-4o_1-basic-skill" \
-    --output_file="saves/diplomacy/gpt-4o_1-basic-skill/eval.json"
+    --output_file="results/diplomacy/gpt-4o_1-basic-skill/eval.json"
 ```
 
-Negotiation‑specific evaluation requires configuration, examples in **[`configs/neg_eval_config.json`](configs/neg_eval_config.json)**:
+Negotiation‑specific evaluation requires configuration(It may require lots of API usage), examples in **[`configs/neg_eval_config.json`](configs/neg_eval_config.json)**:
 ```shell
 python -m spinbench.tasks.evaluation.diplomacy.eval_neg \
-    --neg_config_file="configs/neg_eval_config.json"
+    --neg_config_file="configs/neg_eval_config.json" \
+    --output_folder="results/diplomacy/neg_result"
 ```
 
 ---

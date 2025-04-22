@@ -1,0 +1,183 @@
+# Run the result in the main table in the paper, for o4-mini
+# Requires setting the OPENAI_API_KEY environment variable
+# all configs are in configs folder
+# You have to follow the installation first
+
+# The script will run all the tasks and save the trajectories in the saves folder
+# The evaluation results will be saved in the results folder
+
+
+################################
+######### Tic Tac Toe ##########
+################################
+
+## LLM vs solver
+python -m spinbench.tasks.tic_tac_toe.run_game_vs_solver \
+    --store_folder="saves/tic_tac_toe_LLM_vs_solver" \
+    --player_list="configs/solver_list_single.json" \
+    --total_rounds=10
+
+## Evaluation: annotate each move with the solver's score
+python -m spinbench.tasks.evaluation.competitive.tictactoe_score_moves \
+    --json_folder="saves/tic_tac_toe_LLM_vs_solver"
+
+## Evaluation: compute the game statistics against the solver
+python -m spinbench.tasks.evaluation.competitive.collect_solver_winrate \
+    --directory="saves/tic_tac_toe_LLM_vs_solver" \
+    --output_file="results/tic_tac_toe_LLM_vs_solver_winrate.json"
+
+################################
+########## Connect 4 ###########
+################################
+
+## launch the solver service in a separate terminal
+(
+cd spinbench/tasks/connect4/
+python c4solver.py --port 5000
+) &
+
+## LLM vs solver
+python -m spinbench.tasks.connect4.run_game_vs_solver \
+    --store_folder="saves/connect4_LLM_vs_solver" \
+    --player_list="configs/solver_list_single.json" \
+    --total_rounds=10
+
+# Evaluation: annotate each move with the solver's score
+python -m spinbench.tasks.evaluation.competitive.connect4_score_moves \
+    --json_folder="saves/connect4_LLM_vs_solver"
+
+# Evaluation: gather the scores and compute the result
+python -m spinbench.tasks.evaluation.competitive.connect4_score_plot \
+    --json_folder="saves/connect4_LLM_vs_solver" \
+    --output_path="results"
+
+# Evaluation: compute the game statistics against the solver
+python -m spinbench.tasks.evaluation.competitive.collect_solver_winrate \
+    --directory="saves/connect4_LLM_vs_solver" \
+    --output_file="results/connect4_LLM_vs_solver_winrate.json"
+
+## Close the solver web service
+child_pid=$!
+kill -9 $child_pid
+
+
+################################
+############ Chess #############
+################################
+
+
+## LLM vs stockfish
+python -m spinbench.tasks.chess.chess_stockfish \
+    --store_folder="saves/chess_LLM_vs_stockfish" \
+    --player_list="configs/stockfish-list-single.json" \
+    --stockfish_path="./stockfish" \
+    --total_rounds=4
+
+## Evaluation: annotate each move with the solver's score
+python -m spinbench.tasks.evaluation.competitive.chess_score_moves \
+    --stockfish_path="stockfish" \
+    --json_folder="saves/chess_LLM_vs_stockfish"
+
+## Evaluation: gather the scores and compute the result
+python -m spinbench.tasks.evaluation.competitive.chess_score_plot \
+    --json_folder="saves/chess_LLM_vs_stockfish" \
+    --output_path="results"
+
+## Evaluation: compute the game statistics against the solver
+python -m spinbench.tasks.evaluation.competitive.collect_solver_winrate \
+    --directory="saves/chess_LLM_vs_stockfish" \
+    --output_file="results/chess_LLM_vs_stockfish_winrate.json"
+
+
+####################################
+######### 2-players' Hanabi ########
+####################################
+
+## Run the game given the player models
+python -m spinbench.tasks.hanabi.run_game \
+    --player_models_json="configs/hanabi_player_models.json" \
+    --store_folder="saves/hanabi" \
+    --result_name="2o4-mini" \
+    --total_rounds=5
+
+## Gather the results
+python -m spinbench.tasks.evaluation.hanabi.gather_result \
+    --store_folder="saves/hanabi" \
+    --result_name="2o4-mini" \
+    --total_rounds=5 \
+    --output_file="results/hanabi_result_2_o4-mini.json"
+
+####################################
+############# Diplomacy ############
+####################################
+
+## Basic skill evaluation experiment (one LLM playing against six neural powers)
+power_list="AUSTRIA ENGLAND FRANCE GERMANY ITALY RUSSIA TURKEY"
+
+tested_model="o4-mini_1"
+model_list=( "bot" "bot" ${tested_model} "bot" "bot" "bot" "bot" )
+winning_centers="18"
+
+model_str=$(IFS=,; echo "${model_list[*]}")
+
+python -m spinbench.tasks.diplomacy.run_game \
+  --num_powers=7 \
+  --winning_centers=${winning_centers} \
+  --max_tokens=10000000 \
+  --max_years=1920 \
+  --model_names=$model_str \
+  --temperature=0.9 \
+  --top_p=1.0 \
+  --state_file=diplomacy_game_state.json \
+  --enable_negotiation=0 \
+  --negotiation_rounds=3 \
+  --save_folder=saves/diplomacy/${tested_model}-basic-skill
+
+## Evaluation: gather the metrics
+python -m spinbench.tasks.evaluation.diplomacy.eval \
+    --game_folder="saves/diplomacy/gpt-4o_1-basic-skill" \
+    --output_file="results/diplomacy/gpt-4o_1-basic-skill/eval.json"
+
+
+## Running 4 agents' Diplomacy setting (as in the main result table)
+## Requires setting the OPENAI_API_KEY and ANTHROPIC_API_KEY environment variable
+
+power_list="AUSTRIA ENGLAND FRANCE GERMANY ITALY RUSSIA TURKEY"
+
+# 2 2 2 1
+model1="gpt-4-turbo_1"
+model2="claude-3-5-haiku-20241022_1"
+model3="gpt-4o_1"
+model4="o4-mini_1"
+model_list=(\
+${model1} \
+${model1} \
+${model2} \
+${model2} \
+${model3} \
+${model4} \
+${model3} \
+)
+winning_centers="18"
+
+# generate the model str: m1,m2,m3,m4,m5,m6,m7
+model_str=$(IFS=,; echo "${model_list[*]}")
+
+# start a new game
+python -m spinbench.tasks.diplomacy.run_game \
+--num_powers=7 \
+--winning_centers=${winning_centers} \
+--max_tokens=10000000 \
+--max_years=1920 \
+--model_names=$model_str \
+--temperature=0.9 \
+--top_p=1.0 \
+--state_file=diplomacy_game_state.json \
+--enable_negotiation=0 \
+--negotiation_rounds=3 \
+--save_folder="saves/diplomacy/4-players-setting-testing-o4-mini-no-neg"
+
+## Evaluation: gather the metrics
+python -m spinbench.tasks.evaluation.diplomacy.eval \
+    --game_folder="saves/diplomacy/4-players-setting-testing-o4-mini-no-neg" \
+    --output_file="results/diplomacy/4-players-setting-testing-o4-mini-no-neg/eval.json"

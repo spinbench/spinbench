@@ -55,7 +55,7 @@ def get_chat(model, messages):
 	if model in model_dict:
 		model_dict.move_to_end(model)
 	else:
-		if len(model_dict) >= 2:
+		if len(model_dict) >= 7:
 			old_model, old_instance = model_dict.popitem(last=False)
 			del old_instance
 		model_dict[model] = lpb.BlackboxLLM(model)

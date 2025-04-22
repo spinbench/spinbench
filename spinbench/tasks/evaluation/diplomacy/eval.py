@@ -429,4 +429,7 @@ if __name__ == "__main__":
 	if not os.path.exists(os.path.join(game_folder, "diplomacy_game_save.json")):
 		print(f"Game save file does not exist in {game_folder}.")
 		sys.exit(1)
+	output_folder = os.path.dirname(output_file)
+	if output_folder and not os.path.exists(output_folder):
+		os.makedirs(output_folder)
 	process_game(game_folder, output_file)

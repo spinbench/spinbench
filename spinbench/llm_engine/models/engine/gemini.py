@@ -2,7 +2,7 @@ try:
     from google import genai
     from openai import OpenAI, AzureOpenAI
 except ImportError:
-    raise ImportError("If you'd like to use Gemini models, please install the google-generativeai package by running `pip install google-generativeai`, and add 'GOOGLE_API_KEY' to your environment variables.")
+    raise ImportError("If you'd like to use Gemini models, please install the google-generativeai package by running `pip install google-generativeai`, and add 'GEMINI_API_KEY' to your environment variables.")
 
 import os
 import platformdirs

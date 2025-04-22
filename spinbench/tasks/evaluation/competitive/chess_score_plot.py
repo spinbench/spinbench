@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import os
 import numpy as np
 import copy
 import json
@@ -7,7 +8,9 @@ from matplotlib.colors import ListedColormap
 import glob
 import argparse
 
-def compute_top_score(json_folder, figure_path=None):
+def compute_top_score(json_folder, output_folder=None):
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
     json_files = glob.glob(json_folder + "/*.json")
     d = {
         "white": 0,
@@ -76,10 +79,7 @@ def compute_top_score(json_folder, figure_path=None):
         "GPT-4o": "#95E1D3"
     }
 
-    print(result)
-
-    if not figure_path:
-        return
+    json.dump(result, open(os.path.join(output_folder, "chess_top_move_percentage.json"), "w"), indent=2)
 
     # Only print the first 6
 
@@ -107,13 +107,13 @@ def compute_top_score(json_folder, figure_path=None):
 
     # Adjust layout to accommodate legend
     plt.tight_layout()
-    plt.savefig(figure_path)
+    plt.savefig(output_folder)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Plot top moves.")
     parser.add_argument('--json_folder', type=str, required=True, help='Path to the folder containing JSON files.')
-    parser.add_argument('--figure_path', type=str, default=None, help='Path to save the figure.')
+    parser.add_argument('--output_folder', type=str, required=True, help='Path to save the figure.')
     args = parser.parse_args()
     json_folder = args.json_folder
-    figure_path = args.figure_path
-    compute_top_score(json_folder, figure_path)
+    output_folder = args.output_folder
+    compute_top_score(json_folder, output_folder)

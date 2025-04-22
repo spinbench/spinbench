@@ -50,6 +50,9 @@ def format_model_name(model_info):
     return formatted_name
 
 def process_json_files(input_directory, output_csv):
+    output_folder = os.path.dirname(output_csv)
+    if output_folder and not os.path.exists(output_folder):
+        os.makedirs(output_folder)
     # Dictionary to store win statistics
     win_stats = defaultdict(lambda: {"wins_model1": 0, "wins_model2": 0, "draws": 0})
 

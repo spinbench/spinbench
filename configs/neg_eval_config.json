@@ -10,5 +10,5 @@
 		"ENGLAND": "o1_1"
 	},
     "eval_model": "claude-3-7-sonnet-20250219",
-    "output_folder": "neg_result"
+    "neg_by_phase_output_folder": "saves/diplomacy/multi-211111-talk-fix/neg_result"
 }

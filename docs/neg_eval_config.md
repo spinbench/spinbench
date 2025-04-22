@@ -21,7 +21,7 @@ When you want to **post‑process** a saved Diplomacy game’s negotiation phase
     "ENGLAND": "o1_1"
   },
   "eval_model":    "claude-3-7-sonnet-20250219",
-  "output_folder": "neg_result"
+  "neg_by_phase_output_folder": "neg_result"
 }
 ```
 
@@ -42,7 +42,7 @@ When you want to **post‑process** a saved Diplomacy game’s negotiation phase
   - Scores persuasiveness or detect lies  
   - Summarizes proposals
 
-- **`output_folder`**  
+- **`neg_by_phase_output_folder`**  
   Where the script will write its results
 
 ---
@@ -61,7 +61,7 @@ This will:
 1. **Load** all turn files from `game_folder`.  
 2. **Extract** every negotiation message (sender, recipients, timestamp, content).  
 3. **Call** `get_chat(eval_model, [system + user prompt])` for each, asking it to annotate.  
-4. **Save** the enriched records under `output_folder/`.
+4. **Save** the enriched records under `neg_by_phase_output_folder/`.
 
 ---
 

@@ -70,7 +70,7 @@ def generate_eval_result_dict(config):
     
     Args:
         config (dict): Configuration dictionary containing game_folder, 
-                      power2model mappings, eval_model, and output_folder.
+                      power2model mappings, eval_model, and neg_by_phase_output_folder.
     
     Returns:
         dict: Structured evaluation result dictionary with all metrics initialized to 0.
@@ -107,7 +107,7 @@ def generate_neg_metric_by_phase(neg_config_file):
 	game_folder = neg_config["game_folder"]
 	power2model = neg_config["power2model"]
 	eval_model = neg_config["eval_model"]
-	output_folder = neg_config["output_folder"]
+	output_folder = neg_config["neg_by_phase_output_folder"]
 	if not os.path.exists(output_folder):
 		os.makedirs(output_folder)
 
@@ -254,9 +254,11 @@ def generate_neg_metric_by_phase(neg_config_file):
 			"eval_meta_data": eval_meta_data,
 		}, open(f"{output_folder}/neg_eval_{phase}_{eval_model}.json", "w"), indent=2, ensure_ascii=False)
 
-def gather_neg_result(neg_config_file):
+def gather_neg_result(neg_config_file, output_folder):
+	if not os.path.exists(output_folder):
+		os.makedirs(output_folder)
 	neg_config = json.load(open(neg_config_file, "r"))
-	folder = neg_config["output_folder"]
+	folder = neg_config["neg_by_phase_output_folder"]
 	files = glob.glob(folder + "/*.json")
 	eval_result = generate_eval_result_dict(neg_config)
 	for json_file in files:
@@ -279,7 +281,7 @@ def gather_neg_result(neg_config_file):
 		eval_result["other_features"][model]["peace/conflict"] = eval_result["other_features"][model]["peace"] / eval_result["other_features"][model]["conflict"] if eval_result["other_features"][model]["conflict"] > 0 else 0
 		eval_result["other_features"][model]["perspective_rate"] = eval_result["other_features"][model]["perspective_taking"] / eval_result["total_messages"][model] if eval_result["total_messages"][model] > 0 else 0
 		eval_result["other_features"][model]["conditional_rate"] = eval_result["other_features"][model]["conditional_thinking"] / eval_result["total_messages"][model] if eval_result["total_messages"][model] > 0 else 0
-	output_file = os.path.join(folder, "aggregated_results.json")
+	output_file = os.path.join(output_folder, "aggregated_results.json")
 	with open(output_file, "w") as f:
 		json.dump(eval_result, f, indent=2)
 	print(f"Aggregated results saved to {output_file}")
@@ -287,6 +289,7 @@ def gather_neg_result(neg_config_file):
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description="Generate negotiation metrics by phase")
 	parser.add_argument("--neg_config_file", type=str, required=True, help="Path to the negotiation config file")
+	parser.add_argument("--output_folder", type=str, required=True, help="Path to the output folder")
 	args = parser.parse_args()
 	generate_neg_metric_by_phase(args.neg_config_file)
-	gather_neg_result(args.neg_config_file)
+	gather_neg_result(args.neg_config_file, args.output_folder)

@@ -4,10 +4,13 @@ import sys
 from collections import defaultdict
 import argparse
 
-def process_directory_for_solver_winrate(dir_path, output_filename="our_solver_winrate.json"):
+def process_directory_for_solver_winrate(dir_path, output_file):
     if not os.path.isdir(dir_path):
         print(f"Error: {dir_path} is not a directory.")
         return
+    output_dir= os.path.dirname(output_file)
+    if output_dir and not os.path.exists(output_dir):
+        os.makedirs(output_dir)
 
     stats = defaultdict(lambda: {"wins": 0, "draw":0, "total": 0})
 
@@ -55,17 +58,19 @@ def process_directory_for_solver_winrate(dir_path, output_filename="our_solver_w
         results[matchup] = {
             "wins": wins,
             "draws": draw,
+            "losses": total - wins - draw,
             "total": total,
-            "win_rate": win_rate
+            "win_rate": win_rate,
+            "draw_rate": (draw / total * 100.0) if total > 0 else 0.0,
+            "loss_rate": ((total - wins - draw) / total * 100.0) if total > 0 else 0.0,
         }
 
-    output_path = os.path.join(dir_path, output_filename)
     try:
-        with open(output_path, "w") as out_f:
+        with open(output_file, "w") as out_f:
             json.dump(results, out_f, indent=2)
-        print(f"[INFO] Wrote our_solver winrate results to: {output_path}")
+        print(f"[INFO] Wrote our_solver winrate results to: {output_file}")
     except Exception as e:
-        print(f"Error writing to {output_path}: {e}")
+        print(f"Error writing to {output_file}: {e}")
         return
 
     print("Win Rate Summary:")
@@ -75,8 +80,8 @@ def process_directory_for_solver_winrate(dir_path, output_filename="our_solver_w
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process JSON files for our_solver winrate.")
     parser.add_argument("--directory", type=str, required=True, help="Directory containing JSON files.")
-    parser.add_argument("--output", type=str, default="winrate.json", help="Output filename for winrate results.")
+    parser.add_argument("--output_file", type=str, required=True, help="Output filename for winrate results.")
     args = parser.parse_args()
     input_path = args.directory
-    output_filename = args.output
-    process_directory_for_solver_winrate(input_path, output_filename)
+    output_file = args.output_file
+    process_directory_for_solver_winrate(input_path, output_file)

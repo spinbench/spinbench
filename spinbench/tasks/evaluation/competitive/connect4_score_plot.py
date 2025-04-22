@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import os
 import argparse
 import sys
 import numpy as np
@@ -6,8 +7,10 @@ import copy
 import json
 import glob
 
-def compute_top_score(json_folder, figure_path=None):
+def compute_top_score(json_folder, output_folder=None):
     # Load JSON files
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
     json_files = glob.glob(json_folder + "/*.json")
     result = {}
     top_index = {i: 0 for i in range(1, 8)} # first 4
@@ -33,7 +36,7 @@ def compute_top_score(json_folder, figure_path=None):
         this_sum = result[model][7]
         for i in range(1, 8):
             result[model][i] = result[model][i] / this_sum
-    print(result[model])
+    json.dump(result, open(os.path.join(output_folder, "connect4_top_move_percentage.json"), "w"), indent=2)
 
     # Plot settings
     plt.rcParams.update({
@@ -57,9 +60,6 @@ def compute_top_score(json_folder, figure_path=None):
         "GPT-4o": "#95E1D3"
     }
 
-    if not figure_path:
-        return
-
     plt.figure(figsize=(8, 4))  # Smaller figure size
 
     for i, model in enumerate(models):
@@ -81,13 +81,13 @@ def compute_top_score(json_folder, figure_path=None):
     )
     plt.grid(axis='y', linestyle='--', alpha=0.7)
     plt.tight_layout()
-    plt.savefig(figure_path)
+    plt.savefig(os.path.join(output_folder, "connect4_top_move_percentage.pdf"), dpi=300)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Compute top score from JSON files.")
     parser.add_argument('--json_folder', type=str, required=True, help='Path to the folder containing JSON files.')
-    parser.add_argument('--figure_path', type=str, required=True, help='Path to save the figure.')
+    parser.add_argument('--output_folder', type=str, required=True, help='Path to save the figure.')
     args = parser.parse_args()
     json_folder = args.json_folder
-    figure_path = args.figure_path
-    compute_top_score(json_folder, figure_path)
+    output_folder = args.output_folder
+    compute_top_score(json_folder, output_folder)
