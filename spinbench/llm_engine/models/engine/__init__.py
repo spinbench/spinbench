@@ -50,6 +50,10 @@ def get_engine(engine_name: str, **kwargs) -> EngineLM:
     elif (("gpt-4" in engine_name) or ("gpt-3.5" in engine_name)) or (("o1-mini") in engine_name) or (("o1-preview") in engine_name) or (("o1") in engine_name) or (("o3-mini") in engine_name) or (("o3-preview") in engine_name) or (("o3") in engine_name) or (("o4-mini") in engine_name) or (("o4-preview") in engine_name) or (("o4") in engine_name):
         from .openai import ChatOpenAI
         return ChatOpenAI(model_string=engine_name, is_multimodal=_check_if_multimodal(engine_name), **kwargs)
+    elif "openrouter" in engine_name:
+        from .openrouter import ChatOpenRouter
+        engine_name = engine_name.replace("openrouter-", "")
+        return ChatOpenRouter(model_string=engine_name, is_multimodal=_check_if_multimodal(engine_name), **kwargs)
     elif "claude" in engine_name:
         from .anthropic import ChatAnthropic
         return ChatAnthropic(model_string=engine_name, is_multimodal=_check_if_multimodal(engine_name), **kwargs)

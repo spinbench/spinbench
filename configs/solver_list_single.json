@@ -1,0 +1,25 @@
+{
+    "player1_model_list": [
+        {
+            "model": "our_solver",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        }
+    ],
+    "player2_model_list": [
+        {
+            "model": "gpt-4o",
+            "prompt_config": [
+            ]
+        }
+    ]
+}

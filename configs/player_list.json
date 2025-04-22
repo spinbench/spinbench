@@ -1,0 +1,1854 @@
+{
+    "player1_model_list": [
+        {
+            "model": "gpt-4o",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4o",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4o",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4o",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4o",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4o",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4o",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4o",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4o",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4o",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4o",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4o-mini",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4o-mini",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4o-mini",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4o-mini",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4o-mini",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4o-mini",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4o-mini",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4o-mini",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4o-mini",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4o-mini",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4-turbo",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4-turbo",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4-turbo",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4-turbo",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4-turbo",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4-turbo",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4-turbo",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4-turbo",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4-turbo",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-3.5-turbo",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-3.5-turbo",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-3.5-turbo",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-3.5-turbo",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-3.5-turbo",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-3.5-turbo",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-3.5-turbo",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-3.5-turbo",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "claude-3-5-sonnet-20241022",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "claude-3-5-sonnet-20241022",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "claude-3-5-sonnet-20241022",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "claude-3-5-sonnet-20241022",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "claude-3-5-sonnet-20241022",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "claude-3-5-sonnet-20241022",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "claude-3-5-sonnet-20241022",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "claude-3-5-haiku-20241022",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "claude-3-5-haiku-20241022",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "claude-3-5-haiku-20241022",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "claude-3-5-haiku-20241022",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "claude-3-5-haiku-20241022",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "claude-3-5-haiku-20241022",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-qwen2.5:72b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-qwen2.5:72b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-qwen2.5:72b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-qwen2.5:72b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-qwen2.5:72b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.1:70b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.1:70b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.1:70b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.1:70b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3:70b-instruct",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3:70b-instruct",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3:70b-instruct",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.2:3b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.2:3b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-mistral:latest",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        }
+    ],
+    "player2_model_list": [
+        {
+            "model": "gpt-4o-mini",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4-turbo",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-3.5-turbo",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "claude-3-5-sonnet-20241022",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "claude-3-5-haiku-20241022",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-qwen2.5:72b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.1:70b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3:70b-instruct",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.2:3b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-mistral:latest",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.3",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-4-turbo",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-3.5-turbo",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "claude-3-5-sonnet-20241022",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "claude-3-5-haiku-20241022",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-qwen2.5:72b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.1:70b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3:70b-instruct",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.2:3b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-mistral:latest",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.3",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "gpt-3.5-turbo",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "claude-3-5-sonnet-20241022",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "claude-3-5-haiku-20241022",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-qwen2.5:72b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.1:70b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3:70b-instruct",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.2:3b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-mistral:latest",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.3",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "claude-3-5-sonnet-20241022",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "claude-3-5-haiku-20241022",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-qwen2.5:72b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.1:70b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3:70b-instruct",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.2:3b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-mistral:latest",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.3",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "claude-3-5-haiku-20241022",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-qwen2.5:72b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.1:70b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3:70b-instruct",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.2:3b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-mistral:latest",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.3",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-qwen2.5:72b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.1:70b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3:70b-instruct",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.2:3b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-mistral:latest",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.3",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.1:70b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3:70b-instruct",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.2:3b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-mistral:latest",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.3",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3:70b-instruct",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.2:3b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-mistral:latest",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.3",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.2:3b",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-mistral:latest",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.3",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-mistral:latest",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.3",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "model": "ollama-llama3.3",
+            "prompt_config": [
+                {
+                    "name": "forced-reasoning",
+                    "params": {
+                        "interactive_times": 1,
+                        "prompt_messages": [
+                            "Please reason about the current state. You should analyze all the opponent's moves and your moves, try to reason opponent's thought in detail. Only need to plan and reason now, no need to make move at this stage."
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

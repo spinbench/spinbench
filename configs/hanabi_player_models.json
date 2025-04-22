@@ -1,0 +1,12 @@
+[
+    {
+        "model": "gemini-2.5-pro-preview-03-25",
+        "prompt_config": [
+        ]
+    },
+    {
+        "model": "gemini-2.5-pro-preview-03-25",
+        "prompt_config": [
+        ]
+    }
+]

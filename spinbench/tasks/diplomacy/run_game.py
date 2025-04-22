@@ -11,8 +11,8 @@ Command-line arguments:
 --winning_centers: The minimum number of supply centers needed to win the game. Defaults to 18.
 --max_tokens: The maximum cumulative tokens to allow before ending the game. Defaults to 100000.
 --model_names: Comma-separated model names for each agent, e.g. "gpt-4,gpt-3.5,gpt-3.5,..."
---temperature: OpenAI temperature hyperparameter. Defaults to 1.0.
---top_p: OpenAI top_p hyperparameter. Defaults to 1.0.
+--temperature: temperature hyperparameter. Defaults to 1.0.
+--top_p: top_p hyperparameter. Defaults to 1.0.
 --state_file: JSON file to store and resume game states. Defaults to "diplomacy_game_state.json".
 --enable_negotiation: Whether to enable negotiation rounds. Defaults to 1 (enabled).
 --negotiation_rounds: Number of negotiation rounds per move phase. Defaults to 3.
@@ -33,21 +33,16 @@ python diplomacy_refactored.py
 --save_folder "my_game_saves"
 """
 import time
-import copy
-import anthropic
 import traceback
 import os
-import requests
 import re
 import sys
 import json
 import argparse
-from collections import defaultdict
 from diplomacy import Game, Message
 from diplomacy.utils import common
 from diplomacy.utils.export import to_saved_game_format, load_saved_games_from_disk
-from diplomacy.utils.sorted_dict import SortedDict
-from openai import OpenAI
+from spinbench.tools.chat_service import get_chat
 from spinbench.tasks.diplomacy.diplomacy_utils import (
     get_message_text,
     gen_round_prompt,
@@ -60,13 +55,6 @@ from spinbench.tasks.diplomacy.diplomacy_utils import (
     gen_negotiation_prompt,
 )
 JSON_PATTERN = re.compile(r"({(.|\n)*})")
-anthropic_client = anthropic.Anthropic(
-    # defaults to os.environ.get("ANTHROPIC_API_KEY")
-)
-headers = {
-  'Authorization': "Bearer "+os.environ.get("OPENROUTER_API_KEY"),
-  'Content-Type': "application/json",
-}
 
 def format_adj_information(adj_info):
     """
@@ -141,8 +129,8 @@ def play_diplomacy_game(
     winning_centers: Number of centers needed to claim victory.
     max_tokens: If the total token usage exceeds this, end the game.
     model_names: A list of strings denoting which model each agent uses.
-    temperature: OpenAI temperature.
-    top_p: OpenAI top_p.
+    temperature: temperature.
+    top_p: top_p.
     state_file: Path to the JSON file to store and resume game states.
     negotiation_rounds: Number of negotiation rounds per move phase.
     """
@@ -210,20 +198,12 @@ def play_diplomacy_game(
         game = load_saved_games_from_disk(state["game_path"])[-1]
         past_model_power_dict = state["model_power_dict"]
         total_tokens = state["total_tokens"]
-        try:
-            input_tokens = state["input_tokens"]
-            output_tokens = state["output_tokens"]
-        except KeyError:
-            input_tokens = 0
-            output_tokens = 0
         for model_name in model_power_dict.keys():
             model_power_dict[model_name]["store_messages"] = past_model_power_dict[model_name]["store_messages"]
         print("Resuming from existing game:", game.get_current_phase())
     else:
         game = Game()
         total_tokens = 0
-        input_tokens = 0
-        output_tokens = 0
 
     # init power
     for power_name, power in game.powers.items():
@@ -231,74 +211,12 @@ def play_diplomacy_game(
             continue
         model_power_dict[model_names[power_name_index[power_name]]]["power_names"].append(power_name)
 
-    client = OpenAI(
-        api_key=os.environ.get("OPENAI_API_KEY", ""),
-    )
-
     # Helper function to call the chat model and capture tokens
     def call_chat_model(role_messages, model):
-        nonlocal total_tokens, input_tokens, output_tokens
+        nonlocal total_tokens
         try:
-            # You can also pass temperature, top_p here if needed
-            if "o1" not in model and "gpt" in model:
-                chat_completion = client.chat.completions.create(
-                    messages=role_messages,
-                    model=model,
-                    temperature=temperature,
-                    top_p=top_p
-                )
-                total_tokens += chat_completion.usage.to_dict().get("total_tokens", 0)
-                print("total tokens used in this call: ", chat_completion.usage.to_dict().get("total_tokens", 0))
-                input_tokens += chat_completion.usage.to_dict().get("prompt_tokens", 0)
-                print("input tokens used in this call: ", chat_completion.usage.to_dict().get("prompt_tokens", 0))
-                output_tokens += chat_completion.usage.to_dict().get("completion_tokens", 0)
-                print("output tokens used in this call: ", chat_completion.usage.to_dict().get("completion_tokens", 0))
-                content = chat_completion.choices[0].message.content
-            elif "o1" in model or "o3" in model:
-                chat_completion = client.chat.completions.create(
-                    messages=role_messages,
-                    model=model,
-                )
-                total_tokens += chat_completion.usage.to_dict().get("total_tokens", 0)
-                print("total tokens used in this call: ", chat_completion.usage.to_dict().get("total_tokens", 0))
-                input_tokens += chat_completion.usage.to_dict().get("prompt_tokens", 0)
-                print("input tokens used in this call: ", chat_completion.usage.to_dict().get("prompt_tokens", 0))
-                output_tokens += chat_completion.usage.to_dict().get("completion_tokens", 0)
-                print("output tokens used in this call: ", chat_completion.usage.to_dict().get("completion_tokens", 0))
-                content = chat_completion.choices[0].message.content
-            elif "claude" in model:
-                message = anthropic_client.messages.create(
-                    messages=role_messages,
-                    model=model,
-                    temperature=temperature,
-                    top_p=top_p,
-                    max_tokens=8000,
-                )
-                total_tokens += message.usage.input_tokens + message.usage.output_tokens
-                print("total tokens used in this call: ", message.usage.input_tokens + message.usage.output_tokens)
-                input_tokens += message.usage.input_tokens
-                print("input tokens used in this call: ", message.usage.input_tokens)
-                output_tokens += message.usage.output_tokens
-                print("output tokens used in this call: ", message.usage.output_tokens)
-                content = message.content[0].text
-            elif "deepseek" in model:
-                response = requests.post('https://openrouter.ai/api/v1/chat/completions', headers=headers, json={
-                    'model': 'deepseek/deepseek-r1',
-                    'messages': role_messages,
-                    'provider': {
-                        'order': [
-                            'Minimax'
-                        ],
-                        'allow_fallbacks': False
-                        }
-                }).json()
-                total_tokens += response["usage"].get("total_tokens", 0)
-                print("total tokens used in this call: ", response["usage"].get("total_tokens", 0))
-                input_tokens += response["usage"].get("prompt_tokens", 0)
-                print("input tokens used in this call: ", response["usage"].get("prompt_tokens", 0))
-                output_tokens += response["usage"].get("completion_tokens", 0)
-                print("output tokens used in this call: ", response["usage"].get("completion_tokens", 0))
-                content = response["choices"][0]["message"]["content"]
+            content, used_token = get_chat(model, role_messages)
+            total_tokens += used_token
             return content
         except Exception as e:
             print("Error calling chat model:", e)
@@ -307,6 +225,8 @@ def play_diplomacy_game(
     # Prepare dictionary to store messages and orders as well
     store_messages = {}
     store_orders = {}
+
+    game.render(True, True, output_format="svg", output_path=f"{save_folder}/maps/{game.get_current_phase()}.svg")
 
     # The main game loop
     while not game.is_game_done:
@@ -340,8 +260,6 @@ def play_diplomacy_game(
         # Prepare possible orders
         possible_orders_dict = game.get_all_possible_orders()
         print("total tokens: ", total_tokens)
-        print("input tokens: ", input_tokens)
-        print("output tokens: ", output_tokens)
         print("*"*50)
         print("current state: ", game.get_state())
         print("now phase: ", game.get_current_phase())
@@ -612,8 +530,6 @@ def play_diplomacy_game(
         data_to_save = {
             "game_path": game_save_path, # Save the path to the game state
             "total_tokens": total_tokens,
-            "input_tokens": input_tokens,
-            "output_tokens": output_tokens,
             "outcome": outcome,
             "model_power_dict": {
                 model_name: {
@@ -650,8 +566,8 @@ def main():
     parser.add_argument("--max_years", type=int, default=1916, help="Max number of years to run the game.")
     parser.add_argument("--model_names", type=str, default="",
     help="Comma-separated model names, e.g. 'gpt-4,gpt-4,gpt-4'")
-    parser.add_argument("--temperature", type=float, default=1.0, help="OpenAI temperature parameter.")
-    parser.add_argument("--top_p", type=float, default=1.0, help="OpenAI top_p parameter.")
+    parser.add_argument("--temperature", type=float, default=1.0, help="temperature parameter.")
+    parser.add_argument("--top_p", type=float, default=1.0, help="top_p parameter.")
     parser.add_argument("--state_file", type=str, default="diplomacy_game_state.json",
     help="File to store and resume game state.")
     parser.add_argument("--enable_negotiation", type=int, default=1, help="Enable negotiation phase.")

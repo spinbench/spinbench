@@ -75,6 +75,8 @@ def process_directory_for_solver_winrate(dir_path, output_filename="our_solver_w
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process JSON files for our_solver winrate.")
     parser.add_argument("--directory", type=str, required=True, help="Directory containing JSON files.")
+    parser.add_argument("--output", type=str, default="winrate.json", help="Output filename for winrate results.")
     args = parser.parse_args()
     input_path = args.directory
-    process_directory_for_solver_winrate(input_path)
+    output_filename = args.output
+    process_directory_for_solver_winrate(input_path, output_filename)

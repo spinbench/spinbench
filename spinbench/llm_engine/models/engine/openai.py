@@ -68,13 +68,11 @@ class ChatOpenAI(EngineLM, CachedEngine):
             #     api_key=OPENAI_API_KEY
             #     )
         elif base_url and base_url == OLLAMA_BASE_URL:
-            ic("in ollmama, ",OLLAMA_BASE_URL)
             self.client = OpenAI(
                 base_url=base_url,
                 api_key="ollama"
             )
         elif base_url and base_url == DEEPSEEK_BASE_URL:
-            ic("in deepseek, ",DEEPSEEK_BASE_URL)
             self.client = OpenAI(
                 base_url=base_url,
                 api_key=os.getenv("DEEPSEEK_API")
@@ -198,7 +196,6 @@ class ChatOpenAI(EngineLM, CachedEngine):
             self, history, system_prompt=None, temperature=0.95, max_tokens=4096, top_p=0.99
     ):
         sys_prompt_arg = system_prompt if system_prompt else self.system_prompt
-        ic(self.model_string)
         if "o1" in self.model_string or "o3" in self.model_string or "o4" in self.model_string:
             response = self.client.chat.completions.create(
                 model=self.model_string,
