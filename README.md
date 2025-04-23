@@ -453,11 +453,11 @@ Our code is based on or inspire by the following awesome repositories:
 - PDDL: [VAL](https://github.com/KCL-Planning/VAL)
 ,[pddl-generators](https://github.com/AI-Planning/pddl-generators)
 - Game solver: [Connect4](https://github.com/PascalPons/connect4), [Stockfish](https://github.com/official-stockfish/Stockfish)
-- Game environments: [OpenSpiel](https://github.com/google-deepmind/open_spiel), [PettingZoo](https://github.com/Farama-Foundation/PettingZoo), [Diplomacy AI](https://github.com/diplomacy/diplomacy)
+- Game environments: [OpenSpiel](https://github.com/google-deepmind/open_spiel), [PettingZoo](https://github.com/Farama-Foundation/PettingZoo), [Diplomacy engine](https://github.com/diplomacy/diplomacy), [Chess](https://github.com/niklasf/python-chess)
 - LLM engine: [textgrad](https://github.com/zou-group/textgrad)
 ## 🪪 License & Contact
 
-SPIN‑Bench is released under the **MIT License**. See [`LICENSE`](LICENSE) for details.
+SPIN‑Bench is released under the **MIT License**. See [`LICENSE`](LICENSE) for details. For the solvers and game engines, please refer to their corresponding repositories for their respective licenses.
 
 
 Happy benchmarking!
