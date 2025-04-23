@@ -61,9 +61,9 @@ def main():
     Main function to verify the plan and print the result.
     """
     # Example file paths (replace with your actual file paths)
-    domain_file = "/ssd2/kevin/projects/llm-pddl/domains/barman/domain.pddl"
-    problem_file = "/ssd2/kevin/projects/llm-pddl/domains/barman/p01.pddl"
-    plan_file = "/ssd2/kevin/projects/llm_plan_bench/barman/p01_claude.pddl"
+    domain_file = "input/domains/barman/domain.pddl"
+    problem_file = "input/domains/barman/p01.pddl"
+    plan_file = "solution/domains/barman/p01_claude.pddl"
     
 
     # Verify the plan
