@@ -1,5 +1,5 @@
-from llm_engine.models.engine import EngineLM, get_engine
-from llm_engine.models.utils.roles import (SYSTEM_PROMPT_DEFAULT_ROLE)
+from spinbench.llm_engine.models.engine import EngineLM, get_engine
+from spinbench.llm_engine.models.utils.roles import (SYSTEM_PROMPT_DEFAULT_ROLE)
 from typing import Union, List
 # from llm_engine.models.variable import Variable
 

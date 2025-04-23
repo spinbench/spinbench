@@ -1,6 +1,6 @@
 import json
 import regex
-import llm_engine as lpb
+import spinbench.llm_engine as lpb
 model = lpb.BlackboxLLM("gpt-4o")
 json_pattern = regex.compile(r'\{(?:[^{}]|(?R))*\}', regex.DOTALL)
 def parse_json(content):

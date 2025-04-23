@@ -1,6 +1,6 @@
 from typing import Union, List
-from llm_engine.models.engine import EngineLM, get_engine
-from llm_engine.models.utils.llm_utils import LLMPlanCall
+from spinbench.llm_engine.models.engine import EngineLM, get_engine
+from spinbench.llm_engine.models.utils.llm_utils import LLMPlanCall
 from abc import ABC, abstractmethod
 
 class Module(ABC):

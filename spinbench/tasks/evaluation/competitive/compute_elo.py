@@ -1,8 +1,12 @@
 import csv
 from tqdm import tqdm
 import argparse
+import os
 
-def compute_elo(filename):
+def compute_elo(filename, output_file):
+    output_folder = os.path.dirname(output_file)
+    if output_folder and not os.path.exists(output_folder):
+        os.makedirs(output_folder)
     player_ratings_elo = {}
     matches = []
     with open(filename, 'r', encoding='utf-8') as csvfile:
@@ -43,15 +47,24 @@ def compute_elo(filename):
 
             player_ratings_elo[model1] = elo_update(rating1, expected_score1, actual_score1)
             player_ratings_elo[model2] = elo_update(rating2, expected_score2, actual_score2)
+    # Write the Elo ratings to a CSV file
+    with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(['Model', 'Elo Rating'])
+        for model, rating in sorted(player_ratings_elo.items(), key=lambda x: x[1], reverse=True):
+            writer.writerow([model, rating])
+    print(f"Elo ratings saved to {output_file}")
     return player_ratings_elo
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Compute Elo ratings from win statistics.")
     parser.add_argument('--input', type=str, required=True, help='Path to the input CSV file with win statistics.')
+    parser.add_argument("--output_file", type=str, required=True, help='Path to the output CSV file for Elo ratings.')
     args = parser.parse_args()
     
     input_csv = args.input
+    output_file = args.output_file
     print("Elo Ratings:")
-    player_ratings_elo = compute_elo(input_csv)
+    player_ratings_elo = compute_elo(input_csv,output_file)
     for model, rating in sorted(player_ratings_elo.items(), key=lambda x: x[1], reverse=True):
         print(f"{model}: {rating:.2f}")

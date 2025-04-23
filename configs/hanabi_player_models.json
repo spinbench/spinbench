@@ -8,5 +8,20 @@
         "model": "o4-mini",
         "prompt_config": [
         ]
+    },
+    {
+        "model": "o4-mini",
+        "prompt_config": [
+        ]
+    },
+    {
+        "model": "o4-mini",
+        "prompt_config": [
+        ]
+    },
+    {
+        "model": "o4-mini",
+        "prompt_config": [
+        ]
     }
 ]

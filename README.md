@@ -193,7 +193,7 @@ python -m spinbench.tasks.tic_tac_toe.run_game \
 python -m spinbench.tasks.evaluation.competitive.tictactoe_score_moves \
     --json_folder="saves/tic_tac_toe_LLM_vs_solver"
 
-# compute the game statistics against the solver
+# compute the game statistics. In the result, win rate is SOLVER's winrate. In the result, win rate is SOLVER's winrate
 python -m spinbench.tasks.evaluation.competitive.collect_solver_winrate \
     --directory="saves/tic_tac_toe_LLM_vs_solver" \
     --output_file="results/tic_tac_toe_LLM_vs_solver_winrate.json"
@@ -227,16 +227,16 @@ python -m spinbench.tasks.connect4.run_game \
 ```
 **Run the evaluation**
 ```shell
-# annotate each move with the solver's score
+# Evaluation: annotate each move with the solver's score
 python -m spinbench.tasks.evaluation.competitive.connect4_score_moves \
     --json_folder="saves/connect4_LLM_vs_solver"
 
-# gather the scores and compute the result
+# Evaluation: gather the scores and compute the result
 python -m spinbench.tasks.evaluation.competitive.connect4_score_plot \
     --json_folder="saves/connect4_LLM_vs_solver" \
-    --output_path="results"
+    --output_folder="results"
 
-# compute the game statistics against the solver
+# Evaluation: compute the game statistics. In the result, win rate is SOLVER's winrate
 python -m spinbench.tasks.evaluation.competitive.collect_solver_winrate \
     --directory="saves/connect4_LLM_vs_solver" \
     --output_file="results/connect4_LLM_vs_solver_winrate.json"
@@ -262,7 +262,7 @@ The level of Stockfish can be set from 0 (weak) to 20 (strongest).
 python -m spinbench.tasks.chess.chess_stockfish \
     --store_folder="saves/chess_LLM_vs_stockfish" \
     --player_list="configs/stockfish-list-single.json" \
-    --stockfish_path="stockfish" \
+    --stockfish_path="./stockfish" \
     --total_rounds=4
 ```
 
@@ -276,17 +276,17 @@ python -m spinbench.tasks.chess.run_game \
 
 **Run the evaluation**
 ```shell
-# annotate each move with the solver's score
+## Evaluation: annotate each move with the solver's score
 python -m spinbench.tasks.evaluation.competitive.chess_score_moves \
-    --stockfish_path="stockfish" \
+    --stockfish_path="./stockfish" \
     --json_folder="saves/chess_LLM_vs_stockfish"
 
-# gather the scores and compute the result
+## Evaluation: gather the scores and compute the result
 python -m spinbench.tasks.evaluation.competitive.chess_score_plot \
     --json_folder="saves/chess_LLM_vs_stockfish" \
-    --output_path="results"
+    --output_folder="results"
 
-# compute the game statistics against the solver
+## Evaluation: compute the game statistics. In the result, win rate is SOLVER's winrate
 python -m spinbench.tasks.evaluation.competitive.collect_solver_winrate \
     --directory="saves/chess_LLM_vs_stockfish" \
     --output_file="results/chess_LLM_vs_stockfish_winrate.json"
@@ -296,16 +296,17 @@ python -m spinbench.tasks.evaluation.competitive.collect_solver_winrate \
 ### More on win‑rate, win‑stats, and Elo ratings for competitive games
 
 ```shell
-python -m spinbench.tasks.evaluation.competitive.collect-solver-winrate \
+python -m spinbench.tasks.evaluation.competitive.collect_solver_winrate \
     --directory="saves/connect4_LLMs" \
-    --output="winrate.json"
+    --output_file="results/connect4_LLMs_winrate.json"
 
 python -m spinbench.tasks.evaluation.competitive.win_stats \
     --input="saves/connect4_LLMs" \
-    --output="saves/connect4_LLMs/win_stats.csv"
+    --output="results/connect4_LLMs/win_stats.csv"
 
 python -m spinbench.tasks.evaluation.competitive.compute_elo \
-    --input="saves/connect4_LLMs/win_stats.csv"
+    --input="saves/connect4_LLMs/win_stats.csv" \
+    --output_file="results/connect4_LLMs/elo.csv" 
 ```
 
 ---
@@ -317,27 +318,27 @@ To run a game of Hanabi, you need to set up a config file with the player models
 ```jsonc
 // configs/hanabi_player_models.json
 [
-  { "model": "gemini-2.5-pro-preview-03-25", "prompt_config": [] },
-  { "model": "gemini-2.5-pro-preview-03-25", "prompt_config": [] }
+  { "model": "o4-mini", "prompt_config": [] },
+  { "model": "o4-mini", "prompt_config": [] }
 ]
 ```
 
-With this config, you can run a game of Hanabi with two players using the `gemini-2.5-pro-preview-03-25` model with the following command:
+With this config, you can run a game of Hanabi with two players using the `o4-mini` model with the following command:
 
 ```shell
-# run the game given the player models
+## Run the game given the player models
 python -m spinbench.tasks.hanabi.run_game \
     --player_models_json="configs/hanabi_player_models.json" \
     --store_folder="saves/hanabi" \
-    --result_name="2gemini-2.5-pro-preview" \
+    --result_name="2o4-mini" \
     --total_rounds=5
 
-# gather the results
+## Gather the results
 python -m spinbench.tasks.evaluation.hanabi.gather_result \
     --store_folder="saves/hanabi" \
-    --result_name="2gemini-2.5-pro-preview" \
+    --result_name="2o4-mini" \
     --total_rounds=5 \
-    --output_file="results/hanabi_result_2_gemini-2.5-pro-preview.json"
+    --output_file="results/hanabi_result_2_o4-mini.json"
 ```
 
 ---
@@ -351,7 +352,7 @@ A minimal *basic‑skill* example:
 # power list
 power_list="AUSTRIA ENGLAND FRANCE GERMANY ITALY RUSSIA TURKEY"
 
-tested_model="gpt-4o_1"
+tested_model="o4-mini_1"
 model_list=( "bot" "bot" ${tested_model} "bot" "bot" "bot" "bot" )
 winning_centers="18"
 
@@ -374,11 +375,11 @@ python -m spinbench.tasks.diplomacy.run_game \
 Generate evaluation metrics:
 ```shell
 python -m spinbench.tasks.evaluation.diplomacy.eval \
-    --game_folder="saves/diplomacy/gpt-4o_1-basic-skill" \
-    --output_file="results/diplomacy/gpt-4o_1-basic-skill/eval.json"
+    --game_folder="saves/diplomacy/o4-mini_1-basic-skill" \
+    --output_file="results/diplomacy/o4-mini_1-basic-skill/eval.json"
 ```
 
-Negotiation‑specific evaluation requires configuration(It may require lots of API usage), examples in **[`configs/neg_eval_config.json`](configs/neg_eval_config.json)**:
+Negotiation‑specific evaluation requires configuration(It may require lots of API usage, and it can only evaluate the game where negotiation is enabled), examples in **[`configs/neg_eval_config.json`](configs/neg_eval_config.json)**:
 ```shell
 python -m spinbench.tasks.evaluation.diplomacy.eval_neg \
     --neg_config_file="configs/neg_eval_config.json" \

@@ -4,7 +4,7 @@ import os
 import argparse
 import sys
 from diplomacy.utils.export import load_saved_games_from_disk
-from utils import parse_model_message
+from spinbench.tasks.evaluation.diplomacy.utils import parse_model_message
 
 def compute_metrics(tp, fp, fn):
     precision = tp / (tp + fp) if (tp + fp) > 0 else 0

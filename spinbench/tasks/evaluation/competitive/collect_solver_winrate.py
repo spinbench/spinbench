@@ -13,7 +13,7 @@ def process_directory_for_solver_winrate(dir_path, output_file):
         os.makedirs(output_dir)
 
     stats = defaultdict(lambda: {"wins": 0, "draw":0, "total": 0})
-
+    stockfish = False
     for filename in os.listdir(dir_path):
         if filename.lower().endswith(".json"):
             full_path = os.path.join(dir_path, filename)
@@ -29,16 +29,20 @@ def process_directory_for_solver_winrate(dir_path, output_file):
             p2_model = data.get("player2_model", {}).get("model", "")
             winner = data.get("winner", "")
 
-            if p1_model == "our_solver":
+            if p1_model == "our_solver" or p1_model == "stockfish":
+                if p1_model == "stockfish":
+                    stockfish = True
                 our_solver_is_player1 = True
                 opponent_model = p2_model
-            elif p2_model == "our_solver":
+            elif p2_model == "our_solver" or p2_model == "stockfish":
+                if p2_model == "stockfish":
+                    stockfish = True
                 our_solver_is_player1 = False
                 opponent_model = p1_model
             else:
                 continue
 
-            matchup_key = f"Solver vs {opponent_model}"
+            matchup_key = f"Solver vs {opponent_model}" if not stockfish else f"Stockfish-level-{data.get("player1_model", {}).get("level", "0")} vs {opponent_model}"
 
             stats[matchup_key]["total"] += 1
 

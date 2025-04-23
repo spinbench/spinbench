@@ -8,15 +8,13 @@ def score_moves(stockfish_path, json_folder):
 	stockfish = Stockfish(stockfish_path)
 	stockfish.set_skill_level(20)
 	stockfish.update_engine_parameters({
-		"Threads": 8,       
+		"Threads": 16,       
 		"Skill Level": 20,
 		"Move Overhead": 10,
 		"Hash": 2048,
 	})
 	json_files = glob.glob(f"{json_folder}/*.json")
 	for game_file in tqdm(json_files):
-		if "o1" not in game_file:
-			continue
 		game = json.load(open(game_file,"r"))
 		game_log = game["game_log"]
 		for log in game_log:

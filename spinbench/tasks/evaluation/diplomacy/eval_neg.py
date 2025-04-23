@@ -13,7 +13,7 @@ anthropic_client = anthropic.Anthropic(
     # defaults to os.environ.get("ANTHROPIC_API_KEY")
 )
 from spinbench.tools.chat_service import get_chat
-import llm_engine as lpb
+import spinbench.llm_engine as lpb
 model = lpb.BlackboxLLM("gpt-4o") # model for fixing the json data
 from diplomacy.utils.export import load_saved_games_from_disk
 json_pattern = regex.compile(r'\{(?:[^{}]|(?R))*\}', regex.DOTALL)
