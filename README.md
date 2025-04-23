@@ -17,19 +17,19 @@ Authors: Jianzhu Yao, Kevin Wang, Ryan Hsieh, Haisu Zhou, Tianqing Zou, Zerui Ch
 
 ## Table of Contents
 
-- [Overview](#Overview)
-- [Features](#features)
-- [Installation](#installation)
-- [Quick-Start](#quick-start)
-- [Configuration Files](#configuration-files)
-- [Usage](#usage)
+- [Overview](#-overview)
+- [Features](#-features)
+- [Installation](#-installation)
+- [Quick-Start](#-quick-start)
+- [Configuration Files](#-configuration-files)
+- [Usage](#-usage)
   - [PDDL](#pddl)
   - [Competitive Games](#competitive-games)
   - [Cooperative Game — Hanabi](#cooperative-game-hanabi)
   - [Strategic Game — Diplomacy](#strategic-game-diplomacy)
-- [Citation](#citation)
-- [Contributing](#contributing)
-- [License & Contact](#license--contact)
+- [Citation](#-citation)
+- [Contributing](#-contributing)
+- [License & Contact](#-license--contact)
 
 ---
 
