@@ -91,8 +91,9 @@ def get_engine(engine_name: str, **kwargs) -> EngineLM:
         from .groq import ChatGroq
         engine_name = engine_name.replace("groq-", "")
         return ChatGroq(model_string=engine_name, **kwargs)
-    elif "llama" in engine_name.lower():
-        from .llama_local import ChatLocalLLM
+    elif "transformers" in engine_name.lower():
+        from .transformers_local import ChatLocalLLM
+        engine_name = engine_name.replace("transformers-", "")
         return ChatLocalLLM(model_string=engine_name, **kwargs)
     else:
         raise ValueError(f"Engine {engine_name} not supported")

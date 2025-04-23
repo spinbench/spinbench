@@ -15,6 +15,24 @@ Authors: Jianzhu Yao, Kevin Wang, Ryan Hsieh, Haisu Zhou, Tianqing Zou, Zerui Ch
 
 ---
 
+## Table of Contents
+
+- [Overview](#Overview)
+- [Features](#features)
+- [Installation](#installation)
+- [Quick-Start](#quick-start)
+- [Configuration Files](#configuration-files)
+- [Usage](#usage)
+  - [PDDL](#pddl)
+  - [Competitive Games](#competitive-games)
+  - [Cooperative Game — Hanabi](#cooperative-game-hanabi)
+  - [Strategic Game — Diplomacy](#strategic-game-diplomacy)
+- [Citation](#citation)
+- [Contributing](#contributing)
+- [License & Contact](#license--contact)
+
+---
+
 ## 👋 Overview
 
 ![](assets/main_figure.png)
@@ -149,22 +167,38 @@ SPIN‑Bench decouples *model definitions* from *game logic* through declarative
 
 *The i‑th entry of `player1_model_list` always faces the i‑th entry of `player2_model_list`; add or reorder entries to orchestrate round‑robins, self‑play, or ablations.*
 
+If you want to use remote / local models with the huggingface transformers library, you should add `transformers-` before the model name. You can refer to [`spinbench/llm_engine/models/engine/transformers_local.py`](spinbench/llm_engine/models/engine/transformers_local.py) for the details of loading the model and the text generation pipeline. Some examples for how to set the model names:
+
+```json
+"player2_model_list": [
+    {
+      "model": "gpt-4o",
+      "model": "transformers-deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+      "model": "ollama-qwen2.5-coder:latest",
+      "model": "claude-3-7-sonnet-20250219",
+      "model": "gemini-2.5-pro-preview-03-25",
+      "prompt_config": [
+      ]
+    }
+]
+```
+
 Detailed prompt‑template documentation lives in **[`docs/prompt_config.md`](docs/prompt_config.md)**. We also provide more documentations for how to write the config file in **[`docs`](docs)**. And you can find the example configs in **[`configs`](configs)**.
 
 ---
 
 ## 🎮 Usage
 
-With all examples in this readme file and configs folder, we will show you how to run our benchmark **main table**'s result with OpenAI API, using model `o4-mini`. If you want to run one single file containing all the tasks, please refer to [scripts/run_all.py](scripts/run_all.py) for more details.
+With all examples in this readme file and configs folder, we will show you how to run our benchmark **main table**'s result with OpenAI API, using model `o4-mini`. If you want to run one single file containing all the tasks, please refer to [scripts/run_all_games.py](scripts/run_all_games.py) for more details.
 
 ### PDDL
 
 ```shell
- ./scripts/run_pddl.sh -e <experiment name> -m <model name or model path>
+./scripts/run_pddl.sh -e <experiment name> -m <model name or model path>
 # example
 # ./scripts/run_pddl.sh -e 04_23 -m o4-mini-2025-04-16
 #This script would run both the inference and evluation, the llm answer would be save in save and the final metric would be in results
-```shell
+```
 
 
 ### Competitive Games
@@ -293,7 +327,7 @@ python -m spinbench.tasks.evaluation.competitive.collect_solver_winrate \
 ```
 </details>
 
-### More on win‑rate, win‑stats, and Elo ratings for competitive games
+**More on win‑rate, win‑stats, and Elo ratings for competitive games**
 
 ```shell
 python -m spinbench.tasks.evaluation.competitive.collect_solver_winrate \

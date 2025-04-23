@@ -29,27 +29,16 @@ class ChatLocalLLM(EngineLM, CachedEngine):
         self.tokenizer.pad_token = self.tokenizer.eos_token
         self.tokenizer.padding_side = "right"
 
-        num_gpus = torch.cuda.device_count()
-        for i in range(num_gpus):
-            try:
-                print(f"Trying to load model on GPU {i}")
-                self.model = AutoModelForCausalLM.from_pretrained(
-                    model_string,
-                    torch_dtype=torch.float16,
-                    quantization_config={"load_in_4bit": True, "bnb_4bit_compute_dtype": torch.float16, "bnb_4bit_use_double_quant": True, "bnb_4bit_quant_type": "nf4"},
-                    use_flash_attention_2=True,
-                    trust_remote_code=True,
-                    device_map={ "": i },
-                )
-                self.pipe = pipeline("text-generation", model=self.model, tokenizer=self.tokenizer, device_map={ "": i })
-                self.model.to(f"cuda:{i}")
-                break
-            except RuntimeError as e:
-                print(f"Failed to load model on GPU {i}: {e}")
-                continue
-        else:
-            raise RuntimeError("Failed to load model on any GPU")
-
+        self.model = AutoModelForCausalLM.from_pretrained(
+            model_string,
+            torch_dtype=torch.float16,
+            quantization_config={"load_in_4bit": True, "bnb_4bit_compute_dtype": torch.float16, "bnb_4bit_use_double_quant": True, "bnb_4bit_quant_type": "nf4"},
+            use_flash_attention_2=True,
+            trust_remote_code=True,
+            low_cpu_mem_usage=True,
+            device_map="auto",
+        )
+        self.pipe = pipeline("text-generation", model=self.model, tokenizer=self.tokenizer, device_map="auto")
 
     def _format_prompt(self, prompt: str, system_prompt: str = None) -> str:
         sys_prompt = system_prompt if system_prompt else self.system_prompt
@@ -72,20 +61,26 @@ class ChatLocalLLM(EngineLM, CachedEngine):
         history,
         system_prompt: str = None,
         temperature: float = 0.95,
-        max_tokens: int = 4096,
+        max_tokens: int = 40960,
         top_p: float = 0.95,
     ) -> str:
         # data format:
         # history = [
-        #     {"role": "user", "content": "Hi, my name is Albert"},
-        #     {"role": "assistant", "content": "Hello Albert, how can I help you today?"},
+        # {"role": "user", "content": "Hi, my name is Albert"},
+        # {"role": "assistant", "content": "Hello Albert, how can I help you today?"},
+        # {"role": "user", "content": "Hi, my name is Albert"},
         # ]
-        return self.pipe(
+        response = self.pipe(
             history,
             max_length=max_tokens,
             temperature=temperature,
             top_p=top_p,
-        )[0]['generated_text'][-1]["content"]
+        )
+        print("the response is", response)
+        content = response[0]['generated_text'][-1]["content"]
+        # total_tokens = response[0]['generated_text'][-1]["total_tokens"]
+
+        return content
 
     def _generate_response(
         self,
