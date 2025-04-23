@@ -6,7 +6,7 @@
 
 - An **extensible LLM‑driven game‑agent** pipeline  
 - A variety of **game environments** (perfect‑ and imperfect‑information)  
-- **Ground‑truth solvers** (e.g. Stockfish, Connect 4 engine)  
+- **Ground‑truth solvers** (e.g. Stockfish, Connect 4 engine)  
 - **Flexible JSON‑based prompting** and multi‑agent configurations  
 - **Evaluation scripts** for tactical strength, Elo, negotiation metrics, and reasoning chains  
 
@@ -38,16 +38,16 @@ Authors: Jianzhu Yao, Kevin Wang, Ryan Hsieh, Haisu Zhou, Tianqing Zou, Zerui Ch
 ![](assets/main_figure.png)
 
 SPIN‑Bench is an open‑source benchmark that probes the **strategic planning** and **social‑reasoning** abilities of contemporary language models.  
-It unifies a diverse suite of games—from *Tic‑Tac‑Toe* and *Connect 4* to *Chess*, *Hanabi*, and *Diplomacy*—together with ground‑truth solvers, flexible prompting, and end-to-end evaluation.  
+It unifies a diverse suite of games—from *Tic‑Tac‑Toe* and *Connect 4* to *Chess*, *Hanabi*, and *Diplomacy*—together with ground‑truth solvers, flexible prompting, and end-to-end evaluation.  
 
 Researchers can effortlessly:  
 
-* **Pit LLMs against optimal solvers** (e.g. Stockfish, perfect‑play Connect 4) to gauge raw tactical strength.  
+* **Pit LLMs against optimal solvers** (e.g. Stockfish, perfect‑play Connect 4) to gauge raw tactical strength.  
 * **Stage multi‑agent LLM battles** via simple JSON configs—assign one model to multiple players or ensembles.  
 * **Customize reasoning** with JSON hooks (forced‑reasoning, history replay, future speculation, code generation).  
 * **Score reasoning chains** to examine how models plan, reflect, and adapt over time.  
 
-With SPIN‑Bench’s plug‑and‑play agents, configurable pipelines, and rich analytics, you can probe every facet of LLM strategic and social intelligence—end to end.
+With SPIN‑Bench's plug‑and‑play agents, configurable pipelines, and rich analytics, you can probe every facet of LLM strategic and social intelligence—end to end.
 
 ---
 
@@ -55,8 +55,8 @@ With SPIN‑Bench’s plug‑and‑play agents, configurable pipelines, and rich
 
 | Category                       | Highlights                                                                                                                                                           |
 |--------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Diverse Games**              | Perfect‑information (Tic‑Tac‑Toe, Connect 4, Chess) + imperfect‑information & negotiation (Hanabi, Diplomacy)                                                        |
-| **Plug‑and‑Play Solvers**      | Optimal baselines for Connect 4 and Tic‑Tac‑Toe, Stockfish for Chess, plus custom algorithm‐based solvers                                                             |
+| **Diverse Games**              | Perfect‑information (Tic‑Tac‑Toe, Connect 4, Chess) + imperfect‑information & negotiation (Hanabi, Diplomacy)                                                        |
+| **Plug‑and‑Play Solvers**      | Optimal baselines for Connect 4 and Tic‑Tac‑Toe, Stockfish for Chess, plus custom algorithm‑based solvers                                                             |
 | **Agent Prompt Config Hooks**        | JSON hooks to customize chain‑of‑thought, reasoning history, future‑state speculation, code generation, and more ([see `doc/prompt_config.md`])                         |
 | **Player List Configuration**  | Define multi‑agent setups in `player_list_config.json`—LLMs, chess engines (e.g. Stockfish), custom solvers; also support for multi-agent ensembles                 |
 | **Negotiation Annotation**     | Post‑process Diplomacy saves with an `eval_model` to label, summarize, and score all negotiation messages                                                              |
@@ -449,8 +449,12 @@ Email **Jianzhu Yao** (<jy0246@princeton.edu>) or **Kevin Wang** (<kevinwang.183
 
 ---
 ## Acknowledgement 
-PDDL: Thanks 
-
+Our code is based on or inspire by the following awesome repositories:
+- PDDL: [VAL](https://github.com/KCL-Planning/VAL)
+,[pddl-generators](https://github.com/AI-Planning/pddl-generators)
+- Game solver: [Connect4](https://github.com/PascalPons/connect4), [Stockfish](https://github.com/official-stockfish/Stockfish)
+- Game environments: [OpenSpiel](https://github.com/google-deepmind/open_spiel), [PettingZoo](https://github.com/Farama-Foundation/PettingZoo), [Diplomacy AI](https://github.com/diplomacy/diplomacy)
+- LLM engine: [textgrad](https://github.com/zou-group/textgrad)
 ## 🪪 License & Contact
 
 SPIN‑Bench is released under the **MIT License**. See [`LICENSE`](LICENSE) for details.
