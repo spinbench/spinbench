@@ -7,7 +7,7 @@ import openai
 import concurrent.futures
 import threading
 from queue import Queue
-from tools.chat_service import get_chat
+from spinbench.tools.chat_service import get_chat
 
 
 def extract_json_from_response(response: str) -> str:
@@ -64,7 +64,7 @@ def process_instance(args):
         # Send prompt to LLM
         # response = model(prompt_data["prompt"])
         # todo: add device specification for local model
-        response = get_chat(model, prompt_data["prompt"])
+        response, tokens_used = get_chat(model, prompt_data["prompt"])
         
         # Save full text response
         with open(full_text_file, 'w') as f:

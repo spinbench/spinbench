@@ -1,4 +1,4 @@
-from llm_plan_bench.models.prompt_generation import (
+from spinbench.tasks.PDDL.prompt_generation import (
     PromptGenerator,
     read_file,
     read_pddl_file,
