@@ -164,7 +164,7 @@ With all examples in this readme file and configs folder, we will show you how t
 # example
 # ./scripts/run_pddl.sh -e 04_23 -m o4-mini-2025-04-16
 #This script would run both the inference and evluation, the llm answer would be save in save and the final metric would be in results
-```shell
+```
 
 
 ### Competitive Games
@@ -412,6 +412,8 @@ Have questions, ideas, or want to integrate a new game?
 Email **Jianzhu Yao** (<jy0246@princeton.edu>) or **Kevin Wang** (<kevinwang.1839@utexas.edu>).
 
 ---
+## Acknowledgement 
+PDDL: Thanks 
 
 ## 🪪 License & Contact
 
