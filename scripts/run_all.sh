@@ -21,7 +21,7 @@ python -m spinbench.tasks.tic_tac_toe.run_game_vs_solver \
 python -m spinbench.tasks.evaluation.competitive.tictactoe_score_moves \
     --json_folder="saves/tic_tac_toe_LLM_vs_solver"
 
-## Evaluation: compute the game statistics against the solver
+## Evaluation: compute the game statistics. In the result, win rate is SOLVER's winrate
 python -m spinbench.tasks.evaluation.competitive.collect_solver_winrate \
     --directory="saves/tic_tac_toe_LLM_vs_solver" \
     --output_file="results/tic_tac_toe_LLM_vs_solver_winrate.json"
@@ -49,9 +49,9 @@ python -m spinbench.tasks.evaluation.competitive.connect4_score_moves \
 # Evaluation: gather the scores and compute the result
 python -m spinbench.tasks.evaluation.competitive.connect4_score_plot \
     --json_folder="saves/connect4_LLM_vs_solver" \
-    --output_path="results"
+    --output_folder="results"
 
-# Evaluation: compute the game statistics against the solver
+# Evaluation: compute the game statistics. In the result, win rate is SOLVER's winrate
 python -m spinbench.tasks.evaluation.competitive.collect_solver_winrate \
     --directory="saves/connect4_LLM_vs_solver" \
     --output_file="results/connect4_LLM_vs_solver_winrate.json"
@@ -75,15 +75,15 @@ python -m spinbench.tasks.chess.chess_stockfish \
 
 ## Evaluation: annotate each move with the solver's score
 python -m spinbench.tasks.evaluation.competitive.chess_score_moves \
-    --stockfish_path="stockfish" \
+    --stockfish_path="./stockfish" \
     --json_folder="saves/chess_LLM_vs_stockfish"
 
 ## Evaluation: gather the scores and compute the result
 python -m spinbench.tasks.evaluation.competitive.chess_score_plot \
     --json_folder="saves/chess_LLM_vs_stockfish" \
-    --output_path="results"
+    --output_folder="results"
 
-## Evaluation: compute the game statistics against the solver
+## Evaluation: compute the game statistics. In the result, win rate is SOLVER's winrate
 python -m spinbench.tasks.evaluation.competitive.collect_solver_winrate \
     --directory="saves/chess_LLM_vs_stockfish" \
     --output_file="results/chess_LLM_vs_stockfish_winrate.json"
@@ -106,6 +106,61 @@ python -m spinbench.tasks.evaluation.hanabi.gather_result \
     --result_name="2o4-mini" \
     --total_rounds=5 \
     --output_file="results/hanabi_result_2_o4-mini.json"
+
+####################################
+######### 3-players' Hanabi ########
+####################################
+
+## Run the game given the player models
+python -m spinbench.tasks.hanabi.run_game \
+    --player_models_json="configs/hanabi_player_models.json" \
+    --store_folder="saves/hanabi" \
+    --result_name="3o4-mini" \
+    --total_rounds=5
+## Gather the results
+python -m spinbench.tasks.evaluation.hanabi.gather_result \
+    --store_folder="saves/hanabi" \
+    --result_name="3o4-mini" \
+    --total_rounds=5 \
+    --output_file="results/hanabi_result_3_o4-mini.json"
+
+
+####################################
+######### 4-players' Hanabi ########
+####################################
+
+## Run the game given the player models
+python -m spinbench.tasks.hanabi.run_game \
+    --player_models_json="configs/hanabi_player_models.json" \
+    --store_folder="saves/hanabi" \
+    --result_name="4o4-mini" \
+    --total_rounds=5
+## Gather the results
+python -m spinbench.tasks.evaluation.hanabi.gather_result \
+    --store_folder="saves/hanabi" \
+    --result_name="4o4-mini" \
+    --total_rounds=5 \
+    --output_file="results/hanabi_result_4_o4-mini.json"
+
+
+########################################
+######### 5-players' Hanabi ########
+####################################
+
+
+## Run the game given the player models
+python -m spinbench.tasks.hanabi.run_game \
+    --player_models_json="configs/hanabi_player_models.json" \
+    --store_folder="saves/hanabi" \
+    --result_name="5o4-mini" \
+    --total_rounds=5
+## Gather the results
+python -m spinbench.tasks.evaluation.hanabi.gather_result \
+    --store_folder="saves/hanabi" \
+    --result_name="5o4-mini" \
+    --total_rounds=5 \
+    --output_file="results/hanabi_result_5_o4-mini.json"
+
 
 ####################################
 ############# Diplomacy ############
@@ -135,8 +190,8 @@ python -m spinbench.tasks.diplomacy.run_game \
 
 ## Evaluation: gather the metrics
 python -m spinbench.tasks.evaluation.diplomacy.eval \
-    --game_folder="saves/diplomacy/gpt-4o_1-basic-skill" \
-    --output_file="results/diplomacy/gpt-4o_1-basic-skill/eval.json"
+    --game_folder="saves/diplomacy/o4-mini_1-basic-skill" \
+    --output_file="results/diplomacy/o4-mini_1-basic-skill/eval.json"
 
 
 ## Running 4 agents' Diplomacy setting (as in the main result table)

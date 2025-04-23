@@ -8,5 +8,7 @@ setup(
         "open-spiel==1.5",
         "diplomacy==1.1.2",
         "pettingzoo==1.24.3",
+        "anthropic==0.50.0",
+        "openai==1.61.0",
     ],
 )

@@ -284,7 +284,7 @@ def score_game_log_inplace(json_path):
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description="Score Tic Tac Toe game logs.")
-	parser.add_argument('--json_foldeer', type=str, required=True, help='Path to the folder containing JSON files.')
+	parser.add_argument('--json_folder', type=str, required=True, help='Path to the folder containing JSON files.')
 	args = parser.parse_args()
 	json_folder = args.json_folder
 	json_files = [f for f in os.listdir(json_folder) if f.endswith(".json")]
