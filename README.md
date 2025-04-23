@@ -20,13 +20,13 @@ Authors: Jianzhu Yao, Kevin Wang, Ryan Hsieh, Haisu Zhou, Tianqing Zou, Zerui Ch
 - [Overview](#-overview)
 - [Features](#-features)
 - [Installation](#-installation)
-- [Quick-Start](#-quick-start)
+- [Quick-Start](#-quickstart)
 - [Configuration Files](#-configuration-files)
 - [Usage](#-usage)
   - [PDDL](#pddl)
   - [Competitive Games](#competitive-games)
-  - [Cooperative Game — Hanabi](#cooperative-game-hanabi)
-  - [Strategic Game — Diplomacy](#strategic-game-diplomacy)
+  - [Cooperative Game — Hanabi](#cooperative-game--hanabi)
+  - [Strategic Game — Diplomacy](#strategic-game--diplomacy)
 - [Citation](#-citation)
 - [Contributing](#-contributing)
 - [License & Contact](#-license--contact)
@@ -422,7 +422,8 @@ python -m spinbench.tasks.evaluation.diplomacy.eval_neg \
 
 ---
 
-## ✍️ Citation
+## 👓 Citation
+
 If you build upon SPIN‑Bench, please cite:
 
 ```bibtex
