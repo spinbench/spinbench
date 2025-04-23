@@ -44,7 +44,7 @@ if [ ! -z "$DOMAIN" ]; then
     echo "Domain: $DOMAIN"
 fi
 
-Step 1: Generate prompts
+# Step 1: Generate prompts
 echo -e "\n=== Generating Prompts ==="
 if [ ! -z "$DOMAIN" ]; then
     python -m spinbench.tasks.PDDL.prompt_generation.generate_plan_prompt --domain "$DOMAIN" --data_path "$DATA_PATH" --output_path "$PROMPT_DIR"

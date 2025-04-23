@@ -164,7 +164,7 @@ def validate_plan(domain_file: str, problem_file: str, plan_file: str) -> Dict[s
     """
     # try:
     result = subprocess.run(
-        ["submodule/VAL/validate", domain_file, problem_file, plan_file],
+        ["spinbench/tasks/PDDL/submodules/VAL/validate", domain_file, problem_file, plan_file],
         capture_output=True,
         text=True,
         check=False
@@ -374,7 +374,7 @@ def main():
                         help='Base path containing solution directories')
     parser.add_argument('--output_path', default='results/<model_name>',
                         help='Path to save validation results')
-    parser.add_argument('--domain', default='results',
+    parser.add_argument('--domain', default='',
                         help='Specific domain to validate (empty for all domains)')
     parser.add_argument('--analyze_only', action='store_true',
                         help='Only analyze existing validation results without running validation')

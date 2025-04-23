@@ -82,6 +82,8 @@ The resulting `stockfish` binary must remain in the repository root (or set `--s
 ```bash
 cd spinbench/tasks/PDDL/submodules/VAL
 make clean
+# if you don't have these tool installed 
+# apt-get update && apt-get install -y flex bison build-essential
 sed -i 's/-Werror //g' Makefile
 make -j2
 cd ../../../../.. # back to repo root
@@ -157,7 +159,13 @@ With all examples in this readme file and configs folder, we will show you how t
 
 ### PDDL
 
-Coming soon.
+```shell
+ ./scripts/run_pddl.sh -e <experiment name> -m <model name or model path>
+# example
+# ./scripts/run_pddl.sh -e 04_23 -m o4-mini-2025-04-16
+#This script would run both the inference and evluation, the llm answer would be save in save and the final metric would be in results
+```shell
+
 
 ### Competitive Games
 <details>
