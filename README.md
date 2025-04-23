@@ -189,7 +189,7 @@ Detailed prompt‑template documentation lives in **[`docs/prompt_config.md`](do
 
 ## 🎮 Usage
 
-With all examples in this readme file and configs folder, we will show you how to run our benchmark **main table**'s result with OpenAI API, using model `o4-mini`. If you want to run one single file containing all the tasks, please refer to [scripts/run_all_games.py](scripts/run_all_games.py) for more details.
+With all examples in this readme file and configs folder, we will show you how to run our benchmark **main table**'s result with OpenAI API, using model `o4-mini`. If you want to run one single file containing all the tasks, please refer to [scripts/run_all_games.py](scripts/run_all_games.py) for more details. You should run all the below commands in the root directory of the repository.
 
 ### PDDL
 
