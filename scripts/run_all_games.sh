@@ -6,7 +6,6 @@
 # The script will run all the tasks and save the trajectories in the saves folder
 # The evaluation results will be saved in the results folder
 
-
 ################################
 ######### Tic Tac Toe ##########
 ################################

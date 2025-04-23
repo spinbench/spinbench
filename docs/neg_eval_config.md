@@ -53,7 +53,7 @@ With your config saved in `configs/neg_eval_config.json`, invoke:
 
 ```bash
 python -m spinbench.tasks.evaluation.diplomacy.eval_neg \
-    --neg_config_file="/home/jianzhu/spinbench/configs/neg_eval_config.json"
+    --neg_config_file="configs/neg_eval_config.json"
 ```
 
 This will:
