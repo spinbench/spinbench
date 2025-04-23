@@ -4,6 +4,7 @@ import subprocess
 from pathlib import Path
 from typing import Dict, Any
 import os 
+from collections import Counter  # Add Counter import
 
 def save_summary_csv(results: Dict[str, Any], output_path: str):
     """
@@ -262,18 +263,138 @@ def validate_domain(domain_name: str, data_path: str, solutions_path: str) -> Di
     
     return results
 
+def analyze_validation_results(file_path, output_path):
+    """
+    Analyze validation results and categorize errors and successes.
+    
+    Args:
+        file_path: Path to the validation results JSON file
+        output_path: Path to save the detailed analysis JSON file
+    """
+    # Read the JSON file
+    with open(file_path, 'r') as f:
+        data = json.load(f)
+    
+    # Initialize counters
+    result_types = Counter()
+    
+    # Process each domain
+    for domain_name, domain_data in data.items():
+        if isinstance(domain_data, dict) and 'instances' in domain_data:
+            # Process each instance
+            for instance_name, instance_data in domain_data['instances'].items():
+                if 'output' in instance_data and instance_data['output']:
+                    output = instance_data['output']
+                    valid = instance_data.get('valid', False)
+                    
+                    # Success patterns
+                    if "Plan valid" in output:
+                        result_types["Success: Plan valid"] += 1
+                    elif "Plan executed successfully" in output and valid:
+                        result_types["Success: Plan executed successfully"] += 1
+                    # Error patterns
+                    elif "Plan failed to execute" in output:
+                        result_types["Error: Plan failed to execute"] += 1
+                    elif "Bad plan description" in output:
+                        result_types["Error: Bad plan description"] += 1
+                    elif "Error in type-checking" in output:
+                        result_types["Error: Type checking failed"] += 1
+                    elif "Goal not satisfied" in output:
+                        result_types["Error: Goal not satisfied"] += 1
+                    else:
+                        result_types["Other: Unclassified"] += 1
+
+                    # Additional checks for specific error messages
+                    if "syntax error" in output.lower():
+                        result_types["Error: Syntax error"] += 1
+                    if "invalid operator" in output.lower():
+                        result_types["Error: Invalid operator"] += 1
+                    if "undefined" in output.lower():
+                        result_types["Error: Undefined reference"] += 1
+                    if "precondition" in output.lower():
+                        result_types["Error: Precondition failure"] += 1
+    
+    # Group results by category
+    categorized_results = {
+        "successes": {k: v for k, v in result_types.items() if k.startswith("Success")},
+        "errors": {k: v for k, v in result_types.items() if k.startswith("Error")},
+        "warnings": {k: v for k, v in result_types.items() if k.startswith("Warning")},
+        "other": {k: v for k, v in result_types.items() if k.startswith("Other")}
+    }
+    
+    # Calculate statistics
+    stats = {
+        "total_instances": sum(result_types.values()),
+        "total_successes": sum(v for k, v in result_types.items() if k.startswith("Success")),
+        "total_errors": sum(v for k, v in result_types.items() if k.startswith("Error")),
+        "total_warnings": sum(v for k, v in result_types.items() if k.startswith("Warning")),
+        "success_rate": round(sum(v for k, v in result_types.items() if k.startswith("Success")) / 
+                            sum(result_types.values()) * 100, 2) if sum(result_types.values()) > 0 else 0
+    }
+    
+    # Prepare final results
+    results = {
+        "detailed_counts": dict(result_types),
+        "categorized_results": categorized_results,
+        "statistics": stats
+    }
+    
+    # Save results to JSON
+    output_file = os.path.join(output_path, "validation_analysis_detailed.json")
+    with open(output_file, 'w') as f:
+        json.dump(results, f, indent=2)
+    
+    # Print summary
+    print("\nValidation Analysis Summary:")
+    print("=" * 50)
+    print("\nStatistics:")
+    for stat, value in stats.items():
+        if isinstance(value, float):
+            print(f"{stat}: {value:.2f}%")
+        else:
+            print(f"{stat}: {value}")
+
+    print("\nDetailed Results by Category:")
+    print("-" * 50)
+    for category, category_results in categorized_results.items():
+        if category_results:  # Only print categories that have results
+            print(f"\n{category.upper()}:")
+            for result_type, count in category_results.items():
+                print(f"  {result_type}: {count}")
+    
+    print(f"\nDetailed analysis saved to: {output_file}")
+    
+    return results
+
 def main():
     parser = argparse.ArgumentParser(description="Validate PDDL solutions")
-    parser.add_argument('--data_path', default='data/pddl',
+    parser.add_argument('--data_path', default='spinbench/tasks/PDDL/classical_planning_dataset',
                         help='Base path containing domain directories')
-    parser.add_argument('--solutions_path', default='experiments/init_run',
+    parser.add_argument('--solutions_path', default='save/<model_name>/pddl',
                         help='Base path containing solution directories')
-    # parser.add_argument('--output', default='validation_results.json',
-    #                     help='Path to save validation results')
-    parser.add_argument('--domain', default='',
+    parser.add_argument('--output_path', default='results/<model_name>',
+                        help='Path to save validation results')
+    parser.add_argument('--domain', default='results',
                         help='Specific domain to validate (empty for all domains)')
+    parser.add_argument('--analyze_only', action='store_true',
+                        help='Only analyze existing validation results without running validation')
     
     args = parser.parse_args()
+    
+    # Create output directory if it doesn't exist
+    os.makedirs(args.output_path, exist_ok=True)
+    
+    json_path = os.path.join(args.output_path, "validation_results.json")
+    
+    if args.analyze_only:
+        if os.path.exists(json_path):
+            print(f"Analyzing existing validation results from: {json_path}")
+            analyze_validation_results(json_path, args.output_path)
+            return
+        else:
+            print(f"Error: Validation results file not found at {json_path}")
+            print("Run validation first or specify the correct path.")
+            return
     
     # data_path = Path(args.data_path)
     results = {}
@@ -312,19 +433,22 @@ def main():
         }
         
         # Save results
-        json_path = os.path.join(args.solutions_path, "validation_results.json")
         with open(json_path, 'w') as f:
             json.dump(results, f, indent=2)
         
-        # Save CSV summary
-        save_summary_csv(results, args.solutions_path)
-        save_domain_scores_csv(results, args.solutions_path)
+        # Save CSV summary - now to output_path instead of solutions_path
+        save_summary_csv(results, args.output_path)
+        save_domain_scores_csv(results, args.output_path)
         
         print("Overall Summary:")
         print(f"Total instances: {total_instances}")
         print(f"Total valid solutions: {total_valid}")
         print(f"Overall accuracy: {results['overall_summary']['overall_accuracy']:.2f}%")
         print(f"\nResults saved to: {json_path}")
+        
+        # Run detailed analysis on the results
+        print("\nRunning detailed analysis of validation results...")
+        analyze_validation_results(json_path, args.output_path)
         
     except Exception as e:
         print(f"Error: {str(e)}")

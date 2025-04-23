@@ -78,7 +78,17 @@ cd ../..    # back to repo root
 ```
 The resulting `stockfish` binary must remain in the repository root (or set `--stockfish_path` in later commands).
 
-### 5. API Key setup
+### 5. Build the **PDDL** validation pipeline
+```bash
+cd spinbench/tasks/PDDL/submodules/VAL
+make clean
+sed -i 's/-Werror //g' Makefile
+make -j2
+cd ../../../../.. # back to repo root
+#the validate file should be generated after make
+```
+
+### 6. API Key setup
 
 SPIN‑Bench supports OpenAI, Anthropic, Gemini APIs, OpenRouter, ollama, and local models. 
 
