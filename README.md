@@ -72,7 +72,7 @@ With SPIN‑Bench's plug‑and‑play agents, configurable pipelines, and rich a
 
 ### 2. Clone & Install `spinbench`
 ```shell
-git clone --recursive git@github.com:spinbench/spinbench.git
+git clone --recursive https://github.com/spinbench/spinbench.git
 cd spinbench
 pip install -e .
 
@@ -455,7 +455,7 @@ Email **Jianzhu Yao** (<jy0246@princeton.edu>) or **Kevin Wang** (<kevinwang.183
 
 ---
 ## Acknowledgement 
-Our code is based on or inspire by the following awesome repositories:
+Our code is based on or inspired by the following awesome repositories:
 - PDDL: [VAL](https://github.com/KCL-Planning/VAL)
 ,[pddl-generators](https://github.com/AI-Planning/pddl-generators)
 - Game solver: [Connect4](https://github.com/PascalPons/connect4), [Stockfish](https://github.com/official-stockfish/Stockfish)
