@@ -75,6 +75,12 @@ With SPIN‑Bench's plug‑and‑play agents, configurable pipelines, and rich a
 git clone --recursive git@github.com:spinbench/spinbench.git
 cd spinbench
 pip install -e .
+
+# Install PyTorch, for example,
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
+
+# Install FlashAttention
+pip install flash-attn --no-build-isolation
 ```
 
 ### 3. Build the **Connect 4** solver
