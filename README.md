@@ -72,7 +72,7 @@ With SPIN‑Bench's plug‑and‑play agents, configurable pipelines, and rich a
 
 ### 2. Clone & Install `spinbench`
 ```shell
-git clone --recursive git@github.com:spinbench/spinbench.git
+git clone --recursive https://github.com/spinbench/spinbench.git
 cd spinbench
 pip install -e .
 ```
