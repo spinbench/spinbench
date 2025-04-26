@@ -7,6 +7,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from .base import EngineLM, CachedEngine
 from transformers import pipeline
 
+
 class ChatLocalLLM(EngineLM, CachedEngine):
     DEFAULT_SYSTEM_PROMPT = "You are a helpful, creative, and smart assistant."
 
@@ -14,11 +15,15 @@ class ChatLocalLLM(EngineLM, CachedEngine):
         self,
         model_string: str = "meta-llama/Meta-Llama-3-8B",
         system_prompt: str = DEFAULT_SYSTEM_PROMPT,
-        **kwargs
+        **kwargs,
     ):
         root = platformdirs.user_cache_dir("textgrad")
-        cache_path = os.path.join(root, f"cache_transformers_{model_string.replace('/', '_')}.db")
-        self.device = kwargs.get('device', 'cuda' if torch.cuda.is_available() else 'cpu')
+        cache_path = os.path.join(
+            root, f"cache_transformers_{model_string.replace('/', '_')}.db"
+        )
+        self.device = kwargs.get(
+            "device", "cuda" if torch.cuda.is_available() else "cpu"
+        )
 
         super().__init__(cache_path=cache_path)
 
@@ -32,13 +37,23 @@ class ChatLocalLLM(EngineLM, CachedEngine):
         self.model = AutoModelForCausalLM.from_pretrained(
             model_string,
             torch_dtype=torch.float16,
-            quantization_config={"load_in_4bit": True, "bnb_4bit_compute_dtype": torch.float16, "bnb_4bit_use_double_quant": True, "bnb_4bit_quant_type": "nf4"},
+            quantization_config={
+                "load_in_4bit": True,
+                "bnb_4bit_compute_dtype": torch.float16,
+                "bnb_4bit_use_double_quant": True,
+                "bnb_4bit_quant_type": "nf4",
+            },
             use_flash_attention_2=True,
             trust_remote_code=True,
             low_cpu_mem_usage=True,
             device_map="auto",
         )
-        self.pipe = pipeline("text-generation", model=self.model, tokenizer=self.tokenizer, device_map="auto")
+        self.pipe = pipeline(
+            "text-generation",
+            model=self.model,
+            tokenizer=self.tokenizer,
+            device_map="auto",
+        )
 
     def _format_prompt(self, prompt: str, system_prompt: str = None) -> str:
         sys_prompt = system_prompt if system_prompt else self.system_prompt
@@ -46,16 +61,16 @@ class ChatLocalLLM(EngineLM, CachedEngine):
 
     def generate(
         self,
-        prompt: Union[str, List[Union[str,dict]]],
+        prompt: Union[str, List[Union[str, dict]]],
         system_prompt: str = None,
-        **kwargs
+        **kwargs,
     ) -> str:
         if isinstance(prompt, list) and all(isinstance(item, dict) for item in prompt):
             return self._generate_from_history(prompt, system_prompt, **kwargs)
         if isinstance(prompt, list):
             prompt = "\n".join(prompt)
         return self._generate_response(prompt, system_prompt, **kwargs)
-        
+
     def _generate_from_history(
         self,
         history,
@@ -70,14 +85,20 @@ class ChatLocalLLM(EngineLM, CachedEngine):
         # {"role": "assistant", "content": "Hello Albert, how can I help you today?"},
         # {"role": "user", "content": "Hi, my name is Albert"},
         # ]
+        messages = []
+        if system_prompt:
+            messages.append({"role": "system", "content": system_prompt})
+        else:
+            messages.append({"role": "system", "content": self.system_prompt})
+        messages.extend(history)
         response = self.pipe(
-            history,
+            messages,
             max_length=max_tokens,
             temperature=temperature,
             top_p=top_p,
         )
-        print("the response is", response)
-        content = response[0]['generated_text'][-1]["content"]
+        # print("the response is", response)
+        content = response[0]["generated_text"][-1]["content"]
         # total_tokens = response[0]['generated_text'][-1]["total_tokens"]
 
         return content
@@ -87,51 +108,33 @@ class ChatLocalLLM(EngineLM, CachedEngine):
         prompt: str,
         system_prompt: str = None,
         temperature: float = 0.7,
-        max_tokens: int = 1024,
+        max_tokens: int = 2048,
         top_p: float = 0.95,
+        cache: bool = False,
     ) -> str:
-        cache_key = (system_prompt if system_prompt else self.system_prompt) + prompt
-        
-        if cache_hit := self._check_cache(cache_key):
-            return cache_hit
-
-        formatted_prompt = self._format_prompt(prompt, system_prompt)
-        inputs = self.tokenizer(
-            formatted_prompt,
-            return_tensors="pt",
-            padding=True,
-            truncation=True,
-            add_special_tokens=True
-        ).to(self.device)
-
-        with torch.no_grad():
-            output = self.model.generate(
-                **inputs,
-                max_new_tokens=max_tokens,
-                temperature=temperature,
-                top_p=top_p,
-                do_sample=True if temperature > 0 else False,
-                pad_token_id=self.tokenizer.pad_token_id,
-                eos_token_id=self.tokenizer.eos_token_id,
+        if cache:
+            cache_key = (system_prompt if system_prompt else self.system_prompt) + prompt
+            if cache_hit := self._check_cache(cache_key):
+                return cache_hit
+        messages = []
+        if system_prompt or self.system_prompt:
+            messages.append(
+                {"role": "system", "content": system_prompt or self.system_prompt}
             )
+        messages.append({"role": "user", "content": prompt})
 
-        # Decode with skip_special_tokens=False to preserve EOS tokens
-        generated_tokens = output[0][inputs["input_ids"].shape[1]:]
-        response = self.tokenizer.decode(generated_tokens, skip_special_tokens=False)
-        
-        # Clean up response by splitting on EOS token or "Human:"
-        # First try splitting on EOS token
-        response_parts = response.split(self.tokenizer.eos_token)
-        if len(response_parts) > 1:
-            response_text = response_parts[0].strip()
-        else:
-            # Fallback to splitting on "Human:" if no EOS token found
-            response_text = response.split("Human:")[0].strip()
-        
-        # Remove any remaining special tokens for the final output
-        response_text = self.tokenizer.clean_up_tokenization(response_text)
-        self._save_cache(cache_key, response_text)
-        return response_text
+        # Use pipeline instead of manual generation
+        response = self.pipe(
+            messages,
+            max_length=max_tokens,
+            temperature=temperature,
+            top_p=top_p,
+        )
+        content = response[0]["generated_text"][-1]["content"]
+
+        if cache:
+            self._save_cache(cache_key, content)
+        return content
 
     def __call__(self, prompt, **kwargs):
         return self.generate(prompt, **kwargs)
