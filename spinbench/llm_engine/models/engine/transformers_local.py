@@ -36,15 +36,16 @@ class ChatLocalLLM(EngineLM, CachedEngine):
 
         self.model = AutoModelForCausalLM.from_pretrained(
             model_string,
-            torch_dtype=torch.float16,
-            quantization_config={
-                "load_in_4bit": True,
-                "bnb_4bit_compute_dtype": torch.float16,
-                "bnb_4bit_use_double_quant": True,
-                "bnb_4bit_quant_type": "nf4",
-            },
-            use_flash_attention_2=True,
-            trust_remote_code=True,
+            # torch_dtype=torch.float16,
+            # quantization_config={
+            #     "load_in_4bit": True,
+            #     "bnb_4bit_compute_dtype": torch.float16,
+            #     "bnb_4bit_use_double_quant": True,
+            #     "bnb_4bit_quant_type": "nf4",
+            # },
+            # use_flash_attention_2=True,
+            # trust_remote_code=True,     # llama
+            torch_dtype="auto",
             low_cpu_mem_usage=True,
             device_map="auto",
         )
@@ -76,7 +77,7 @@ class ChatLocalLLM(EngineLM, CachedEngine):
         history,
         system_prompt: str = None,
         temperature: float = 0.95,
-        max_tokens: int = 40960,
+        max_tokens: int = 8192,
         top_p: float = 0.95,
     ) -> str:
         # data format:
