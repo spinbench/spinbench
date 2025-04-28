@@ -20,5 +20,9 @@ setup(
         "transformers>=4.49.0",
         "accelerate==1.1.1",
         "bitsandbytes>=0.44.1",
+        "chess==1.11.1",
+        "stockfish==3.28.0",
+        "platformdirs",
+        "flask",
     ],
 )
