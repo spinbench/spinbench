@@ -12,18 +12,23 @@
 
 ## LLM vs solver
 python -m spinbench.tasks.tic_tac_toe.run_game_vs_solver \
-    --store_folder="saves/tic_tac_toe_LLM_vs_solver" \
-    --player_list="configs/solver_list_single.json" \
+    --store_folder="saves/o4-mini-2025-04-16/tic_tac_toe_LLM_vs_solver" \
+    --tested_model="o4-mini-2025-04-16" \
     --total_rounds=10
 
 ## Evaluation: annotate each move with the solver's score
 python -m spinbench.tasks.evaluation.competitive.tictactoe_score_moves \
-    --json_folder="saves/tic_tac_toe_LLM_vs_solver"
+    --json_folder="saves/o4-mini-2025-04-16/tic_tac_toe_LLM_vs_solver"
+
+# Evaluation: gather the scores and compute the result
+python -m spinbench.tasks.evaluation.competitive.tictactoe_score_plot \
+    --json_folder="saves/o4-mini-2025-04-16/tic_tac_toe_LLM_vs_solver" \
+    --output_folder="results/o4-mini-2025-04-16"
 
 ## Evaluation: compute the game statistics. In the result, win rate is SOLVER's winrate
 python -m spinbench.tasks.evaluation.competitive.collect_solver_winrate \
-    --directory="saves/tic_tac_toe_LLM_vs_solver" \
-    --output_file="results/tic_tac_toe_LLM_vs_solver_winrate.json"
+    --directory="saves/o4-mini-2025-04-16/tic_tac_toe_LLM_vs_solver" \
+    --output_file="results/o4-mini-2025-04-16/tic_tac_toe_LLM_vs_solver_winrate.json"
 
 ################################
 ########## Connect 4 ###########
@@ -37,23 +42,23 @@ python c4solver.py --port 5000
 
 ## LLM vs solver
 python -m spinbench.tasks.connect4.run_game_vs_solver \
-    --store_folder="saves/connect4_LLM_vs_solver" \
-    --player_list="configs/solver_list_single.json" \
+    --store_folder="saves/o4-mini-2025-04-16/connect4_LLM_vs_solver" \
+    --tested_model="o4-mini-2025-04-16" \
     --total_rounds=10
 
 # Evaluation: annotate each move with the solver's score
 python -m spinbench.tasks.evaluation.competitive.connect4_score_moves \
-    --json_folder="saves/connect4_LLM_vs_solver"
+    --json_folder="saves/o4-mini-2025-04-16/connect4_LLM_vs_solver"
 
 # Evaluation: gather the scores and compute the result
 python -m spinbench.tasks.evaluation.competitive.connect4_score_plot \
-    --json_folder="saves/connect4_LLM_vs_solver" \
-    --output_folder="results"
+    --json_folder="saves/o4-mini-2025-04-16/connect4_LLM_vs_solver" \
+    --output_folder="results/o4-mini-2025-04-16"
 
 # Evaluation: compute the game statistics. In the result, win rate is SOLVER's winrate
 python -m spinbench.tasks.evaluation.competitive.collect_solver_winrate \
-    --directory="saves/connect4_LLM_vs_solver" \
-    --output_file="results/connect4_LLM_vs_solver_winrate.json"
+    --directory="saves/o4-mini-2025-04-16/connect4_LLM_vs_solver" \
+    --output_file="results/o4-mini-2025-04-16/connect4_LLM_vs_solver_winrate.json"
 
 ## Close the solver web service
 child_pid=$!
@@ -67,44 +72,49 @@ kill -9 $child_pid
 
 ## LLM vs stockfish
 python -m spinbench.tasks.chess.chess_stockfish \
-    --store_folder="saves/chess_LLM_vs_stockfish" \
-    --player_list="configs/stockfish-list-single.json" \
+    --store_folder="saves/o4-mini-2025-04-16/chess_LLM_vs_stockfish" \
+    --tested_model="o4-mini-2025-04-16" \
+    --stockfish_level=20 \
     --stockfish_path="./stockfish" \
     --total_rounds=4
 
 ## Evaluation: annotate each move with the solver's score
 python -m spinbench.tasks.evaluation.competitive.chess_score_moves \
     --stockfish_path="./stockfish" \
-    --json_folder="saves/chess_LLM_vs_stockfish"
+    --json_folder="saves/o4-mini-2025-04-16/chess_LLM_vs_stockfish"
 
 ## Evaluation: gather the scores and compute the result
 python -m spinbench.tasks.evaluation.competitive.chess_score_plot \
-    --json_folder="saves/chess_LLM_vs_stockfish" \
-    --output_folder="results"
+    --json_folder="saves/o4-mini-2025-04-16/chess_LLM_vs_stockfish" \
+    --output_folder="results/o4-mini-2025-04-16"
 
 ## Evaluation: compute the game statistics. In the result, win rate is SOLVER's winrate
 python -m spinbench.tasks.evaluation.competitive.collect_solver_winrate \
-    --directory="saves/chess_LLM_vs_stockfish" \
-    --output_file="results/chess_LLM_vs_stockfish_winrate.json"
+    --directory="saves/o4-mini-2025-04-16/chess_LLM_vs_stockfish" \
+    --output_file="results/o4-mini-2025-04-16/chess_LLM_vs_stockfish_winrate.json"
 
 
 ####################################
 ######### 2-players' Hanabi ########
 ####################################
 
+# test_model and player_number should be set at the same time
+
 ## Run the game given the player models
 python -m spinbench.tasks.hanabi.run_game \
     --player_models_json="configs/hanabi_player_models.json" \
-    --store_folder="saves/hanabi" \
-    --result_name="2o4-mini" \
+    --store_folder="saves/o4-mini-2025-04-16/hanabi" \
+    --result_name="2o4-mini-2025-04-16" \
+    --test_model="o4-mini-2025-04-16" \
+    --player_number=2 \
     --total_rounds=5
 
 ## Gather the results
 python -m spinbench.tasks.evaluation.hanabi.gather_result \
-    --store_folder="saves/hanabi" \
-    --result_name="2o4-mini" \
+    --store_folder="saves/o4-mini-2025-04-16/hanabi" \
+    --result_name="2o4-mini-2025-04-16" \
     --total_rounds=5 \
-    --output_file="results/hanabi_result_2_o4-mini.json"
+    --output_file="results/hanabi_result_2_o4-mini-2025-04-16.json"
 
 ####################################
 ######### 3-players' Hanabi ########
@@ -113,15 +123,17 @@ python -m spinbench.tasks.evaluation.hanabi.gather_result \
 ## Run the game given the player models
 python -m spinbench.tasks.hanabi.run_game \
     --player_models_json="configs/hanabi_player_models.json" \
-    --store_folder="saves/hanabi" \
-    --result_name="3o4-mini" \
+    --store_folder="saves/o4-mini-2025-04-16/hanabi" \
+    --result_name="3o4-mini-2025-04-16" \
+    --test_model="o4-mini-2025-04-16" \
+    --player_number=3 \
     --total_rounds=5
 ## Gather the results
 python -m spinbench.tasks.evaluation.hanabi.gather_result \
-    --store_folder="saves/hanabi" \
-    --result_name="3o4-mini" \
+    --store_folder="saves/o4-mini-2025-04-16/hanabi" \
+    --result_name="3o4-mini-2025-04-16" \
     --total_rounds=5 \
-    --output_file="results/hanabi_result_3_o4-mini.json"
+    --output_file="results/hanabi_result_3_o4-mini-2025-04-16.json"
 
 
 ####################################
@@ -131,15 +143,17 @@ python -m spinbench.tasks.evaluation.hanabi.gather_result \
 ## Run the game given the player models
 python -m spinbench.tasks.hanabi.run_game \
     --player_models_json="configs/hanabi_player_models.json" \
-    --store_folder="saves/hanabi" \
-    --result_name="4o4-mini" \
+    --store_folder="saves/o4-mini-2025-04-16/hanabi" \
+    --result_name="4o4-mini-2025-04-16" \
+    --test_model="o4-mini-2025-04-16" \
+    --player_number=4 \
     --total_rounds=5
 ## Gather the results
 python -m spinbench.tasks.evaluation.hanabi.gather_result \
-    --store_folder="saves/hanabi" \
-    --result_name="4o4-mini" \
+    --store_folder="saves/o4-mini-2025-04-16/hanabi" \
+    --result_name="4o4-mini-2025-04-16" \
     --total_rounds=5 \
-    --output_file="results/hanabi_result_4_o4-mini.json"
+    --output_file="results/hanabi_result_4_o4-mini-2025-04-16.json"
 
 
 ########################################
@@ -150,15 +164,17 @@ python -m spinbench.tasks.evaluation.hanabi.gather_result \
 ## Run the game given the player models
 python -m spinbench.tasks.hanabi.run_game \
     --player_models_json="configs/hanabi_player_models.json" \
-    --store_folder="saves/hanabi" \
-    --result_name="5o4-mini" \
+    --store_folder="saves/o4-mini-2025-04-16/hanabi" \
+    --result_name="5o4-mini-2025-04-16" \
+    --test_model="o4-mini-2025-04-16" \
+    --player_number=5 \
     --total_rounds=5
 ## Gather the results
 python -m spinbench.tasks.evaluation.hanabi.gather_result \
-    --store_folder="saves/hanabi" \
-    --result_name="5o4-mini" \
+    --store_folder="saves/o4-mini-2025-04-16/hanabi" \
+    --result_name="5o4-mini-2025-04-16" \
     --total_rounds=5 \
-    --output_file="results/hanabi_result_5_o4-mini.json"
+    --output_file="results/hanabi_result_5_o4-mini-2025-04-16.json"
 
 
 ####################################
@@ -168,7 +184,7 @@ python -m spinbench.tasks.evaluation.hanabi.gather_result \
 ## Basic skill evaluation experiment (one LLM playing against six neural powers)
 power_list="AUSTRIA ENGLAND FRANCE GERMANY ITALY RUSSIA TURKEY"
 
-tested_model="o4-mini_1"
+tested_model="o4-mini-2025-04-16_1"
 model_list=( "bot" "bot" ${tested_model} "bot" "bot" "bot" "bot" )
 winning_centers="18"
 
@@ -185,12 +201,12 @@ python -m spinbench.tasks.diplomacy.run_game \
   --state_file=diplomacy_game_state.json \
   --enable_negotiation=0 \
   --negotiation_rounds=3 \
-  --save_folder=saves/diplomacy/${tested_model}-basic-skill
+  --save_folder=saves/${tested_model}/diplomacy/basic-skill
 
 ## Evaluation: gather the metrics
 python -m spinbench.tasks.evaluation.diplomacy.eval \
-    --game_folder="saves/diplomacy/o4-mini_1-basic-skill" \
-    --output_file="results/diplomacy/o4-mini_1-basic-skill/eval.json"
+    --game_folder="saves/o4-mini-2025-04-16_1/diplomacy/basic-skill" \
+    --output_file="results/o4-mini-2025-04-16_1/diplomacy/basic-skill/eval.json"
 
 
 ## Running 4 agents' Diplomacy setting (as in the main result table)
@@ -202,7 +218,7 @@ power_list="AUSTRIA ENGLAND FRANCE GERMANY ITALY RUSSIA TURKEY"
 model1="gpt-4-turbo_1"
 model2="claude-3-5-haiku-20241022_1"
 model3="gpt-4o_1"
-model4="o4-mini_1"
+model4="o4-mini-2025-04-16_1"
 model_list=(\
 ${model1} \
 ${model1} \
@@ -229,9 +245,9 @@ python -m spinbench.tasks.diplomacy.run_game \
 --state_file=diplomacy_game_state.json \
 --enable_negotiation=0 \
 --negotiation_rounds=3 \
---save_folder="saves/diplomacy/4-players-setting-testing-o4-mini-no-neg"
+--save_folder="saves/o4-mini-2025-04-16/diplomacy/4-players-setting-no-neg"
 
 ## Evaluation: gather the metrics
 python -m spinbench.tasks.evaluation.diplomacy.eval \
-    --game_folder="saves/diplomacy/4-players-setting-testing-o4-mini-no-neg" \
-    --output_file="results/diplomacy/4-players-setting-testing-o4-mini-no-neg/eval.json"
+    --game_folder="saves/o4-mini-2025-04-16/diplomacy/4-players-setting-no-neg" \
+    --output_file="results/o4-mini-2025-04-16/diplomacy/4-players-setting-no-neg"

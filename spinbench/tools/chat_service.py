@@ -59,6 +59,7 @@ def get_chat(model, messages, device=None):
 			old_model, old_instance = model_dict.popitem(last=False)
 			del old_instance
 		model_dict[model] = lpb.BlackboxLLM(model, device=device)
+	# print("messages:", messages)
 	before_total_tokens = model_dict[model].engine.total_tokens
 	# print("messages", messages)
 	content = model_dict[model](messages)

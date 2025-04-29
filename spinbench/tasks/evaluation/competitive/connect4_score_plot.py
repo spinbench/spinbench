@@ -25,6 +25,8 @@ def compute_top_score(json_folder, output_folder=None):
             result[model] = copy.deepcopy(top_index)
         game_log = game["game_log"]
         for log in game_log:
+            if log["action"] is None:
+                continue
             if log["agent"] == inspect:
                 for k in result[model].keys():
                     if k >= log["top_move_index"] + 1:

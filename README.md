@@ -128,19 +128,31 @@ export OPENROUTER_API_KEY="your_openrouter_api_key"
 ---
 
 ## 🔥 Quick‑Start
-Want to see SPIN‑Bench in action? Run ten LLM‑vs‑solver *Tic‑Tac‑Toe* matches and score every move:
+Want to see SPIN‑Bench in action? Set up your `OPENAI_API_KEY`, run ten LLM‑vs‑solver *Tic‑Tac‑Toe* matches, score every move, and compute the best move ratio:
 
 ```shell
+## LLM vs solver
 python -m spinbench.tasks.tic_tac_toe.run_game_vs_solver \
-    --store_folder="saves/tic_tac_toe_vs_solver" \
-    --player_list="configs/solver_list_single.json" \
+    --store_folder="saves/o4-mini-2025-04-16/tic_tac_toe_LLM_vs_solver" \
+    --tested_model="o4-mini-2025-04-16" \
     --total_rounds=10
 
+## Evaluation: annotate each move with the solver's score
 python -m spinbench.tasks.evaluation.competitive.tictactoe_score_moves \
-    --json_folder="saves/tic_tac_toe_vs_solver"
+    --json_folder="saves/o4-mini-2025-04-16/tic_tac_toe_LLM_vs_solver"
+
+# Evaluation: gather the scores and compute the result
+python -m spinbench.tasks.evaluation.competitive.tictactoe_score_plot \
+    --json_folder="saves/o4-mini-2025-04-16/tic_tac_toe_LLM_vs_solver" \
+    --output_folder="results/o4-mini-2025-04-16"
+
+## Evaluation: compute the game statistics. In the result, win rate is SOLVER's winrate
+python -m spinbench.tasks.evaluation.competitive.collect_solver_winrate \
+    --directory="saves/o4-mini-2025-04-16/tic_tac_toe_LLM_vs_solver" \
+    --output_file="results/o4-mini-2025-04-16/tic_tac_toe_LLM_vs_solver_winrate.json"
 ```
 
-Results appear in `saves/tic_tac_toe_vs_solver`, ready for analysis or Elo aggregation.
+Results appear in `saves/o4-mini-2025-04-16/tic_tac_toe_LLM_vs_solver`, ready for analysis or Elo aggregation.
 
 ---
 
@@ -191,6 +203,8 @@ If you want to use remote / local models with the huggingface transformers libra
 
 Detailed prompt‑template documentation lives in **[`docs/prompt_config.md`](docs/prompt_config.md)**. We also provide more documentations for how to write the config file in **[`docs`](docs)**. And you can find the example configs in **[`configs`](configs)**.
 
+In the game between LLMs and solver, besides the above model list config file, we also support only running one model-solver pair. You can pass `--tested_model` to the command line to specify the model name. The naming rule is the same as that of the model above. This will override the `--player_list` config. See [scripts/run_all_games.py](scripts/run_all_games.py) for more details and examples.
+
 ---
 
 ## 🎮 Usage
@@ -232,6 +246,11 @@ python -m spinbench.tasks.tic_tac_toe.run_game \
 # annotate each move with the solver's score
 python -m spinbench.tasks.evaluation.competitive.tictactoe_score_moves \
     --json_folder="saves/tic_tac_toe_LLM_vs_solver"
+
+# Evaluation: gather the scores and compute the result
+python -m spinbench.tasks.evaluation.competitive.tictactoe_score_plot \
+    --json_folder="saves/tic_tac_toe_LLM_vs_solver" \
+    --output_folder="results"
 
 # compute the game statistics. In the result, win rate is SOLVER's winrate. In the result, win rate is SOLVER's winrate
 python -m spinbench.tasks.evaluation.competitive.collect_solver_winrate \
@@ -290,7 +309,7 @@ python -m spinbench.tasks.evaluation.competitive.collect_solver_winrate \
 Create a config such as:
 ```json
 {
-  "player1_model_list": [ { "model": "stockfish", "level": 0 } ],
+  "player1_model_list": [ { "model": "stockfish", "level": 20 } ],
   "player2_model_list": [ { "model": "gpt-4o", "prompt_config": [] } ]
 }
 ```
@@ -409,14 +428,14 @@ python -m spinbench.tasks.diplomacy.run_game \
   --state_file=diplomacy_game_state.json \
   --enable_negotiation=0 \
   --negotiation_rounds=3 \
-  --save_folder=saves/diplomacy/${tested_model}-basic-skill
+  --save_folder=saves/${tested_model}/diplomacy/basic-skill
 ```
 
 Generate evaluation metrics:
 ```shell
 python -m spinbench.tasks.evaluation.diplomacy.eval \
-    --game_folder="saves/diplomacy/o4-mini_1-basic-skill" \
-    --output_file="results/diplomacy/o4-mini_1-basic-skill/eval.json"
+    --game_folder="saves/o4-mini_1/diplomacy/basic-skill" \
+    --output_file="results/o4-mini_1/diplomacy/basic-skill/eval.json"
 ```
 
 Negotiation‑specific evaluation requires configuration(It may require lots of API usage, and it can only evaluate the game where negotiation is enabled), examples in **[`configs/neg_eval_config.json`](configs/neg_eval_config.json)**:

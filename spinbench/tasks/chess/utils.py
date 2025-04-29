@@ -10,7 +10,7 @@ json_pattern = regex.compile(r'\{(?:[^{}]|(?R))*\}', regex.DOTALL)
 
 first_player_initial_prompt = f"""
 You are playing a text game of Chess against an opponent. Chess is a two-player strategy board game played on an 8x8 board. The goal of the game is to checkmate the opponent's king. On the board, your pieces are represented by uppercase letters and the opponent's pieces are represented by lowercase letters. You are a chest master playing a text based game of chess.
-    """
+"""
 
 second_player_initial_prompt = f"""
 You are playing a text game of Chess against an opponent. Chess is a two-player strategy board game played on an 8x8 board. The goal of the game is to checkmate the opponent's king. On the board, your pieces are represented by lowercase letters and the opponent's pieces are represented by uppercase letters. You are a chest master playing a text based game of chess.

@@ -1,5 +1,5 @@
-import json
 import argparse
+import json
 import sys
 import copy
 import pyspiel
@@ -23,8 +23,15 @@ from spinbench.tasks.hanabi.utils import (
 	gen_initial_prompt,
 )
 
-def run_game(player_models_json, store_folder, result_name, total_rounds=5):
-	player_models = json.load(open(player_models_json,"r")) # list
+def run_game(player_models_json, store_folder, result_name, total_rounds=5, test_model=None, player_number=None):
+	if test_model is None:
+		player_models = json.load(open(player_models_json,"r")) # list
+	else:
+		player_models = [{
+			"model": test_model,
+			"prompt_config": [
+			]
+		} for _ in range(player_number)]
 	player_num = len(player_models)
 	if player_num < 5:
 		hand_size = 5
@@ -118,10 +125,12 @@ def run_game(player_models_json, store_folder, result_name, total_rounds=5):
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
-	parser.add_argument("--player_models_json", type=str, required=True, help="Path to the player models JSON file")
+	parser.add_argument("--player_models_json", type=str, help="Path to the player models JSON file")
 	parser.add_argument("--store_folder", type=str, required=True, help="Path to the folder where results will be stored")
 	parser.add_argument("--result_name", type=str, required=True, help="Name of the result file")
 	parser.add_argument("--total_rounds", type=int, default=5)
+	parser.add_argument("--test_model", type=str, default=None, help="Tested model name")
+	parser.add_argument("--player_number", type=int, default=None, help="Number of players")
 	args = parser.parse_args()
 
-	run_game(args.player_models_json, args.store_folder, args.result_name, args.total_rounds)
+	run_game(args.player_models_json, args.store_folder, args.result_name, args.total_rounds, args.test_model, args.player_number)

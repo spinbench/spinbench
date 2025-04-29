@@ -19,7 +19,7 @@ from spinbench.tasks.chess.utils import (
 	gen_move, 
 )
 
-def run_game(store_folder, player_list, total_rounds=4):
+def run_game(store_folder, player_list, total_rounds=4, illtor=10, initial_response=True):
 	assert total_rounds % 2 == 0, "total_rounds should be even"
 	if not os.path.exists(store_folder):
 		os.makedirs(store_folder)
@@ -105,14 +105,20 @@ def run_game(store_folder, player_list, total_rounds=4):
 						break
 					turn = board.turn
 					legal_moves = board.legal_moves
-					illegal_tolerance = 10
+					illegal_tolerance = illtor
 					if turn == True: # white
-						first_player_messages = first_player_messages[:2]
+						if initial_response:
+							first_player_messages = first_player_messages[:2]
+						else:
+							first_player_messages = first_player_messages[:1]
 						hook_functions = create_hook_functions(player1_model, first_player_reasoning_action_steps, "\nPlease look at the current board state represented by ascii and FEN and make your next move:\n <FEN>\nFEN: " + board.fen() +  "\n</FEN>\n\n<board_state>\n\n2D board: \n" + format_board(str(board)) + "\n</board_state>\n\n", generate_action_prompt([move.uci() for move in board.legal_moves]))
 						move, action, win, game_state, added_tokens = play(first_player_messages, first_player_store_message, player1_model_name, first_player_reasoning_action_steps, board, "", legal_moves, gen_move,illegal_tolerance, True, hook_functions,0,board=board,legal_move_list=[move.uci() for move in legal_moves])
 						total_tokens += added_tokens
 					elif turn == False: # black
-						second_player_messages = second_player_messages[:2]
+						if initial_response:
+							second_player_messages = second_player_messages[:2]
+						else:
+							second_player_messages = second_player_messages[:1]
 						hook_functions = create_hook_functions(player2_model, second_player_reasoning_action_steps, "\nPlease look at the current board state represented by ascii and FEN and make your next move:\n <FEN>\nFEN: " + board.fen() +  "\n</FEN>\n\n<board_state>\n\n2D board: \n" + format_board(str(board)) + "\n</board_state>\n\n", generate_action_prompt([move.uci() for move in board.legal_moves]))
 						move, action, win, game_state, added_tokens = play(second_player_messages, second_player_store_message, player2_model_name, second_player_reasoning_action_steps, board, "", legal_moves, gen_move,illegal_tolerance, False, hook_functions,1,board=board,legal_move_list=[move.uci() for move in legal_moves])
 						total_tokens += added_tokens
@@ -177,5 +183,17 @@ if __name__ == "__main__":
 		default=4,
 		help="total round of the game",
 	)
+	parser.add_argument(
+		"--illegal_tolerance",
+		type=int,
+		default=10,
+		help="illegal tolerance for the game",
+	)
+	parser.add_argument(
+		"--initial_response",
+		type=bool,
+		default=True,
+		help="whether to use initial response from assistant",
+	)
 	args = parser.parse_args()
-	run_game(args.store_folder, args.player_list, args.total_rounds)
+	run_game(args.store_folder, args.player_list, args.total_rounds, args.illegal_tolerance, args.initial_response)

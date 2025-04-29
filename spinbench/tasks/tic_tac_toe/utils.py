@@ -332,7 +332,6 @@ def find_best_move_for_o(board_2d):
 	best_move = best_moves[0] if best_moves else None
 	return best_move
 
-
 def getLegalMoves(board_array):
 	legal_moves = []
 	for row in range(3):
@@ -341,7 +340,6 @@ def getLegalMoves(board_array):
 				move_idx = row * 3 + col  # Mapping (row, col) to index
 				legal_moves.append(move_idx)
 	return legal_moves
-
 
 def detectWin(board_2d, player_mark):
 	"""

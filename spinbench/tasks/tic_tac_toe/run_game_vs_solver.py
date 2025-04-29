@@ -20,13 +20,29 @@ from spinbench.tasks.tic_tac_toe.utils import (
 	check_win,
 )
 
-def run_game_vs_solver(store_folder, player_list, total_rounds=10):
+def run_game_vs_solver(store_folder, player_list, total_rounds=10, tested_model=None, illtor=10, initial_response=True):
 	assert total_rounds % 2 == 0, "total_rounds must be even"
 	if not os.path.exists(store_folder):
 		os.makedirs(store_folder)
-	player_list_json = json.load(open(player_list,"r"))
-	player1_model_list = player_list_json["player1_model_list"]
-	player2_model_list = player_list_json["player2_model_list"]
+	if tested_model is not None:
+		player1_model_list = [
+			{
+				"model": "our_solver",
+				"prompt_config": [
+				]
+			}
+		]
+		player2_model_list = [
+			{
+				"model": tested_model,
+				"prompt_config": [
+				]
+			}
+		]
+	else:
+		player_list_json = json.load(open(player_list,"r"))
+		player1_model_list = player_list_json["player1_model_list"]
+		player2_model_list = player_list_json["player2_model_list"]
 	print(len(player1_model_list), len(player2_model_list))
 	for i in range(len(player1_model_list)):
 		print(player1_model_list[i]["model"], "vs", player2_model_list[i]["model"])
@@ -87,7 +103,7 @@ def run_game_vs_solver(store_folder, player_list, total_rounds=10):
 						break
 					if win == None:
 						win = check_win(rewards)
-					illegal_tolerance = 10
+					illegal_tolerance = illtor
 					if termination or truncation:
 						action = None
 					else:
@@ -99,7 +115,10 @@ def run_game_vs_solver(store_folder, player_list, total_rounds=10):
 								action = best_move
 							else:
 								# LLM-based approach
-								first_player_messages = first_player_messages[:2]
+								if initial_response:
+									first_player_messages = first_player_messages[:2]
+								else:
+									first_player_messages = first_player_messages[:1]
 								hook_functions = create_hook_functions(
 									player1_model,
 									first_player_reasoning_action_steps,
@@ -129,7 +148,10 @@ def run_game_vs_solver(store_folder, player_list, total_rounds=10):
 								action = best_move
 							else:
 								# LLM-based approach for player_2
-								second_player_messages = second_player_messages[:2]
+								if initial_response:
+									second_player_messages = second_player_messages[:2]
+								else:
+									second_player_messages = second_player_messages[:1]
 								hook_functions = create_hook_functions(
 									player2_model,
 									second_player_reasoning_action_steps,
@@ -215,7 +237,6 @@ if __name__ == "__main__":
 	parser.add_argument(
 		"--player_list",
 		type=str,
-		required=True,
 		help="Path to the JSON file containing player models",
 	)
 	parser.add_argument(
@@ -224,8 +245,24 @@ if __name__ == "__main__":
 		default=10,
 		help="Total rounds to play",
 	)
+	parser.add_argument('--tested_model', type=str, default=None, help="Tested model name")
+	parser.add_argument(
+		"--illegal_tolerance",
+		type=int,
+		default=10,
+		help="Illegal tolerance for the game",
+	)
+	parser.add_argument(
+		"--initial_response",
+		type=bool,
+		default=True,
+		help="Whether to use initial response from assistant",
+	)
 	args = parser.parse_args()
 	store_folder = args.store_folder
 	player_list = args.player_list
 	total_rounds = args.total_rounds
-	run_game_vs_solver(store_folder, player_list, total_rounds)
+	tested_model = args.tested_model
+	illegal_tolerance = args.illegal_tolerance
+	initial_response = args.initial_response
+	run_game_vs_solver(store_folder, player_list, total_rounds, tested_model, illegal_tolerance, initial_response)

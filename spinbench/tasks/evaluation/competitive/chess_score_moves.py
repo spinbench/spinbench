@@ -8,7 +8,7 @@ def score_moves(stockfish_path, json_folder):
 	stockfish = Stockfish(stockfish_path)
 	stockfish.set_skill_level(20)
 	stockfish.update_engine_parameters({
-		"Threads": 16,       
+		"Threads": 32,       
 		"Skill Level": 20,
 		"Move Overhead": 10,
 		"Hash": 2048,

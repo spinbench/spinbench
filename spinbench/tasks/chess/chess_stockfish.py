@@ -19,15 +19,30 @@ from spinbench.tasks.chess.utils import (
 	gen_move, 
 )
 
-def run_game_vs_stockfish(store_folder, player_list, stockfish, total_rounds=4):
+def run_game_vs_stockfish(store_folder, player_list, stockfish, total_rounds=4, tested_model=None, stockfish_level=None, illtor=10, initial_response=True):
 	assert total_rounds % 2 == 0, "total_rounds should be even"
 	if not os.path.exists(store_folder):
 		os.makedirs(store_folder)
-	player_list_json = json.load(open(player_list,"r"))
-	player1_model_list = player_list_json["player1_model_list"]
-	player2_model_list = player_list_json["player2_model_list"]
-	print(len(player1_model_list))
-	print(len(player2_model_list))
+
+	if tested_model is not None:
+		player1_model_list = [
+			{
+				"model": "stockfish",
+				"level": stockfish_level,
+			}
+		]
+		player2_model_list = [
+			{
+				"model": tested_model,
+				"prompt_config": [
+				]
+			}
+		]
+	else:
+		player_list_json = json.load(open(player_list,"r"))
+		player1_model_list = player_list_json["player1_model_list"]
+		player2_model_list = player_list_json["player2_model_list"]
+	print(len(player1_model_list), len(player2_model_list))
 	time.sleep(1)
 	for i in range(len(player1_model_list)):
 		print(player1_model_list[i]["model"], "vs", player2_model_list[i]["model"])
@@ -119,7 +134,7 @@ def run_game_vs_stockfish(store_folder, player_list, stockfish, total_rounds=4):
 					break
 				turn = board.turn
 				legal_moves = board.legal_moves
-				illegal_tolerance = 10 # if the model makes an illegal move, it will try again 3 times
+				illegal_tolerance = illtor
 				if turn == True: # white
 					if player1_model_name == "stockfish":
 						print("stockfish")
@@ -210,9 +225,25 @@ def run_game_vs_stockfish(store_folder, player_list, stockfish, total_rounds=4):
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--store_folder", type=str, required=True, help="The folder to store the game results")
-	parser.add_argument("--player_list", type=str, required=True, help="The file to store the player list")
+	parser.add_argument("--player_list", type=str, help="The file to store the player list")
 	parser.add_argument("--stockfish_path", type=str, required=True, help="The path to the stockfish executable")
 	parser.add_argument("--total_rounds", type=int, default=4, help="The total number of rounds to play")
+	parser.add_argument("--tested_model", type=str, default=None)
+	parser.add_argument("--stockfish_level", type=int, default=None, help="The level of stockfish")
+	parser.add_argument(
+		"--illegal_tolerance",
+		type=int,
+		default=10,
+		help="Illegal tolerance for the game",
+	)
+	parser.add_argument(
+		"--initial_response",
+		type=bool,
+		default=True,
+		help="Whether to use initial response from assistant",
+	)
 	args = parser.parse_args()
+	if args.tested_model is not None:
+		assert args.stockfish_level is not None, "If you want to test a model, you must specify the stockfish level"
 	stockfish = Stockfish(args.stockfish_path)
-	run_game_vs_stockfish(args.store_folder, args.player_list, stockfish, args.total_rounds)
+	run_game_vs_stockfish(args.store_folder, args.player_list, stockfish, args.total_rounds, args.tested_model, args.stockfish_level, args.illegal_tolerance, args.initial_response)
