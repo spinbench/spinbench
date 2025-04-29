@@ -9,7 +9,7 @@ setup(
         "diplomacy==1.1.2",
         "pettingzoo==1.24.3",
         "anthropic==0.50.0",
-        "opencv-python==4.8.0.74",
+        "opencv-python==4.8.1.78",
         "openai==1.61.0",
         "pygame==2.6.1",
         "regex==2024.9.11",
