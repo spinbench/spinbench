@@ -29,7 +29,7 @@ Your previous moves and thinking are below  (in the last 3 moves in the order of
 </previous_moves>
 """
 
-def run_game(store_folder, player_list, total_rounds=10, illtor=10, initial_response=True):
+def run_game(store_folder, player_list, total_rounds=10, illtor=10):
 	assert total_rounds % 2 == 0, "total_rounds should be even"
 	if not os.path.exists(store_folder):
 		os.makedirs(store_folder)
@@ -101,18 +101,12 @@ def run_game(store_folder, player_list, total_rounds=10, illtor=10, initial_resp
 					action = None
 				else:
 					if agent == 'player_0':
-						if initial_response:
-							first_player_messages = first_player_messages[:2]
-						else:
-							first_player_messages = first_player_messages[:1]
+						first_player_messages = first_player_messages[:2]
 						hook_functions = create_hook_functions(player1_model, first_player_reasoning_action_steps, "Your opponent has made the move, and now the state is: \n" + grid_description + "\n", generate_action_prompt(legal_moves))
 						move, action, win, game_state, added_tokens = play(first_player_messages, first_player_store_message, player1_model_name, first_player_reasoning_action_steps, grid_description, legal_moves_description, legal_moves, gen_move, illegal_tolerance,True, hook_functions,0)
 						total_tokens += added_tokens
 					elif agent == 'player_1':
-						if initial_response:
-							second_player_messages = second_player_messages[:2]
-						else:
-							second_player_messages = second_player_messages[:1]
+						second_player_messages = second_player_messages[:2]
 						hook_functions = create_hook_functions(player2_model, second_player_reasoning_action_steps, "Your opponent has made the move, and now the state is: \n" + grid_description + "\n", generate_action_prompt(legal_moves))
 						move, action, win, game_state, added_tokens = play(second_player_messages, second_player_store_message, player2_model_name, second_player_reasoning_action_steps, grid_description, legal_moves_description, legal_moves, gen_move, illegal_tolerance,True, hook_functions,1)
 						total_tokens += added_tokens
@@ -170,13 +164,11 @@ if __name__ == "__main__":
 	parser.add_argument('--player_list', type=str, required=True, help="Path to the player list JSON file")
 	parser.add_argument('--total_rounds', type=int, default=10, help="Total rounds to play")
 	parser.add_argument('--illegal_tolerance', type=int, default=10, help="Illegal move tolerance")
-	parser.add_argument('--initial_response', action='store_true', help="Whether to include initial response")
 	args = parser.parse_args()
 
 	store_folder = args.store_folder
 	player_list = args.player_list
 	total_rounds = args.total_rounds
 	illegal_tolerance = args.illegal_tolerance
-	initial_response = args.initial_response
 
-	run_game(store_folder, player_list, total_rounds, illegal_tolerance, initial_response)
+	run_game(store_folder, player_list, total_rounds, illegal_tolerance)

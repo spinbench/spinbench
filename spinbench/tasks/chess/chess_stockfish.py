@@ -19,7 +19,7 @@ from spinbench.tasks.chess.utils import (
 	gen_move, 
 )
 
-def run_game_vs_stockfish(store_folder, player_list, stockfish, total_rounds=4, tested_model=None, stockfish_level=None, illtor=10, initial_response=True):
+def run_game_vs_stockfish(store_folder, player_list, stockfish, total_rounds=4, tested_model=None, stockfish_level=None, illtor=10):
 	assert total_rounds % 2 == 0, "total_rounds should be even"
 	if not os.path.exists(store_folder):
 		os.makedirs(store_folder)
@@ -236,14 +236,8 @@ if __name__ == "__main__":
 		default=10,
 		help="Illegal tolerance for the game",
 	)
-	parser.add_argument(
-		"--initial_response",
-		type=bool,
-		default=True,
-		help="Whether to use initial response from assistant",
-	)
 	args = parser.parse_args()
 	if args.tested_model is not None:
 		assert args.stockfish_level is not None, "If you want to test a model, you must specify the stockfish level"
 	stockfish = Stockfish(args.stockfish_path)
-	run_game_vs_stockfish(args.store_folder, args.player_list, stockfish, args.total_rounds, args.tested_model, args.stockfish_level, args.illegal_tolerance, args.initial_response)
+	run_game_vs_stockfish(args.store_folder, args.player_list, stockfish, args.total_rounds, args.tested_model, args.stockfish_level, args.illegal_tolerance)

@@ -16,7 +16,7 @@ from spinbench.tasks.tic_tac_toe.utils import (
 )
 import argparse
 
-def run_game(store_folder, player_list, total_rounds=10, illtor=10, initial_response=True):
+def run_game(store_folder, player_list, total_rounds=10, illtor=10):
 	assert total_rounds % 2 == 0, "total_rounds must be even"
 	if not os.path.exists(store_folder):
 		os.makedirs(store_folder)
@@ -89,19 +89,13 @@ def run_game(store_folder, player_list, total_rounds=10, illtor=10, initial_resp
 					else:
 						if agent == 'player_1':
 							# first_player
-							if initial_response:
-								first_player_messages = first_player_messages[:2]
-							else:
-								first_player_messages = first_player_messages[:1]
+							first_player_messages = first_player_messages[:2]
 							hook_functions = create_hook_functions(player1_model, first_player_reasoning_action_steps, board_state, generate_action_prompt(legal_moves))
 							move, action, win, game_state, added_tokens = play(first_player_messages, first_player_store_message, player1_model_name, first_player_reasoning_action_steps, board_state, legal_moves, legal_moves_list, gen_move, illegal_tolerance, True, hook_functions,0)
 							total_tokens += added_tokens
 						elif agent == 'player_2':
 							# second_player
-							if initial_response:
-								second_player_messages = second_player_messages[:2]
-							else:
-								second_player_messages = second_player_messages[:1]
+							second_player_messages = second_player_messages[:2]
 							hook_functions = create_hook_functions(player2_model, second_player_reasoning_action_steps, board_state, generate_action_prompt(legal_moves))
 							move, action, win, game_state, added_tokens = play(second_player_messages, second_player_store_message, player2_model_name, second_player_reasoning_action_steps, board_state, legal_moves, legal_moves_list, gen_move, illegal_tolerance, True, hook_functions,1)
 							total_tokens += added_tokens
@@ -180,19 +174,13 @@ if __name__ == "__main__":
 		default=10,
 		help="Illegal move tolerance",
 	)
-	parser.add_argument(
-		"--initial_response",
-		action="store_true",
-		help="Whether to include initial response from assistant",
-	)
 	args = parser.parse_args()
 	store_folder = args.store_folder
 	player_list = args.player_list
 	total_rounds = args.total_rounds
 	illegal_tolerance = args.illegal_tolerance
-	initial_response = args.initial_response
 
 	if not os.path.exists(store_folder):
 		os.makedirs(store_folder)
 	
-	run_game(store_folder, player_list, total_rounds, 	illegal_tolerance, initial_response)
+	run_game(store_folder, player_list, total_rounds, 	illegal_tolerance)

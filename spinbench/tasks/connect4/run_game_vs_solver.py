@@ -32,7 +32,7 @@ Your previous moves and thinking are below  (in the last 3 moves in the order of
 </previous_moves>
 """
 
-def run_game_vs_solver(store_folder, player_list, total_rounds=10, tested_model=None, illtor=10, initial_response=True):
+def run_game_vs_solver(store_folder, player_list, total_rounds=10, tested_model=None, illtor=10):
 	assert total_rounds % 2 == 0, "total_rounds should be even"
 	if not os.path.exists(store_folder):
 		os.makedirs(store_folder)
@@ -142,10 +142,7 @@ def run_game_vs_solver(store_folder, player_list, total_rounds=10, tested_model=
 							pos_str += str(move + 1)
 						else:
 							# lm gen_move
-							if initial_response:
-								first_player_messages = first_player_messages[:2]
-							else:
-								first_player_messages = first_player_messages[:1]
+							first_player_messages = first_player_messages[:2]
 							hook_functions = create_hook_functions(
 								player1_model,
 								first_player_reasoning_action_steps,
@@ -192,10 +189,7 @@ def run_game_vs_solver(store_folder, player_list, total_rounds=10, tested_model=
 							pos_str += str(move + 1)
 						else:
 							# lm gen_move
-							if initial_response:
-								second_player_messages = second_player_messages[:2]
-							else:
-								second_player_messages = second_player_messages[:1]
+							second_player_messages = second_player_messages[:2]
 							hook_functions = create_hook_functions(
 								player2_model,
 								second_player_reasoning_action_steps,
@@ -285,12 +279,6 @@ if __name__ == "__main__":
 		default=10,
 		help="Illegal tolerance for the game",
 	)
-	parser.add_argument(
-		"--initial_response",
-		type=bool,
-		default=True,
-		help="Whether to use initial response from assistant",
-	)
 	args = parser.parse_args()
 
-	run_game_vs_solver(args.store_folder, args.player_list, args.total_rounds, args.tested_model, args.illegal_tolerance, args.initial_response)
+	run_game_vs_solver(args.store_folder, args.player_list, args.total_rounds, args.tested_model, args.illegal_tolerance)
