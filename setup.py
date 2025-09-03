@@ -24,5 +24,6 @@ setup(
         "stockfish==3.28.0",
         "platformdirs",
         "flask",
+        "xai-sdk",
     ],
 )

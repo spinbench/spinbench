@@ -17,7 +17,6 @@ __MULTIMODAL_ENGINES__ = ["gpt-4-turbo",
                           "claude-3-sonnet-20240229",
                           "claude-3-haiku-20240307",
                           "gpt-4-turbo-2024-04-09",
-
                           ]
 
 def _check_if_multimodal(engine_name: str):
@@ -75,6 +74,10 @@ def get_engine(engine_name: str, **kwargs) -> EngineLM:
             base_url=OLLAMA_BASE_URL,
             **kwargs
         )
+    elif engine_name.startswith("xai"):
+        from .xai import ChatXAI
+        model_string = engine_name.replace("xai-", "")
+        return ChatXAI(model_string=model_string, **kwargs)
     elif engine_name.startswith("deepseek"):
         from .openai import ChatOpenAI, DEEPSEEK_BASE_URL
         model_string = engine_name
