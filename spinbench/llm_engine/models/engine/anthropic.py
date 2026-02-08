@@ -66,19 +66,30 @@ class ChatAnthropic(EngineLM, CachedEngine):
         if cache_or_none is not None:
             return cache_or_none
 
-        response = self.client.messages.create(
-            messages=[
-                {
-                    "role": "user",
-                    "content": prompt,
-                }
-            ],
-            model=self.model_string,
-            system=sys_prompt_arg,
-            temperature=temperature,
-            max_tokens=max_tokens,
-            top_p=top_p,
-        )
+        try:
+            response = self.client.messages.create(
+                messages=[
+                    {
+                        "role": "user",
+                        "content": prompt,
+                    }
+                ],
+                model=self.model_string,
+                system=sys_prompt_arg,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                top_p=top_p,
+            )
+        except:
+            response = self.client.messages.create(
+                messages=[
+                    {
+                        "role": "user",
+                        "content": prompt,
+                    }
+                ],
+                model=self.model_string,
+            )
         self.total_tokens += response.usage.input_tokens + response.usage.output_tokens
         response = response.content[0].text
         self._save_cache(sys_prompt_arg + prompt, response)
@@ -120,16 +131,24 @@ class ChatAnthropic(EngineLM, CachedEngine):
         if cache_or_none is not None:
             return cache_or_none
 
-        response = self.client.messages.create(
-            model=self.model_string,
-            messages=[
-                {"role": "user", "content": formatted_content},
-            ],
-            temperature=temperature,
-            max_tokens=max_tokens,
-            top_p=top_p,
-            system=sys_prompt_arg
-        )
+        try:
+            response = self.client.messages.create(
+                model=self.model_string,
+                messages=[
+                    {"role": "user", "content": formatted_content},
+                ],
+                temperature=temperature,
+                max_tokens=max_tokens,
+                top_p=top_p,
+                system=sys_prompt_arg
+            )
+        except:
+            response = self.client.messages.create(
+                model=self.model_string,
+                messages=[
+                    {"role": "user", "content": formatted_content},
+                ],
+            )
         self.total_tokens += response.usage.input_tokens + response.usage.output_tokens
 
         response_text = response.content[0].text
@@ -141,14 +160,20 @@ class ChatAnthropic(EngineLM, CachedEngine):
     ):
         sys_prompt_arg = system_prompt if system_prompt else self.system_prompt
 
-        response = self.client.messages.create(
-            model=self.model_string,
-            messages=history,
-            temperature=temperature,
-            max_tokens=max_tokens,
-            top_p=top_p,
-            system=sys_prompt_arg
-        )
+        try:
+            response = self.client.messages.create(
+                model=self.model_string,
+                messages=history,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                top_p=top_p,
+                system=sys_prompt_arg
+            )
+        except:
+            response = self.client.messages.create(
+                model=self.model_string,
+                messages=history,
+            )
 
         self.total_tokens += response.usage.input_tokens + response.usage.output_tokens
         response_text = response.content[0].text

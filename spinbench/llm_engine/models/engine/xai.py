@@ -61,12 +61,17 @@ class ChatXAI(EngineLM, CachedEngine):
         cache_or_none = self._check_cache(sys_prompt_arg + prompt)
         if cache_or_none is not None:
             return cache_or_none
-        chat = self.client.chat.create(
-            model=self.model_string,
-            max_tokens=max_tokens,
-            temperature=temperature,
-            top_p=top_p
-        )
+        try:
+            chat = self.client.chat.create(
+                model=self.model_string,
+                max_tokens=max_tokens,
+                temperature=temperature,
+                top_p=top_p
+            )
+        except:
+            chat = self.client.chat.create(
+                model=self.model_string,
+            )
         if system_prompt:
             chat.append(system(system_prompt))
         chat.append(user(prompt))
@@ -112,12 +117,18 @@ class ChatXAI(EngineLM, CachedEngine):
         cache_or_none = self._check_cache(cache_key)
         if cache_or_none is not None:
             return cache_or_none
-        chat = self.client.chat.create(
-            model=self.model_string,
-            max_tokens=max_tokens,
-            temperature=temperature,
-            top_p=top_p
-        )
+        
+        try:
+            chat = self.client.chat.create(
+                    model=self.model_string,
+                    max_tokens=max_tokens,
+                    temperature=temperature,
+                    top_p=top_p
+            )
+        except:
+            chat = self.client.chat.create(
+                model=self.model_string,
+            )
         if sys_prompt_arg:
             chat.append(system(sys_prompt_arg))
         chat.append(user(formatted_content))
@@ -131,12 +142,17 @@ class ChatXAI(EngineLM, CachedEngine):
             self, history, system_prompt=None, temperature=0.95, max_tokens=4096, top_p=0.99
     ):
         sys_prompt_arg = system_prompt if system_prompt else self.system_prompt
-        chat = self.client.chat.create(
-            model=self.model_string,
-            max_tokens=max_tokens,
-            temperature=temperature,
-            top_p=top_p
-        )
+        try:
+            chat = self.client.chat.create(
+                model=self.model_string,
+                max_tokens=max_tokens,
+                temperature=temperature,
+                top_p=top_p
+            )
+        except:
+            chat = self.client.chat.create(
+                model=self.model_string,
+            )
         if sys_prompt_arg:
             chat.append(system(sys_prompt_arg))
         for m in history:

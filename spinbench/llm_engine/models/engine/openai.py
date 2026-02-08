@@ -108,24 +108,12 @@ class ChatOpenAI(EngineLM, CachedEngine):
             return cache_or_none
 
 
-        if "o1" in self.model_string or "o3" in self.model_string or "o4" in self.model_string:
-            response = self.client.chat.completions.create(
+        response = self.client.chat.completions.create(
             model=self.model_string,
             messages=[
                 {"role": "user", "content": prompt},
             ]
         )
-        else:
-            response = self.client.chat.completions.create(
-                model=self.model_string,
-                messages=[
-                    {"role": "system", "content": sys_prompt_arg},
-                    {"role": "user", "content": prompt},
-                ],
-                temperature=temperature,
-                max_tokens=max_tokens,
-                top_p=top_p,
-            )
         self.total_tokens += response.usage.total_tokens
         response = response.choices[0].message.content
         self._save_cache(sys_prompt_arg + prompt, response)
@@ -168,24 +156,12 @@ class ChatOpenAI(EngineLM, CachedEngine):
         cache_or_none = self._check_cache(cache_key)
         if cache_or_none is not None:
             return cache_or_none
-        if "o1" in self.model_string or "o3" in self.model_string or "o4" in self.model_string:
-            response = self.client.chat.completions.create(
+        response = self.client.chat.completions.create(
             model=self.model_string,
             messages=[
                 {"role": "user", "content": formatted_content},
             ]
         )
-        else:
-            response = self.client.chat.completions.create(
-                model=self.model_string,
-                messages=[
-                    {"role": "system", "content": sys_prompt_arg},
-                    {"role": "user", "content": formatted_content},
-                ],
-                temperature=temperature,
-                max_tokens=max_tokens,
-                top_p=top_p,
-            )
 
         response_text = response.choices[0].message.content
         self.total_tokens += response.usage.total_tokens
@@ -196,20 +172,9 @@ class ChatOpenAI(EngineLM, CachedEngine):
             self, history, system_prompt=None, temperature=0.95, max_tokens=4096, top_p=0.99
     ):
         sys_prompt_arg = system_prompt if system_prompt else self.system_prompt
-        if "o1" in self.model_string or "o3" in self.model_string or "o4" in self.model_string:
-            response = self.client.chat.completions.create(
+        response = self.client.chat.completions.create(
                 model=self.model_string,
                 messages=history,
-            )
-        else:
-            response = self.client.chat.completions.create(
-                model=self.model_string,
-                messages=[
-                    {"role": "system", "content": sys_prompt_arg}
-                ] + history,
-                temperature=temperature,
-                max_tokens=max_tokens,
-                top_p=top_p,
             )
         self.total_tokens += response.usage.total_tokens
         response_text = response.choices[0].message.content
