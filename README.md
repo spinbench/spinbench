@@ -65,8 +65,8 @@ With SPIN‑Bench's plug‑and‑play agents, configurable pipelines, and rich a
 ---
 
 ## 🗓️ News and Updates
-- **2026-07-14:** We co-led and organized the **MindGames Challenge**, alongside the merged **MindGames + TextArena** benchmark effort and paper release.
-- **2026-07-01:** SPIN-Bench merged with **TextArena**.  
+- **2025-07-14:** We co-led and organized the **MindGames Challenge**, alongside the merged **MindGames + TextArena** benchmark effort and paper release.
+- **2025-07-01:** SPIN-Bench merged with **TextArena**.  
 
 
 ## 🔧 Installation
